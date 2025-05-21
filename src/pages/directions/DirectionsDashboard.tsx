@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDirections, createDirection, deleteDirection } from '../../services/DirectionService';
+import { fetchDirections, createDirection, deleteDirection, associatePerson } from '../../services/DirectionService';
+import { fetchPeople } from '../../services/PersonService';
 import type { Direction } from '../../types/Direction';
+import { Person } from '../../types/Person';
 import Modal from '../../components/modal/Modal'; // Importando el Modal genérico
 import Table from '../../components/table/Table';
 import Button from '../../components/button/Button';
 import Title from '../../components/title/Title'
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import Select from 'react-select'
+
 
 const DirectionsDashboard: React.FC = () => {
   const [directions, setDirections] = useState<Direction[]>([]);
+  const [people, setPeople] = useState<Person[]>([]);
   const [showModalForm, setShowModalForm] = useState(false);
+  const [showAssociationModal, setShowAssociationModal] = useState(false);
+
+  const [selectedDirectionId, setSelectedDirectionId] = useState<number | null>(null);
+  const [selectedPersonId, setSelectedPersonId] = useState<number>(-1);
 
   // Estado del formulario
   const [directionStreet, setDirectionStreet] = useState('');
@@ -17,10 +26,14 @@ const DirectionsDashboard: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const data = await fetchDirections();
-      setDirections(data);
+      const [peopleData, directionsData] = await Promise.all([
+        fetchPeople(),
+        fetchDirections(),
+      ]);
+      setPeople(peopleData);
+      setDirections(directionsData);
     } catch (error) {
-      console.error('Error al cargar las direcciones: ', error);
+      console.error("Error al cargar los datos: ", error);
     }
   };
 
@@ -42,26 +55,47 @@ const DirectionsDashboard: React.FC = () => {
   };
 
   const handleDeleteDirection = async (directionId: number) => {
+    try {
+      await deleteDirection(directionId);
+      setDirections((prevDirections) => prevDirections.filter((direction) => direction.id !== directionId));
+    } catch (error) {
+      console.error("Error al eliminar el proyecto: ", error);
+    }
+  };
+  const handleAssociatePerson = async () => {
+    if (selectedDirectionId !== null && selectedPersonId !== -1) {
       try {
-        await deleteDirection(directionId);
-        setDirections((prevDirections) => prevDirections.filter((direction) => direction.id !== directionId));
+        await associatePerson(selectedDirectionId, selectedPersonId);
+        fetchData();
+          setShowAssociationModal(false);
+          setSelectedPersonId(-1); // resetear selección
       } catch (error) {
-        console.error("Error al eliminar el proyecto: ", error);
+          console.error("Error al asociar el proyecto: ", error);
       }
-    };
-
+    }
+  };
   const columns: { header: string; accessor?: keyof Direction; width?: number;
     render?: (value: any, row: Direction) => React.ReactNode }[] = [
       { header: 'ID', accessor: 'id', width: 80 },
-      { header: 'Calle', accessor: 'street', width: 250 },
-      { header: 'Ciudad', accessor: 'city', width: 250},
-      { header: 'Acciones', width: 200, render: (row) =>(
+      { header: 'Calle', accessor: 'street', width: 200 },
+      { header: 'Ciudad', accessor: 'city', width: 200},
+      { header: 'Persona', accessor: 'personName', width: 150 },
+      { header: 'Acciones', width: 280, render: (_, row) =>(
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <Button 
             title="Eliminar" 
             onPress={() => handleDeleteDirection(row.id)} 
             type = 'delete'
             />
+          <Button
+            title="Asociar Persona"
+            onPress={() => {
+                setSelectedDirectionId(row.id);
+                setShowAssociationModal(true);
+                setSelectedPersonId(-1); // Resetear cada vez que abres el modal
+              }}
+            type="associate"
+          />
         </View>
       ),}
     ];
@@ -93,6 +127,28 @@ const DirectionsDashboard: React.FC = () => {
           />
         </View>
       </ScrollView>
+      <Modal
+        title= "Asociar Persona"
+        visible={showAssociationModal}
+        onClose={() => setShowAssociationModal(false)}
+        size="m"
+      >
+        <View>
+          <Select
+            options={people}
+            getOptionLabel={(person) => person.name}
+            getOptionValue={(person) => person.id.toString()}
+            onChange={(selectedOption) => setSelectedPersonId(Number(selectedOption?.id))}
+            placeholder="Selecciona una persona"
+            value={people.find((person) => person.id === selectedPersonId)}
+          />
+          <Button 
+            title="Asociar" 
+            onPress={handleAssociatePerson} 
+            type = 'save'
+          />
+        </View>
+      </Modal>
       <Modal
         title="Añadir Dirección"
         visible={showModalForm}

@@ -41,7 +41,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title
+          <Title style = {{paddingBottom: 50}}
             text = 'Web Project'
             size = 'xl'
             align = 'center'
@@ -49,17 +49,21 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
             bold
             />
         </View>
-        <View style = {{alignItems: 'center'}}>
+        <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+          <View style = {{paddingBottom: 15}}>
             <Button
                 title="Crear usuario"
                 onPress={() => setShowSignInModal(true)}
                 type = 'add'
             />
+          </View>
+          <View style = {{alignItems: 'center', paddingBottom: 15}}>
             <Button
                 title="Iniciar sesion"
                 onPress={() => setShowLoginModal(true)}
                 type = 'add'
             />
+          </View>
         </View>
       </ScrollView>
       <Modal
@@ -139,6 +143,7 @@ const styles = StyleSheet.create({
     flexGrow: 1, 
     paddingVertical: 20,
     justifyContent: 'flex-start',
+    paddingTop: 200
   },
   formContainer: {
     flexDirection: 'column',

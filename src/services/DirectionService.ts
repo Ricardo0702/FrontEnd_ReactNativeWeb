@@ -44,3 +44,18 @@ export const deleteDirection = async (directionId: number) => {
   });
 };
 
+export const associatePerson = async (directionId: number, personId: number) => {
+  const token = getToken();
+
+  if (!token) {
+    throw new Error('Token no disponible. Usuario no autenticado.');
+  }
+  
+  await axios.put(`${API_URL}/${directionId}/persona/${personId}`, {}, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+  });
+};
+
