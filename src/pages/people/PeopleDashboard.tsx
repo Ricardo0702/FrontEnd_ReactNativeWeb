@@ -3,12 +3,15 @@ import Modal from '../../components/modal/Modal'; // El nuevo modal responsivo
 import Table from '../../components/table/Table';
 import Button from '../../components/button/Button'
 import Title from '../../components/title/Title'
-import { fetchPeople, createPerson, deletePerson, associateProject } from '../../services/PersonService';
+import { fetchPeople, createPerson, deletePerson, associateProject, updatePerson } from '../../services/PersonService';
+import { saveRecentChange } from '../../services/localStorage';
 import { fetchProjects } from '../../services/ProjectService';
 import type { Person } from '../../types/Person';
 import type { Project } from '../../types/Project';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Select from 'react-select';
+
+
 
 
 const PeopleDashboard: React.FC = () => {
@@ -17,6 +20,7 @@ const PeopleDashboard: React.FC = () => {
 
   const [showModalForm, setShowModalForm] = useState(false);
   const [showAssociationModal, setShowAssociationModal] = useState(false);
+  const [showUpdateModal, setUpdateModal] = useState(false);
 
   const [personName, setPersonName] = useState('');
   const [personAge, setPersonAge] = useState<number>(0);
@@ -43,22 +47,60 @@ const PeopleDashboard: React.FC = () => {
 
   const handleDeletePerson = async (personId: number) => {
     try {
+      const deletedPerson = people.find(p => p.id === personId);
       await deletePerson(personId);
       setPeople((prevPeople) => prevPeople.filter((person) => person.id !== personId));
+
+      if (deletedPerson) {
+        saveRecentChange({
+          type: 'Persona',
+          action: 'Eliminado/a',
+          name: deletedPerson.name,
+          timestamp: Date.now(),
+        });
+      }
     } catch (error) {
       console.error("Error al eliminar la persona: ", error);
     }
   };
 
+
   const handleCreatePerson = async () => {
     try {
-      await createPerson(personName, personAge);
+      const newPerson = await createPerson(personName, personAge);
+
+      saveRecentChange({
+        type: 'Persona',
+        action: 'Añadido/a',
+        name: newPerson.name,
+        timestamp: Date.now(),
+      });
+
       fetchData();
       setShowModalForm(false);
       setPersonName('');
       setPersonAge(0);
     } catch (error) {
       console.error('Error al crear la persona:', error);
+    }
+  };
+
+  const handleUpdatePerson = async (personId: number, personName: string) => {
+    try{
+      await updatePerson(personId, personName);
+
+      saveRecentChange({
+        type: 'Persona',
+        action: 'Editado/a',
+        name: personName,
+        timestamp: Date.now()
+      });
+
+      fetchData();
+      setUpdateModal(false);
+      setPersonName('');
+    } catch(error){
+      console.error("Error al modificar el proyecto: ", error);
     }
   };
 
@@ -69,11 +111,25 @@ const PeopleDashboard: React.FC = () => {
         fetchData();
         setShowAssociationModal(false);
         setSelectedProjectId(-1); // resetear selección
+
+        const person = people.find(p => p.id === selectedPersonId);
+        const project = projects.find(p => p.id === selectedProjectId);
+
+        if (person && project) {
+          saveRecentChange({
+            type: 'Persona',
+            action: 'Editado/a',
+            name: `Persona "${person.name}" Asociado al proyecto "${project.name}"`,
+            timestamp: Date.now()
+          });
+        }
+
       } catch (error) {
         console.error("Error al asociar el proyecto: ", error);
       }
     }
   };
+
 
   const columns: { header: string; accessor?: keyof Person; width?: number; 
       render?: (value: any, row: Person) => React.ReactNode }[] = [
@@ -108,26 +164,43 @@ const PeopleDashboard: React.FC = () => {
       },
       {
         header: 'Acciones',
-        width: 300,
-        render: (_: any, row: Person) => (
+        width: 400,
+        render: (_: any, row: Person, rowIndex?: number) => {
+        const isEven = (rowIndex ?? 0) % 2 === 0;
+        const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
+        return (
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <Button 
               title="Eliminar" 
               onPress={() => handleDeletePerson(row.id)} 
-              type = 'delete'
+              type='delete'
             />
-            <Button 
-              title="Asociar Proyecto" 
-              onPress={() => {
-                setSelectedPersonId(row.id);
-                setShowAssociationModal(true);
-                setSelectedProjectId(-1); // Resetear cada vez que abres el modal
-              }}
-              type = 'associate' 
-            />
+            <View style = {{backgroundColor}}>
+              <Button 
+                title="Asociar Proyecto" 
+                onPress={() => {
+                  setSelectedPersonId(row.id);
+                  setShowAssociationModal(true);
+                  setSelectedProjectId(-1);
+                }}
+                type='associate'
+              />
+            </View>
+            <View style = {{backgroundColor}}>
+              <Button
+                title="Modificar"
+                onPress={() => {
+                  setSelectedPersonId(row.id);
+                  setPersonName(row.name);
+                  setUpdateModal(true);
+                }}
+                type='associate'
+              />
+            </View>
           </View>
-        ),
+        );
       }
+    }
   ];
 
   return (
@@ -148,7 +221,7 @@ const PeopleDashboard: React.FC = () => {
             minRowHeight={50}
             minRowWidth={800}
           />
-          <View style = {{alignItems: 'flex-start'}}>
+          <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
             <Button 
                 title="Añadir Persona"
                 onPress={() => setShowModalForm(true)}
@@ -188,6 +261,33 @@ const PeopleDashboard: React.FC = () => {
           />
         </View>
       </Modal>
+      <Modal
+        title = "Modificar persona"
+        visible = {showUpdateModal}
+        onClose = {() => setUpdateModal(false)}
+        size = "xs"
+        >
+        <View>
+          <Text style={styles.label}> Nombre:</Text>
+          <TextInput
+            value = {personName}
+            onChangeText = {setPersonName}
+            style= {styles.input}
+            placeholder='Nombre de la persona'
+            autoFocus
+          />
+          <Button
+            title= "Guardar"
+            onPress={() => {
+              if (selectedPersonId !== null) {
+                handleUpdatePerson(selectedPersonId, personName);
+              }
+            }} 
+            type = 'save'
+          />
+        </View>
+      </Modal>
+
       <Modal
         title="Asociar Proyecto"
         visible={showAssociationModal}
@@ -235,7 +335,7 @@ const styles = StyleSheet.create({
   },
   
   tableContainer: 
-  { marginBottom: 20,
+  { marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center', 
   },

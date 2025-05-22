@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { fetchProjects, createProject, deleteProject } from '../../services/ProjectService';
+import { fetchProjects, createProject, deleteProject, updateProject } from '../../services/ProjectService';
 import type { Project } from '../../types/Project';
 import Modal from '../../components/modal/Modal';
 import Table from '../../components/table/Table';
 import Button from '../../components/button/Button';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Title from '../../components/title/Title';
+import { saveRecentChange } from '../../services/localStorage';
 
 
 const ProjectsDashboard: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [showModalForm, setShowModalForm] = useState(false);
+  const [showUpdateModal, setUpdateModal] = useState(false);
   const [projectName, setProjectName] = useState('');
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
   const fetchData = async () => {
     try {
@@ -28,7 +31,15 @@ const ProjectsDashboard: React.FC = () => {
 
   const handleCreateProject = async () => {
     try {
-      await createProject(projectName);
+      const newPerson = await createProject(projectName);
+      
+      saveRecentChange({
+        type: 'Proyecto',
+        action: 'Añadido/a',
+        name: newPerson.name,
+        timestamp: Date.now(),
+      });
+
       fetchData();
       setShowModalForm(false);
       setProjectName('');
@@ -39,10 +50,40 @@ const ProjectsDashboard: React.FC = () => {
 
   const handleDeleteProject = async (projectId: number) => {
     try {
+      const deletedProject = projects.find(p => p.id === projectId);
       await deleteProject(projectId);
       setProjects((prevProjects) => prevProjects.filter((project) => project.id !== projectId));
+
+      if (deletedProject) {
+        saveRecentChange({
+          type: 'Proyecto',
+          action: 'Eliminado/a',
+          name: deletedProject.name,
+          timestamp: Date.now(),
+        });
+      }
+
     } catch (error) {
       console.error("Error al eliminar el proyecto: ", error);
+    }
+  };
+
+  const handleUpdateProject = async (projectId: number, projectName: string) => {
+    try{
+      await updateProject(projectId, projectName);
+
+      saveRecentChange({
+        type: 'Proyecto',
+        action: 'Editado/a',
+        name: projectName,
+        timestamp: Date.now()
+      });
+
+      fetchData();
+      setUpdateModal(false);
+      setProjectName('');
+    } catch(error){
+      console.error("Error al modificar el proyecto: ", error);
     }
   };
 
@@ -50,13 +91,21 @@ const ProjectsDashboard: React.FC = () => {
     render?: (value: any, row: Project) => React.ReactNode }[] = [
     { header: 'ID', accessor: 'id', width: 80 },
     { header: 'Nombre', accessor: 'name', width: 300 },
-    { header: 'Acciones', width: 300, render: (row) => (
+    { header: 'Acciones', width: 300, render: (_,row) => (
       <View style={{ flexDirection: 'row', gap: 10 }}>
-        {/* Botón con props width, height, color, textColor */}
         <Button 
           title="Eliminar" 
           onPress={() => handleDeleteProject(row.id)} 
           type = 'delete'
+        />
+        <Button
+          title = "Modificar"
+          onPress = {() => {
+            setSelectedProjectId(row.id);
+            setProjectName(row.name);
+            setUpdateModal(true);
+          }}
+          type = 'associate'
         />
       </View>
     ),}
@@ -88,6 +137,33 @@ const ProjectsDashboard: React.FC = () => {
             />
         </View>
       </ScrollView>
+
+      <Modal
+        title = "Modificar proyecto"
+        visible = {showUpdateModal}
+        onClose = {() => setUpdateModal(false)}
+        size = "xs"
+      >
+        <View>
+          <Text style={styles.label}> Nombre:</Text>
+          <TextInput
+            value = {projectName}
+            onChangeText = {setProjectName}
+            style= {styles.input}
+            placeholder='Nombre del proyecto'
+            autoFocus
+          />
+          <Button
+            title= "Guardar"
+            onPress={() => {
+              if (selectedProjectId !== null) {
+                handleUpdateProject(selectedProjectId, projectName);
+              }
+            }} 
+            type = 'save'
+          />
+        </View>
+      </Modal>
 
       <Modal
         title="Añadir Proyecto"

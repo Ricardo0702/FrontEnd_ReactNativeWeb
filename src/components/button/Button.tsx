@@ -39,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
       case 'associate':
         return{
           buttonStyle: { backgroundColor: 'transparent'},
-          textStyle: { color: 'black', textDecorationLine: "underline" as "underline"}
+          textStyle: { color: 'black'}
         }
       default:
         return {

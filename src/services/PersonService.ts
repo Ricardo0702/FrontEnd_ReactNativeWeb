@@ -71,3 +71,17 @@ export const associateProject = async (personId: number, projectId: number) => {
   );
   return response.data;
 };
+
+export const updatePerson = async(personId: number, name: string) => {
+  const token = getToken();
+
+  if (!token) {
+  throw new Error('Token no disponible. Usuario no autenticado.');
+  }
+  await axios.put(`${API_URL}/${personId}`, {name},{
+    headers: {
+      Authorization:  `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};

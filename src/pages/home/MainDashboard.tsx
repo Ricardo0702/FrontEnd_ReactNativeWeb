@@ -1,13 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/button/Button';
+import { RecentChange } from '../../types/recentChange';
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const [recentChanges, setRecentChanges] = useState<RecentChange[]>([]);
+
+  useEffect(() => {
+    const storedChanges = localStorage.getItem('recentChanges');
+    if (storedChanges) {
+      setRecentChanges(JSON.parse(storedChanges));
+    }
+  }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Selecciona una página:</Text>
 
       <View style={styles.peopleButton}>
@@ -16,7 +25,7 @@ const MainDashboard: React.FC = () => {
           width={200}
           height={50}
           onPress={() => navigate('/people')}
-          type = 'link'
+          type='link'
         />
       </View>
       <View style={styles.projectsButton}>
@@ -25,7 +34,7 @@ const MainDashboard: React.FC = () => {
           width={200}
           height={50}
           onPress={() => navigate('/projects')}
-          type = 'link'
+          type='link'
         />
       </View>
       <View style={styles.directionsButton}>
@@ -34,34 +43,69 @@ const MainDashboard: React.FC = () => {
           width={200}
           height={50}
           onPress={() => navigate('/directions')}
-          type = 'link'
+          type='link'
         />
       </View>
-    </View>
+
+      <Text style={styles.subtitle}>Cambios recientes:</Text>
+      {recentChanges.length === 0 ? (
+        <Text style={styles.noChanges}>No hay cambios recientes.</Text>
+      ) : (
+        recentChanges.map((change, index) => (
+          <View key={index} style={styles.changeItem}>
+            <Text style={styles.changeText}>
+              [{new Date(change.timestamp).toLocaleTimeString()}] {change.type} - {change.name}: {change.action}
+            </Text>
+          </View>
+        ))
+      )}
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  paddingBottom: 60
-},
+    alignItems: 'center',
+    paddingTop: 60,
+    paddingBottom: 40,
+  },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 30,
   },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 40,
+    marginBottom: 10,
+  },
+  noChanges: {
+    fontSize: 16,
+    color: '#777',
+  },
+  changeItem: {
+    backgroundColor: '#f4f4f4',
+    padding: 10,
+    marginVertical: 4,
+    borderRadius: 6,
+    width: '80%',
+  },
+  changeText: {
+    fontSize: 14,
+  },
   peopleButton: {
-    backgroundColor: '#fdecea'
+    backgroundColor: '#fdecea',
+    marginBottom: 10,
   },
   projectsButton: {
-    backgroundColor: '#e6f4ea'
+    backgroundColor: '#e6f4ea',
+    marginBottom: 10,
   },
   directionsButton: {
-    backgroundColor: '#e6f0fa' 
-  }
+    backgroundColor: '#e6f0fa',
+    marginBottom: 10,
+  },
 });
 
 export default MainDashboard;

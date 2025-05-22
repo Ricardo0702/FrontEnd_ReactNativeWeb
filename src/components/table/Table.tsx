@@ -56,9 +56,9 @@ const Table = <T,>({
                       { minHeight: minRowHeight },
                     ]}
                   >
-                    <Text style={styles.cellText}>
-                      {col.render ? col.render(cellValue, row) : String(cellValue)}
-                    </Text>
+                    {col.render
+                      ? col.render(cellValue, row, rowIndex)
+                      : <Text style={styles.cellText}>{String(cellValue)}</Text>}
                   </View>
                 );
               })}

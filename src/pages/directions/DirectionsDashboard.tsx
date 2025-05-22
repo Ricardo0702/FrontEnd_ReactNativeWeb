@@ -9,6 +9,7 @@ import Button from '../../components/button/Button';
 import Title from '../../components/title/Title'
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Select from 'react-select'
+import { saveRecentChange } from '../../services/localStorage';
 
 
 const DirectionsDashboard: React.FC = () => {
@@ -44,7 +45,15 @@ const DirectionsDashboard: React.FC = () => {
   // Función para crear dirección
   const handleCreateDirection = async () => {
     try {
-      await createDirection(directionStreet, directionCity);
+      const newDirection = await createDirection(directionStreet, directionCity);
+
+      saveRecentChange({
+        type: 'Dirección',
+        action: 'Eliminado/a',
+        name: `"${newDirection.street}, ${newDirection.city}"`, 
+        timestamp: Date.now(),
+      })
+
       fetchData();
       setShowModalForm(false); // Cerramos el modal
       setDirectionStreet(''); // Limpiamos el formulario
@@ -56,8 +65,19 @@ const DirectionsDashboard: React.FC = () => {
 
   const handleDeleteDirection = async (directionId: number) => {
     try {
+      const deletedDirection = directions.find(d => d.id === directionId);
       await deleteDirection(directionId);
       setDirections((prevDirections) => prevDirections.filter((direction) => direction.id !== directionId));
+
+      if (deletedDirection) {
+        saveRecentChange({
+          type: 'Dirección',
+          action: 'Eliminado/a',
+          name: `"${deletedDirection.street}, ${deletedDirection.city}"`, 
+          timestamp: Date.now(),
+        });
+      }
+      
     } catch (error) {
       console.error("Error al eliminar el proyecto: ", error);
     }
@@ -67,8 +87,21 @@ const DirectionsDashboard: React.FC = () => {
       try {
         await associatePerson(selectedDirectionId, selectedPersonId);
         fetchData();
-          setShowAssociationModal(false);
-          setSelectedPersonId(-1); // resetear selección
+        setShowAssociationModal(false);
+        setSelectedPersonId(-1); // resetear selección
+
+        const direction = directions.find(d => d.id === selectedDirectionId);
+        const person = people.find(p => p.id === selectedPersonId);
+
+        if (direction && person) {
+          saveRecentChange({
+            type: 'Dirección',
+            action: 'Editado/a',
+            name: `Dirección "${direction.street}, ${direction.city}" Asociada a la persona "${person.name}"`,
+            timestamp: Date.now()
+          });
+        }
+
       } catch (error) {
           console.error("Error al asociar el proyecto: ", error);
       }

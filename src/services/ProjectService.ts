@@ -43,3 +43,17 @@ export const deleteProject = async (projectId: number) => {
     },
   });
 };
+
+export const updateProject = async(projectId: number, name: string) => {
+  const token = getToken();
+
+  if (!token) {
+  throw new Error('Token no disponible. Usuario no autenticado.');
+  }
+  await axios.put(`${API_URL}/${projectId}`, {name},{
+    headers: {
+      Authorization:  `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};

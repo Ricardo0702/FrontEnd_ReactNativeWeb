@@ -5,7 +5,7 @@ export interface Table<T> {
     header: string;
     accessor?: keyof T;
     width?: number;
-    render?: (value: any, row: T) => React.ReactNode;
+    render?: (value: any, row: T, rowIndex?: number) => React.ReactNode;
   }>;
   data: T[];
   style?: object;
