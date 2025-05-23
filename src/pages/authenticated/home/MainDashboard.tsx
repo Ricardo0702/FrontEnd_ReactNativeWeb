@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../components/button/Button';
-import { RecentChange } from '../../types/RecentChange';
-import Title from '../../components/title/Title';
+import Button from '../../../components/button/Button';
+import { RecentChange } from '../../../types/RecentChange';
+import Title from '../../../components/title/Title';
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const MainDashboard: React.FC = () => {
           width={320}
           height={75}
           fontSize={20}
-          onPress={() => navigate('/people')}          
+          onPress={() => navigate('/auth/people')}          
         />
       </View>
       <View style={styles.projectsButton}>
@@ -39,7 +39,7 @@ const MainDashboard: React.FC = () => {
           width={320}
           height={75}
           fontSize={20}
-          onPress={() => navigate('/projects')}      
+          onPress={() => navigate('/auth/projects')}      
         />
       </View>
       <View style={styles.directionsButton}>
@@ -48,7 +48,7 @@ const MainDashboard: React.FC = () => {
           width={320}
           height={75}
           fontSize={20}
-          onPress={() => navigate('/directions')}
+          onPress={() => navigate('/auth/directions')}
         />
       </View>
 

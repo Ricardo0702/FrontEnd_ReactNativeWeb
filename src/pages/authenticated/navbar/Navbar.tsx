@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Colors from '../../components/colors/Colors';
+import Colors from '../../../components/colors/Colors';
 
 interface NavbarProps {
   onLogout: () => void;

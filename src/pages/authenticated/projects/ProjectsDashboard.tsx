@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { fetchProjects, createProject, deleteProject, updateProject } from '../../services/ProjectService';
-import type { Project } from '../../types/Project';
-import Modal from '../../components/modal/Modal';
-import Table from '../../components/table/Table';
-import Button from '../../components/button/Button';
+import { fetchProjects, createProject, deleteProject, updateProject } from '../../../services/ProjectService';
+import type { Project } from '../../../types/Project';
+import Modal from '../../../components/modal/Modal';
+import Table from '../../../components/table/Table';
+import Button from '../../../components/button/Button';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
-import Title from '../../components/title/Title';
-import { saveRecentChange } from '../../services/localStorage';
+import Title from '../../../components/title/Title';
+import { saveRecentChange } from '../../../services/localStorage';
 
 
 const ProjectsDashboard: React.FC = () => {

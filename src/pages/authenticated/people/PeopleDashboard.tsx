@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Modal from '../../components/modal/Modal'; // El nuevo modal responsivo
-import Table from '../../components/table/Table';
-import Button from '../../components/button/Button'
-import Title from '../../components/title/Title'
-import { fetchPeople, createPerson, deletePerson, associateProject, updatePerson } from '../../services/PersonService';
-import { saveRecentChange } from '../../services/localStorage';
-import { fetchProjects } from '../../services/ProjectService';
-import type { Person } from '../../types/Person';
-import type { Project } from '../../types/Project';
+import Modal from '../../../components/modal/Modal'; // El nuevo modal responsivo
+import Table from '../../../components/table/Table';
+import Button from '../../../components/button/Button'
+import Title from '../../../components/title/Title'
+import { fetchPeople, createPerson, deletePerson, associateProject, updatePerson } from '../../../services/PersonService';
+import { saveRecentChange } from '../../../services/localStorage';
+import { fetchProjects } from '../../../services/ProjectService';
+import type { Person } from '../../../types/Person';
+import type { Project } from '../../../types/Project';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Select from 'react-select';
-
-
-
 
 const PeopleDashboard: React.FC = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -99,6 +96,7 @@ const PeopleDashboard: React.FC = () => {
       fetchData();
       setUpdateModal(false);
       setPersonName('');
+      setPersonAge(0);
     } catch(error){
       console.error("Error al modificar la persona: ", error);
     }

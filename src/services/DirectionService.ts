@@ -59,6 +59,21 @@ export const associatePerson = async (directionId: number, personId: number) => 
   });
 };
 
+export const removePerson = async (directionId: number, personId: number) => {
+  const token = getToken();
+
+  if (!token) {
+    throw new Error('Token no disponible. Usuario no autenticado.');
+  }
+  
+  await axios.put(`${API_URL}/${directionId}/remove/person/${personId}`, {}, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+  });
+};
+
 export const updateDirection = async (directionId: number, street: string, city: string) => {
   const token = getToken();
 

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDirections, createDirection, deleteDirection, associatePerson, updateDirection } from '../../services/DirectionService';
-import { fetchPeople } from '../../services/PersonService';
-import type { Direction } from '../../types/Direction';
-import { Person } from '../../types/Person';
-import Modal from '../../components/modal/Modal'; // Importando el Modal genérico
-import Table from '../../components/table/Table';
-import Button from '../../components/button/Button';
-import Title from '../../components/title/Title'
+import { fetchDirections, createDirection, deleteDirection, associatePerson, updateDirection } from '../../../services/DirectionService';
+import { fetchPeople } from '../../../services/PersonService';
+import type { Direction } from '../../../types/Direction';
+import { Person } from '../../../types/Person';
+import Modal from '../../../components/modal/Modal'; // Importando el Modal genérico
+import Table from '../../../components/table/Table';
+import Button from '../../../components/button/Button';
+import Title from '../../../components/title/Title'
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import Select from 'react-select'
-import { saveRecentChange } from '../../services/localStorage';
+import { saveRecentChange } from '../../../services/localStorage';
 
 
 const DirectionsDashboard: React.FC = () => {

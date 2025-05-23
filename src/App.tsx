@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
-import Navbar from './pages/navbar/Navbar';
-import MainDashboard from './pages/home/MainDashboard';
-import PeopleDashboard from './pages/people/PeopleDashboard';
-import ProjectsDashboard from './pages/projects/ProjectsDashboard';
-import DirectionsDashboard from './pages/directions/DirectionsDashboard';
+import Navbar from './pages/authenticated/navbar/Navbar';
+import MainDashboard from './pages/authenticated/home/MainDashboard';
+import PeopleDashboard from './pages/authenticated/people/PeopleDashboard';
+import ProjectsDashboard from './pages/authenticated/projects/ProjectsDashboard';
+import DirectionsDashboard from './pages/authenticated/directions/DirectionsDashboard';
 import LoginForm from './pages/login/Login';
 import { isLoggedIn, logout } from './services/AuthService';
 import React, { useState } from 'react';
