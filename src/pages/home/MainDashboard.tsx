@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/button/Button';
-import { RecentChange } from '../../types/recentChange';
+import { RecentChange } from '../../types/RecentChange';
+import Title from '../../components/title/Title';
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -17,33 +18,37 @@ const MainDashboard: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Selecciona una página:</Text>
-
+      <Title style = {styles.title}
+        text = 'Selecciona una página:'
+        size = 'xl'
+        align = 'center'
+        underline
+      />
       <View style={styles.peopleButton}>
         <Button
           title="Personas"
-          width={200}
-          height={50}
-          onPress={() => navigate('/people')}
-          type='link'
+          width={320}
+          height={75}
+          fontSize={20}
+          onPress={() => navigate('/people')}          
         />
       </View>
       <View style={styles.projectsButton}>
         <Button
           title="Proyectos"
-          width={200}
-          height={50}
-          onPress={() => navigate('/projects')}
-          type='link'
+          width={320}
+          height={75}
+          fontSize={20}
+          onPress={() => navigate('/projects')}      
         />
       </View>
       <View style={styles.directionsButton}>
         <Button
           title="Direcciones"
-          width={200}
-          height={50}
+          width={320}
+          height={75}
+          fontSize={20}
           onPress={() => navigate('/directions')}
-          type='link'
         />
       </View>
 
@@ -70,9 +75,8 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 30,
+   paddingTop: 20,
+   paddingBottom: 20
   },
   subtitle: {
     fontSize: 18,
@@ -97,14 +101,17 @@ const styles = StyleSheet.create({
   peopleButton: {
     backgroundColor: '#fdecea',
     marginBottom: 10,
+    borderRadius: 15
   },
   projectsButton: {
     backgroundColor: '#e6f4ea',
     marginBottom: 10,
+    borderRadius: 15
   },
   directionsButton: {
     backgroundColor: '#e6f0fa',
     marginBottom: 10,
+    borderRadius: 15
   },
 });
 

@@ -89,26 +89,33 @@ const ProjectsDashboard: React.FC = () => {
 
   const columns: { header: string; accessor?: keyof Project; width?: number; 
     render?: (value: any, row: Project) => React.ReactNode }[] = [
-    { header: 'ID', accessor: 'id', width: 80 },
     { header: 'Nombre', accessor: 'name', width: 300 },
-    { header: 'Acciones', width: 300, render: (_,row) => (
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        <Button 
-          title="Eliminar" 
-          onPress={() => handleDeleteProject(row.id)} 
-          type = 'delete'
-        />
-        <Button
-          title = "Modificar"
-          onPress = {() => {
-            setSelectedProjectId(row.id);
-            setProjectName(row.name);
-            setUpdateModal(true);
-          }}
-          type = 'associate'
-        />
-      </View>
-    ),}
+    { header: 'Acciones', width: 300, 
+      render: (_: any, row: Project, rowIndex?: number) => {
+      const isEven = (rowIndex ?? 0) % 2 === 0;
+      const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
+      return(
+        <View style={{ flexDirection: 'row', gap: 10 }}>
+          <View style = {{backgroundColor}}>
+          <Button
+            title = "Modificar"
+            onPress = {() => {
+              setSelectedProjectId(row.id);
+              setProjectName(row.name);
+              setUpdateModal(true);
+            }}
+            type = 'associate'
+          />
+        </View>
+          <Button 
+            title="Eliminar" 
+            onPress={() => handleDeleteProject(row.id)} 
+            type = 'delete'
+          />
+        </View>
+      );
+    }
+  }
   ];
 
   return (

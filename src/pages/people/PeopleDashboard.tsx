@@ -85,9 +85,9 @@ const PeopleDashboard: React.FC = () => {
     }
   };
 
-  const handleUpdatePerson = async (personId: number, personName: string) => {
+  const handleUpdatePerson = async (personId: number, personName: string, personAge: number) => {
     try{
-      await updatePerson(personId, personName);
+      await updatePerson(personId, personName, personAge);
 
       saveRecentChange({
         type: 'Persona',
@@ -100,7 +100,7 @@ const PeopleDashboard: React.FC = () => {
       setUpdateModal(false);
       setPersonName('');
     } catch(error){
-      console.error("Error al modificar el proyecto: ", error);
+      console.error("Error al modificar la persona: ", error);
     }
   };
 
@@ -133,7 +133,6 @@ const PeopleDashboard: React.FC = () => {
 
   const columns: { header: string; accessor?: keyof Person; width?: number; 
       render?: (value: any, row: Person) => React.ReactNode }[] = [
-      { header: 'ID', accessor: 'id', width: 80 },
       { header: 'Nombre', accessor: 'name', width: 100 },
       { header: 'Edad', accessor: 'age', width: 80},
       {
@@ -170,11 +169,6 @@ const PeopleDashboard: React.FC = () => {
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
         return (
           <View style={{ flexDirection: 'row', gap: 10 }}>
-            <Button 
-              title="Eliminar" 
-              onPress={() => handleDeletePerson(row.id)} 
-              type='delete'
-            />
             <View style = {{backgroundColor}}>
               <Button 
                 title="Asociar Proyecto" 
@@ -192,11 +186,17 @@ const PeopleDashboard: React.FC = () => {
                 onPress={() => {
                   setSelectedPersonId(row.id);
                   setPersonName(row.name);
+                  setPersonAge(row.age);
                   setUpdateModal(true);
                 }}
                 type='associate'
               />
             </View>
+            <Button 
+              title="Eliminar" 
+              onPress={() => handleDeletePerson(row.id)} 
+              type='delete'
+            />
           </View>
         );
       }
@@ -261,6 +261,7 @@ const PeopleDashboard: React.FC = () => {
           />
         </View>
       </Modal>
+      
       <Modal
         title = "Modificar persona"
         visible = {showUpdateModal}
@@ -276,11 +277,19 @@ const PeopleDashboard: React.FC = () => {
             placeholder='Nombre de la persona'
             autoFocus
           />
+          <Text style={styles.label}>Edad:</Text>
+          <TextInput
+            value={personAge.toString()}
+            onChangeText={(value) => setPersonAge(Number(value))}
+            style={styles.input}
+            placeholder="Edad"
+            keyboardType="numeric"
+          />
           <Button
             title= "Guardar"
             onPress={() => {
               if (selectedPersonId !== null) {
-                handleUpdatePerson(selectedPersonId, personName);
+                handleUpdatePerson(selectedPersonId, personName, personAge);
               }
             }} 
             type = 'save'

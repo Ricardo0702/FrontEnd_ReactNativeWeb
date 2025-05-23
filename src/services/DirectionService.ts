@@ -59,3 +59,19 @@ export const associatePerson = async (directionId: number, personId: number) => 
   });
 };
 
+export const updateDirection = async (directionId: number, street: string, city: string) => {
+  const token = getToken();
+
+   if (!token) {
+    throw new Error('Token no disponible. Usuario no autenticado.');
+  } 
+
+  const response = await axios.put(`${API_URL}/${directionId}`, {street, city}, {
+    headers: {
+      Authorization:  `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response.data;
+};

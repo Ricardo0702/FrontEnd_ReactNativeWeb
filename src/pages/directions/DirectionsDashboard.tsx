@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDirections, createDirection, deleteDirection, associatePerson } from '../../services/DirectionService';
+import { fetchDirections, createDirection, deleteDirection, associatePerson, updateDirection } from '../../services/DirectionService';
 import { fetchPeople } from '../../services/PersonService';
 import type { Direction } from '../../types/Direction';
 import { Person } from '../../types/Person';
@@ -15,8 +15,10 @@ import { saveRecentChange } from '../../services/localStorage';
 const DirectionsDashboard: React.FC = () => {
   const [directions, setDirections] = useState<Direction[]>([]);
   const [people, setPeople] = useState<Person[]>([]);
+
   const [showModalForm, setShowModalForm] = useState(false);
   const [showAssociationModal, setShowAssociationModal] = useState(false);
+  const [showUpdateModal, setUpdateModal] = useState(false);
 
   const [selectedDirectionId, setSelectedDirectionId] = useState<number | null>(null);
   const [selectedPersonId, setSelectedPersonId] = useState<number>(-1);
@@ -107,30 +109,70 @@ const DirectionsDashboard: React.FC = () => {
       }
     }
   };
+
+  const handleUpdateDirection = async (directionId: number, directionStreet: string, directionCity: string) => {
+      try{
+        const updatedDirection = await updateDirection(directionId, directionStreet, directionCity);
+  
+        saveRecentChange({
+          type: 'Dirección',
+          action: 'Editado/a',
+          name: `"${updatedDirection.street}, ${updatedDirection.city}"`,
+          timestamp: Date.now()
+        });
+  
+        fetchData();
+        setUpdateModal(false);
+        setDirectionStreet("");
+        setDirectionCity("");
+      } catch(error){
+        console.error("Error al modificar la dirección: ", error);
+      }
+    };
+
   const columns: { header: string; accessor?: keyof Direction; width?: number;
     render?: (value: any, row: Direction) => React.ReactNode }[] = [
-      { header: 'ID', accessor: 'id', width: 80 },
       { header: 'Calle', accessor: 'street', width: 200 },
       { header: 'Ciudad', accessor: 'city', width: 200},
       { header: 'Persona', accessor: 'personName', width: 150 },
-      { header: 'Acciones', width: 280, render: (_, row) =>(
-        <View style={{ flexDirection: 'row', gap: 10 }}>
-          <Button 
-            title="Eliminar" 
-            onPress={() => handleDeleteDirection(row.id)} 
-            type = 'delete'
-            />
-          <Button
-            title="Asociar Persona"
-            onPress={() => {
-                setSelectedDirectionId(row.id);
-                setShowAssociationModal(true);
-                setSelectedPersonId(-1); // Resetear cada vez que abres el modal
-              }}
-            type="associate"
-          />
-        </View>
-      ),}
+      { header: 'Acciones', width: 400, 
+        render: (_: any, row: Direction, rowIndex?: number) => {
+        const isEven = (rowIndex ?? 0) % 2 === 0;
+        const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
+        return (
+          <View style={{ flexDirection: 'row', gap: 10 }}>
+            <View style = {{backgroundColor}}>
+              <Button
+                title="Asociar Persona"
+                onPress={() => {
+                    setSelectedDirectionId(row.id);
+                    setShowAssociationModal(true);
+                    setSelectedPersonId(-1); // Resetear cada vez que abres el modal
+                  }}
+                type="associate"
+              />
+            </View>
+            <View style = {{backgroundColor}}>
+              <Button
+                title="Modificar"
+                onPress= {() => {
+                  setSelectedDirectionId(row.id);
+                  setDirectionStreet(row.street);
+                  setDirectionCity(row.city);
+                  setUpdateModal(true);
+                }}
+                type = "associate"
+              />
+            </View>
+            <Button 
+              title="Eliminar" 
+              onPress={() => handleDeleteDirection(row.id)} 
+              type = 'delete'
+              />
+          </View>
+        );
+        }
+      }
     ];
 
   return (
@@ -182,6 +224,42 @@ const DirectionsDashboard: React.FC = () => {
           />
         </View>
       </Modal>
+
+      <Modal
+        title = "Modificar dirección"
+        visible = {showUpdateModal}
+        onClose = {() => setUpdateModal(false)}
+        size = "xs"
+        >
+        <View>
+          <Text style={styles.label}> Calle:</Text>
+          <TextInput
+            value = {directionStreet}
+            onChangeText = {setDirectionStreet}
+            style= {styles.input}
+            placeholder='Calle'
+            autoFocus
+          />
+          <Text style={styles.label}>Ciudad:</Text>
+          <TextInput
+            value={directionCity}
+            onChangeText= {setDirectionCity}
+            style={styles.input}
+            placeholder="Ciudad"
+            autoFocus
+          />
+          <Button
+            title= "Guardar"
+            onPress={() => {
+              if (selectedDirectionId !== null) {
+                handleUpdateDirection(selectedDirectionId, directionStreet, directionCity);
+              }
+            }} 
+            type = 'save'
+          />
+        </View>
+      </Modal>
+
       <Modal
         title="Añadir Dirección"
         visible={showModalForm}

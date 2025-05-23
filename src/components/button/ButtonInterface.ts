@@ -5,4 +5,5 @@ export interface ButtonProps {
   height?: number;
   type?: 'delete' | 'save' | 'link' | 'add' | 'associate';
   disabled?: boolean;
+  fontSize?: number;
 }

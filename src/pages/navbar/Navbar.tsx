@@ -13,13 +13,13 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
       <Text style={styles.logo}>My Dashboard</Text>
       </TouchableOpacity>
       <View style={styles.navLinks}>
-        <TouchableOpacity onPress={() => window.location.pathname = '/people'}>
+        <TouchableOpacity onPress={() => window.location.pathname = '/auth/people'}>
           <Text style={styles.navLink}>Personas</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => window.location.pathname = '/projects'}>
+        <TouchableOpacity onPress={() => window.location.pathname = '/auth/projects'}>
           <Text style={styles.navLink}>Proyectos</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => window.location.pathname = '/directions'}>
+        <TouchableOpacity onPress={() => window.location.pathname = '/auth/directions'}>
           <Text style={styles.navLink}>Direcciones</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={onLogout}>

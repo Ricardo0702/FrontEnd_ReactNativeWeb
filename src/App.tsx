@@ -32,24 +32,24 @@ const AppContent: React.FC = () => {
           path="/"
           element={
             isAuthenticated
-              ? <Navigate to="/dashboard" />
+              ? <Navigate to="/auth/dashboard" />
               : <LoginForm onLoginSuccess={handleLoginSuccess} />
           }
         />
         <Route
-          path="/dashboard"
+          path="/auth/dashboard"
           element={isAuthenticated ? <MainDashboard /> : <Navigate to="/" />}
         />
         <Route
-          path="/people"
+          path="/auth/people"
           element={isAuthenticated ? <PeopleDashboard /> : <Navigate to="/" />}
         />
         <Route
-          path="/projects"
+          path="/auth/projects"
           element={isAuthenticated ? <ProjectsDashboard /> : <Navigate to="/" />}
         />
         <Route
-          path="/directions"
+          path="/auth/directions"
           element={isAuthenticated ? <DirectionsDashboard /> : <Navigate to="/" />}
         />
       </Routes>

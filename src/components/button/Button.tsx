@@ -10,16 +10,18 @@ const Button: React.FC<ButtonProps> = ({
   height,
   type,
   disabled = false,
+  fontSize
 }) => {
   const widthValue = width as DimensionValue;
   const heightValue = height as DimensionValue;
+  const fontSizeValue = fontSize;
 
   const getType = () => {
     switch (type) {
       case 'delete':
         return {
-          buttonStyle: { backgroundColor: colors.lightRed },
-          textStyle: { color: colors.red },
+          buttonStyle: { backgroundColor: "transparent"},
+          textStyle: { color: colors.red , textDecorationLine: "underline" as "underline"}
         };
       case 'save':
         return {
@@ -63,15 +65,15 @@ const Button: React.FC<ButtonProps> = ({
       ]}
       activeOpacity={0.7}
     >
-      <Text style={[styles.text, textStyle]}>{title}</Text>
+      <Text style={[styles.text, { fontSize: fontSizeValue}, textStyle, ]}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    justifyContent: "center",
+    alignItems: "center",
     minHeight: 40,
     borderRadius: 8,
   },

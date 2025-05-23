@@ -41,7 +41,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title style = {{paddingBottom: 50}}
+          <Title style = {{paddingBottom: 30}}
             text = 'Web Project'
             size = 'xl'
             align = 'center'
@@ -49,18 +49,22 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
             bold
             />
         </View>
-        <View style = {{alignItems: 'center', justifyContent: 'center'}}>
+        <View style = {{alignItems: 'center', justifyContent: 'center', borderRadius: 8}}>
           <View style = {{paddingBottom: 15}}>
             <Button
                 title="Crear usuario"
                 onPress={() => setShowSignInModal(true)}
+                width={150}
+                height={50}
                 type = 'add'
             />
           </View>
-          <View style = {{alignItems: 'center', paddingBottom: 15}}>
+          <View style = {{ paddingBottom: 15}}>
             <Button
                 title="Iniciar sesion"
                 onPress={() => setShowLoginModal(true)}
+                width={150}
+                height={50}
                 type = 'add'
             />
           </View>
