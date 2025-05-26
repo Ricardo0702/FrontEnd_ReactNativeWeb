@@ -1,48 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Modal from '../../../components/modal/Modal'; // El nuevo modal responsivo
 import Table from '../../../components/table/Table';
 import Button from '../../../components/button/Button'
 import Title from '../../../components/title/Title'
+import TextInput from '../../../components/textInput/TextInput';
 import { fetchPeople, createPerson, deletePerson, associateProject, updatePerson } from '../../../services/PersonService';
 import { saveRecentChange } from '../../../services/localStorage';
 import { fetchProjects } from '../../../services/ProjectService';
-import type { Person } from '../../../types/Person';
-import type { Project } from '../../../types/Project';
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
-import Select from 'react-select';
+import type { IPerson } from '../../../types/IPerson';
+import { View, Text, StyleSheet,ScrollView } from 'react-native';
+import PersonModification from './PersonModification';
 
 const PeopleDashboard: React.FC = () => {
-  const [people, setPeople] = useState<Person[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
+  
+  const [people, setPeople] = useState<IPerson[]>([]);
 
   const [showModalForm, setShowModalForm] = useState(false);
-  const [showAssociationModal, setShowAssociationModal] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
 
   const [personName, setPersonName] = useState('');
   const [personAge, setPersonAge] = useState<number>(0);
 
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
-  const [selectedProjectId, setSelectedProjectId] = useState<number>(-1); // Cambio aquí
 
   const fetchData = async () => {
     try {
-      const [peopleData, projectsData] = await Promise.all([
+      const [peopleData] = await Promise.all([
         fetchPeople(),
-        fetchProjects(),
       ]);
       setPeople(peopleData);
-      setProjects(projectsData);
-    } catch (error) {
-      console.error("Error al cargar los datos: ", error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handleDeletePerson = async (personId: number) => {
+  const handleDeletePerson = useCallback(async (personId: number) => {
     try {
       const deletedPerson = people.find(p => p.id === personId);
       await deletePerson(personId);
@@ -59,7 +53,7 @@ const PeopleDashboard: React.FC = () => {
     } catch (error) {
       console.error("Error al eliminar la persona: ", error);
     }
-  };
+  }, [people]);
 
 
   const handleCreatePerson = async () => {
@@ -102,41 +96,14 @@ const PeopleDashboard: React.FC = () => {
     }
   };
 
-  const handleAssociateProject = async () => {
-    if (selectedPersonId !== null && selectedProjectId !== -1) {
-      try {
-        await associateProject(selectedPersonId, selectedProjectId);
-        fetchData();
-        setShowAssociationModal(false);
-        setSelectedProjectId(-1); // resetear selección
-
-        const person = people.find(p => p.id === selectedPersonId);
-        const project = projects.find(p => p.id === selectedProjectId);
-
-        if (person && project) {
-          saveRecentChange({
-            type: 'Persona',
-            action: 'Editado/a',
-            name: `Persona "${person.name}" Asociado al proyecto "${project.name}"`,
-            timestamp: Date.now()
-          });
-        }
-
-      } catch (error) {
-        console.error("Error al asociar el proyecto: ", error);
-      }
-    }
-  };
-
-
-  const columns: { header: string; accessor?: keyof Person; width?: number; 
-      render?: (value: any, row: Person) => React.ReactNode }[] = [
+  const columns: { header: string; accessor?: keyof IPerson; width?: number; 
+      render?: (value: any, row: IPerson) => React.ReactNode }[] = [
       { header: 'Nombre', accessor: 'name', width: 100 },
       { header: 'Edad', accessor: 'age', width: 80},
       {
         header: 'Direcciones',
         width: 300,
-        render: (_: any, row: Person) => {
+        render: (_: any, row: IPerson) => {
           const streets = row.streets ?? [];
           const cities = row.cities ?? [];
 
@@ -162,39 +129,17 @@ const PeopleDashboard: React.FC = () => {
       {
         header: 'Acciones',
         width: 400,
-        render: (_: any, row: Person, rowIndex?: number) => {
+        render: (_: any, row: IPerson, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
         return (
           <View style={{ flexDirection: 'row', gap: 10 }}>
             <View style = {{backgroundColor}}>
-              <Button 
-                title="Asociar Proyecto" 
-                onPress={() => {
-                  setSelectedPersonId(row.id);
-                  setShowAssociationModal(true);
-                  setSelectedProjectId(-1);
-                }}
-                type='associate'
-              />
+              <Button title="Modificar" onPress={() => {
+                setSelectedPersonId(row.id); setPersonName(row.name); setPersonAge(row.age); setUpdateModal(true);}}
+                type='associate'/>
             </View>
-            <View style = {{backgroundColor}}>
-              <Button
-                title="Modificar"
-                onPress={() => {
-                  setSelectedPersonId(row.id);
-                  setPersonName(row.name);
-                  setPersonAge(row.age);
-                  setUpdateModal(true);
-                }}
-                type='associate'
-              />
-            </View>
-            <Button 
-              title="Eliminar" 
-              onPress={() => handleDeletePerson(row.id)} 
-              type='delete'
-            />
+            <Button title="Eliminar" onPress={() => handleDeletePerson(row.id)} type='delete' />
           </View>
         );
       }
@@ -205,118 +150,31 @@ const PeopleDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title
-            text = 'Personas Registradas'
-            size = 'xl'
-            align = 'center'
-            underline
-            />
+          <Title text = 'Personas Registradas' size = 'xl' align = 'center' underline/>
         </View>
         <View style={styles.tableContainer}>
-          <Table
-            columns={columns}
-            data={people}
-            minRowHeight={50}
-            minRowWidth={800}
-          />
+          <Table columns={columns} data={people} minRowHeight={50} minRowWidth={800}/>
           <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
-            <Button 
-                title="Añadir Persona"
-                onPress={() => setShowModalForm(true)}
-                type = 'add'
-              />
+            <Button title="Añadir Persona" onPress={() => setShowModalForm(true)} type = 'add'/>
           </View>
         </View>
       </ScrollView>
 
-      <Modal
-        title="Añadir Persona"
-        visible={showModalForm}
-        onClose={() => setShowModalForm(false)}
-        size="xs"
-      >
+      <Modal title="Añadir Persona" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <Text style={styles.label}>Nombre:</Text>
-          <TextInput
-            value={personName}
-            onChangeText={setPersonName}
-            style={styles.input}
-            placeholder="Nombre"
-            autoFocus
-          />
-          <Text style={styles.label}>Edad:</Text>
-          <TextInput
-            value={personAge.toString()}
-            onChangeText={(value) => setPersonAge(Number(value))}
-            style={styles.input}
-            placeholder="Edad"
-            keyboardType="numeric"
-          />
-          <Button 
-            title="Guardar" 
-            onPress={handleCreatePerson} 
-            type = 'save' 
-          />
+          <TextInput label= 'Nombre' value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
+
+          <TextInput label= 'Edad' value={personAge.toString()} onChangeText={
+            (value) => setPersonAge(Number(value))} style={styles.input} keyboardType="numeric" />
+
+          <Button title="Guardar" onPress={handleCreatePerson} type = 'save'/>
         </View>
       </Modal>
       
-      <Modal
-        title = "Modificar persona"
-        visible = {showUpdateModal}
-        onClose = {() => setUpdateModal(false)}
-        size = "xs"
-        >
-        <View>
-          <Text style={styles.label}> Nombre:</Text>
-          <TextInput
-            value = {personName}
-            onChangeText = {setPersonName}
-            style= {styles.input}
-            placeholder='Nombre de la persona'
-            autoFocus
-          />
-          <Text style={styles.label}>Edad:</Text>
-          <TextInput
-            value={personAge.toString()}
-            onChangeText={(value) => setPersonAge(Number(value))}
-            style={styles.input}
-            placeholder="Edad"
-            keyboardType="numeric"
-          />
-          <Button
-            title= "Guardar"
-            onPress={() => {
-              if (selectedPersonId !== null) {
-                handleUpdatePerson(selectedPersonId, personName, personAge);
-              }
-            }} 
-            type = 'save'
-          />
-        </View>
+      <Modal title="Modificar persona" visible={showUpdateModal} onClose = {() => setUpdateModal(false)} size = "xl">
+        <PersonModification personId={selectedPersonId} />
       </Modal>
 
-      <Modal
-        title="Asociar Proyecto"
-        visible={showAssociationModal}
-        onClose={() => setShowAssociationModal(false)}
-        size="m"
-      >
-      <View>
-          <Select
-            options={projects}
-            getOptionLabel={(project) => project.name}
-            getOptionValue={(project) => project.id.toString()}
-            onChange={(selectedOption) => setSelectedProjectId(Number(selectedOption?.id))}
-            placeholder="Selecciona un proyecto"
-            value={projects.find((project) => project.id === selectedProjectId)}
-          />
-        <Button 
-          title="Asociar" 
-          onPress={handleAssociateProject} 
-          type = 'save'
-        />
-      </View>
-      </Modal>
     </View>
   );
 };

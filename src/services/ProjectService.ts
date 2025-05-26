@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type{ Project } from '../types/Project';
+import type{ Project } from '../types/IProject';
 import { getToken } from './AuthService';
 
 const API_URL = 'http://localhost:8080/auth/projects';

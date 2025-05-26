@@ -9,23 +9,29 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   return (
     <View style={styles.navbar}>
+
       <TouchableOpacity onPress={() => window.location.pathname = '/'}>
       <Text style={styles.logo}>My Dashboard</Text>
       </TouchableOpacity>
+
       <View style={styles.navLinks}>
         <TouchableOpacity onPress={() => window.location.pathname = '/auth/people'}>
           <Text style={styles.navLink}>Personas</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => window.location.pathname = '/auth/projects'}>
           <Text style={styles.navLink}>Proyectos</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => window.location.pathname = '/auth/directions'}>
           <Text style={styles.navLink}>Direcciones</Text>
         </TouchableOpacity>
+        
         <TouchableOpacity onPress={onLogout}>
           <Text style={styles.navLink}>Cerrar sesión</Text>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 };

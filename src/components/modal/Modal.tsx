@@ -1,5 +1,14 @@
 import React from 'react';
-import { Modal as RNModal, View, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import {
+  Modal as RNModal,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 import useResponsiveXS from '../useResponsives/useResponsiveXS';
 import useResponsiveM from '../useResponsives/useResponsiveM';
 import useResponsiveXL from '../useResponsives/useResponsiveXL';
@@ -10,33 +19,30 @@ const Modal: React.FC<ModalProps> = ({
   visible,
   onClose,
   children,
-  size = 'm', // Establecemos 'm' como valor por defecto
+  size = 'm',
   position = 'center',
 }) => {
-
   if (!visible) return null;
 
-  // Estilo adicional para la posición
   const getPositionStyle = (): ViewStyle => {
-  if (position === 'top') {
-    return {
-      justifyContent: 'flex-start' as const, // 👈 Aseguramos que es un valor válido
-      marginTop: 50,
-    };
-  } else if (position === 'bottom') {
-    return {
-      justifyContent: 'flex-end' as const, // 👈 Aseguramos que es un valor válido
-      marginBottom: 50,
-    };
-  } else {
-    return {
-      justifyContent: 'center' as const, // 👈 Aseguramos que es un valor válido
-      alignItems: 'center',
-    };
-  }
-};
+    if (position === 'top') {
+      return {
+        justifyContent: 'flex-start',
+        marginTop: 50,
+      };
+    } else if (position === 'bottom') {
+      return {
+        justifyContent: 'flex-end',
+        marginBottom: 50,
+      };
+    } else {
+      return {
+        justifyContent: 'center',
+        alignItems: 'center',
+      };
+    }
+  };
 
-  // Estilo del modal basado en el tamaño seleccionado
   const getSizeStyle = () => {
     switch (size) {
       case 'xs':
@@ -46,7 +52,7 @@ const Modal: React.FC<ModalProps> = ({
       case 'xl':
         return useResponsiveXL();
       default:
-        return useResponsiveM(); // Valor por defecto
+        return useResponsiveM();
     }
   };
 
@@ -60,14 +66,18 @@ const Modal: React.FC<ModalProps> = ({
               <Text style={styles.closeButton}>✕</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.content}>
-            {children}
-          </View>
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            <View style={styles.content}>
+              {children}
+            </View>
+          </ScrollView>
         </View>
       </View>
     </RNModal>
   );
 };
+
+const { height: screenHeight } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   overlay: {
@@ -78,6 +88,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     overflow: 'hidden',
+    maxHeight: screenHeight * 0.8, // evita que el modal crezca más allá del 80% de la pantalla
   },
   header: {
     flexDirection: 'row',
@@ -94,6 +105,9 @@ const styles = StyleSheet.create({
   closeButton: {
     fontSize: 18,
     color: '#ff5c5c',
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   content: {
     padding: 15,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/button/Button';
-import { RecentChange } from '../../../types/RecentChange';
+import { RecentChange } from '../../../types/IRecentChange';
 import Title from '../../../components/title/Title';
 
 const MainDashboard: React.FC = () => {

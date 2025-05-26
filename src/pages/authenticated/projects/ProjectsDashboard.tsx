@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { fetchProjects, createProject, deleteProject, updateProject } from '../../../services/ProjectService';
-import type { Project } from '../../../types/Project';
+import type { Project } from '../../../types/IProject';
 import Modal from '../../../components/modal/Modal';
 import Table from '../../../components/table/Table';
 import Button from '../../../components/button/Button';
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import TextInput from '../../../components/textInput/TextInput';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Title from '../../../components/title/Title';
 import { saveRecentChange } from '../../../services/localStorage';
 
@@ -97,21 +98,11 @@ const ProjectsDashboard: React.FC = () => {
       return(
         <View style={{ flexDirection: 'row', gap: 10 }}>
           <View style = {{backgroundColor}}>
-          <Button
-            title = "Modificar"
-            onPress = {() => {
-              setSelectedProjectId(row.id);
-              setProjectName(row.name);
-              setUpdateModal(true);
-            }}
-            type = 'associate'
-          />
-        </View>
-          <Button 
-            title="Eliminar" 
-            onPress={() => handleDeleteProject(row.id)} 
-            type = 'delete'
-          />
+          <Button title = "Modificar" type = 'associate' onPress = {
+            () => {setSelectedProjectId(row.id);setProjectName(row.name);setUpdateModal(true);}} 
+            />
+          </View>
+          <Button title="Eliminar" onPress={() => handleDeleteProject(row.id)} type = 'delete' />
         </View>
       );
     }
@@ -121,77 +112,36 @@ const ProjectsDashboard: React.FC = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+
         <View style={{paddingBottom: 10}}>
-          <Title
-            text = 'Proyectos Registrados'
-            size = 'xl'
-            align = 'center'
-            underline
-          />
+          <Title text = 'Proyectos Registrados' size = 'xl' align = 'center' underline />
         </View>
+
         <View style={styles.tableContainer}>
-          <Table
-            columns={columns}
-            data={projects}
-            minRowHeight={50}   
-          />
+          <Table columns={columns} data={projects} minRowHeight={50} />
         </View>
+
         <View style = {{alignItems: 'center'}}>
-          <Button
-              title="Añadir Proyecto"
-              onPress={() => setShowModalForm(true)}
-              type = 'add'
-            />
+          <Button title="Añadir Proyecto" onPress={() => setShowModalForm(true)} type = 'add' />
         </View>
+
       </ScrollView>
 
-      <Modal
-        title = "Modificar proyecto"
-        visible = {showUpdateModal}
-        onClose = {() => setUpdateModal(false)}
-        size = "xs"
-      >
+      <Modal title = "Modificar proyecto" visible = {showUpdateModal} onClose = {() => setUpdateModal(false)} size = "xs" >
         <View>
-          <Text style={styles.label}> Nombre:</Text>
-          <TextInput
-            value = {projectName}
-            onChangeText = {setProjectName}
-            style= {styles.input}
-            placeholder='Nombre del proyecto'
-            autoFocus
-          />
-          <Button
-            title= "Guardar"
-            onPress={() => {
+          <TextInput label= 'Nombre del proyecto' value = {projectName} onChangeText = {setProjectName} style= {styles.input} autoFocus/>
+          <Button title= "Guardar" onPress={() => {
               if (selectedProjectId !== null) {
                 handleUpdateProject(selectedProjectId, projectName);
               }
-            }} 
-            type = 'save'
-          />
+            }} type = 'save' />
         </View>
       </Modal>
 
-      <Modal
-        title="Añadir Proyecto"
-        visible={showModalForm}
-        onClose={() => setShowModalForm(false)}
-        size="xs"
-      >
+      <Modal title="Añadir Proyecto" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <Text style={styles.label}>Nombre:</Text>
-          <TextInput
-            value={projectName}
-            onChangeText={setProjectName}
-            style={styles.input}
-            placeholder="Nombre del proyecto"
-            autoFocus
-          />
-          <Button 
-            title="Guardar" 
-            onPress={handleCreateProject} 
-            type = 'save'
-          />
+          <TextInput label= 'Nombre del proyecto' value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
+          <Button title="Guardar" onPress={handleCreateProject} type = 'save' />
         </View>
       </Modal>
     </View>

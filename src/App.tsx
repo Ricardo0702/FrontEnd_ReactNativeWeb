@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useParams } from 'react-router-dom';
 import Navbar from './pages/authenticated/navbar/Navbar';
 import MainDashboard from './pages/authenticated/home/MainDashboard';
 import PeopleDashboard from './pages/authenticated/people/PeopleDashboard';
@@ -8,7 +8,14 @@ import LoginForm from './pages/login/Login';
 import { isLoggedIn, logout } from './services/AuthService';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import PersonModification from './pages/authenticated/people/PersonModification';
 
+const PersonModificationWrapper: React.FC = () => {
+  const { personId } = useParams<{ personId: string }>();
+  if (!personId) return null; // opcional: manejo de error o carga
+
+  return <PersonModification personId={Number(personId)} />;
+};
 // Componente que usa useNavigate dentro del Router
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
@@ -51,6 +58,10 @@ const AppContent: React.FC = () => {
         <Route
           path="/auth/directions"
           element={isAuthenticated ? <DirectionsDashboard /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/auth/person/:personId"
+          element={isAuthenticated ? <PersonModificationWrapper /> : <Navigate to="/" />}
         />
       </Routes>
     </View>

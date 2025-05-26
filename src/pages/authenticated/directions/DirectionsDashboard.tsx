@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { fetchDirections, createDirection, deleteDirection, associatePerson, updateDirection } from '../../../services/DirectionService';
 import { fetchPeople } from '../../../services/PersonService';
-import type { Direction } from '../../../types/Direction';
-import { Person } from '../../../types/Person';
+import type { Direction } from '../../../types/IDirection';
+import { IPerson } from '../../../types/IPerson';
 import Modal from '../../../components/modal/Modal'; // Importando el Modal genérico
 import Table from '../../../components/table/Table';
 import Button from '../../../components/button/Button';
-import Title from '../../../components/title/Title'
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import Title from '../../../components/title/Title';
+import TextInput from '../../../components/textInput/TextInput';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Select from 'react-select'
 import { saveRecentChange } from '../../../services/localStorage';
 
 
 const DirectionsDashboard: React.FC = () => {
   const [directions, setDirections] = useState<Direction[]>([]);
-  const [people, setPeople] = useState<Person[]>([]);
+  const [people, setPeople] = useState<IPerson[]>([]);
 
   const [showModalForm, setShowModalForm] = useState(false);
   const [showAssociationModal, setShowAssociationModal] = useState(false);
@@ -141,34 +142,19 @@ const DirectionsDashboard: React.FC = () => {
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
         return (
           <View style={{ flexDirection: 'row', gap: 10 }}>
+
             <View style = {{backgroundColor}}>
-              <Button
-                title="Asociar Persona"
-                onPress={() => {
-                    setSelectedDirectionId(row.id);
-                    setShowAssociationModal(true);
-                    setSelectedPersonId(-1); // Resetear cada vez que abres el modal
-                  }}
-                type="associate"
-              />
+              <Button title="Asociar Persona" type="associate" onPress={() => {
+                setSelectedDirectionId(row.id); setShowAssociationModal(true); setSelectedPersonId(-1); }} />
             </View>
+
             <View style = {{backgroundColor}}>
-              <Button
-                title="Modificar"
-                onPress= {() => {
-                  setSelectedDirectionId(row.id);
-                  setDirectionStreet(row.street);
-                  setDirectionCity(row.city);
-                  setUpdateModal(true);
-                }}
-                type = "associate"
-              />
+              <Button title="Modificar" type = "associate" onPress= {() => {
+                setSelectedDirectionId(row.id); setDirectionStreet(row.street); setDirectionCity(row.city); setUpdateModal(true);}} />
             </View>
-            <Button 
-              title="Eliminar" 
-              onPress={() => handleDeleteDirection(row.id)} 
-              type = 'delete'
-              />
+
+            <Button title="Eliminar" onPress={() => handleDeleteDirection(row.id)} type = 'delete' />
+
           </View>
         );
         }
@@ -177,37 +163,22 @@ const DirectionsDashboard: React.FC = () => {
 
   return (
     <View style={styles.container}>
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title
-            text = 'Direcciones Registradas'
-            size = 'xl'
-            align = 'center'
-            underline
-            />
+          <Title text = 'Direcciones Registradas' size = 'xl' align = 'center' underline />
         </View>
+
         <View style={styles.tableContainer}>
-          <Table
-            columns={columns}
-            data={directions}
-            minRowHeight={50}
-            minRowWidth={800}
-          />
+          <Table columns={columns} data={directions} minRowHeight={50} minRowWidth={800} />
         </View>
+
         <View style = {{alignItems: 'center'}}>
-        <Button
-            title="Añadir Dirección"
-            onPress={() => setShowModalForm(true)}
-            type = 'add'
-          />
+        <Button title="Añadir Dirección" onPress={() => setShowModalForm(true)} type = 'add' />
         </View>
       </ScrollView>
-      <Modal
-        title= "Asociar Persona"
-        visible={showAssociationModal}
-        onClose={() => setShowAssociationModal(false)}
-        size="m"
-      >
+
+      <Modal title= "Asociar Persona" visible={showAssociationModal} onClose={() => setShowAssociationModal(false)} size="m">
         <View>
           <Select
             options={people}
@@ -217,77 +188,31 @@ const DirectionsDashboard: React.FC = () => {
             placeholder="Selecciona una persona"
             value={people.find((person) => person.id === selectedPersonId)}
           />
-          <Button 
-            title="Asociar" 
-            onPress={handleAssociatePerson} 
-            type = 'save'
-          />
+          <Button title="Asociar" onPress={handleAssociatePerson} type = 'save'/>
         </View>
       </Modal>
 
-      <Modal
-        title = "Modificar dirección"
-        visible = {showUpdateModal}
-        onClose = {() => setUpdateModal(false)}
-        size = "xs"
-        >
+      <Modal title = "Modificar dirección" visible = {showUpdateModal} onClose = {() => setUpdateModal(false)} size = "xs" >
         <View>
-          <Text style={styles.label}> Calle:</Text>
-          <TextInput
-            value = {directionStreet}
-            onChangeText = {setDirectionStreet}
-            style= {styles.input}
-            placeholder='Calle'
-            autoFocus
-          />
-          <Text style={styles.label}>Ciudad:</Text>
-          <TextInput
-            value={directionCity}
-            onChangeText= {setDirectionCity}
-            style={styles.input}
-            placeholder="Ciudad"
-            autoFocus
-          />
+          <TextInput label= 'Calle' value = {directionStreet} onChangeText = {setDirectionStreet} style= {styles.input} autoFocus />
+          <TextInput label= 'Ciudad' value={directionCity} onChangeText= {setDirectionCity} style={styles.input} autoFocus />
           <Button
-            title= "Guardar"
-            onPress={() => {
+            title= "Guardar" type = 'save' onPress={() => {
               if (selectedDirectionId !== null) {
                 handleUpdateDirection(selectedDirectionId, directionStreet, directionCity);
-              }
-            }} 
-            type = 'save'
-          />
+              }}} />
         </View>
       </Modal>
 
-      <Modal
-        title="Añadir Dirección"
-        visible={showModalForm}
-        onClose={() => setShowModalForm(false)}
-        size="xs"
-      >
+      <Modal title="Añadir Dirección" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs" >
         <View>
-          <Text style={styles.label}>Calle:</Text>
-          <TextInput
-            value={directionStreet}
-            onChangeText={setDirectionStreet}
-            style={styles.input}
-            placeholder="Calle"
-            autoFocus
-          />
+          <TextInput label= 'Calle' value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
           <Text style={styles.label}>Ciudad:</Text>
-          <TextInput
-            value={directionCity}
-            onChangeText={setDirectionCity}
-            style={styles.input}
-            placeholder="Ciudad"
-          />
-          <Button 
-            title="Guardar" 
-            onPress={handleCreateDirection}
-            type = 'save' />
+          <TextInput label= 'Ciudad' value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
+          <Button title="Guardar" onPress={handleCreateDirection} type = 'save' />
         </View>
       </Modal>
+      
     </View>
   );
 };

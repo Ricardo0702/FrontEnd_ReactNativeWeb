@@ -1,4 +1,4 @@
-import { RecentChange } from '../types/recentChange';
+import { RecentChange } from '../types/IRecentChange';
 
 export const saveRecentChange = (change: RecentChange) => {
   const existing = JSON.parse(localStorage.getItem('recentChanges') || '[]') as RecentChange[];

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { login, signIn } from '../../services/AuthService';
 import Modal from '../../components/modal/Modal'; 
 import Button from '../../components/button/Button';
 import Title from '../../components/title/Title';
+import TextInput from '../../components/textInput/TextInput';
 
 interface Props {
   onLoginSuccess: () => void;
@@ -39,93 +40,39 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
 
   return (
     <View style={styles.container}>
+      
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title style = {{paddingBottom: 30}}
-            text = 'Web Project'
-            size = 'xl'
-            align = 'center'
-            underline
-            bold
-            />
+          <Title style = {{paddingBottom: 30}} text= 'Web Project' size= 'xl' align= 'center' underline bold />
         </View>
+
         <View style = {{alignItems: 'center', justifyContent: 'center', borderRadius: 8}}>
           <View style = {{paddingBottom: 15}}>
-            <Button
-                title="Crear usuario"
-                onPress={() => setShowSignInModal(true)}
-                width={150}
-                height={50}
-                type = 'add'
-            />
+            <Button title="Crear usuario" onPress={() => setShowSignInModal(true)} width={150} height={50} type = 'add' />
           </View>
+
           <View style = {{ paddingBottom: 15}}>
-            <Button
-                title="Iniciar sesion"
-                onPress={() => setShowLoginModal(true)}
-                width={150}
-                height={50}
-                type = 'add'
-            />
+            <Button title="Iniciar sesion" onPress={() => setShowLoginModal(true)} width={150} height={50} type = 'add' />
           </View>
         </View>
       </ScrollView>
-      <Modal
-        title="Crear usuario"
-        visible= {showSignInModal}
-        onClose={() => setShowSignInModal(false)}
-        position="center"
-        size="xs"
-      >
+
+      <Modal title="Crear usuario" visible= {showSignInModal} onClose={() => setShowSignInModal(false)} position="center" size="m" >
         <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Usuario"
-            value={username}
-            onChangeText={setUsername}
-            style={styles.inputField}
-          />
-          <TextInput
-            placeholder="Contraseña"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.inputField}
-          />
-          <Button
-            title="Crear"
-            onPress={handleSignIn}
-            type = 'save'
-          />
+          <TextInput label="Usuario" value={username} onChangeText={setUsername} style={styles.inputField} />
+          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
+          <Button title="Crear" onPress={handleSignIn} type = 'save' />
         </View>
       </Modal>
-      <Modal
-        title="Iniciar Sesión"
-        visible= {showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        position="center"
-        size="xs"
-      >
+
+      <Modal title="Iniciar Sesión" visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="m" >
         <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Usuario"
-            value={username}
-            onChangeText={setUsername}
-            style={styles.inputField}
-          />
-          <TextInput
-            placeholder="Contraseña"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.inputField}
-          />
-          <Button
-            title="Iniciar Sesión"
-            onPress={handleLogin}
-            type = 'save'
-          />
+          <TextInput label="Usuario" value={username} onChangeText={setUsername} style={styles.inputField} />
+          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
+          <Button title="Iniciar Sesión" onPress={handleLogin} type = 'save' />
         </View>
       </Modal>
+
     </View>
   );
 };
