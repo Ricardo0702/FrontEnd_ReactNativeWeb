@@ -83,7 +83,7 @@ export const deletePerson = async (personId: number) => {
   });
 };
 
-export const associateProject = async (personId: number, projectId: number) => {
+export const associateProject = async (personId: number, projectId: number | undefined) => {
   const token = getToken();
   
   if (!token) {

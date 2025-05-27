@@ -11,6 +11,7 @@ import TextInput from '../../../components/textInput/TextInput';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Select from 'react-select'
 import { saveRecentChange } from '../../../services/localStorage';
+import DirectionModification from './DirectionModification';
 
 
 const DirectionsDashboard: React.FC = () => {
@@ -85,51 +86,6 @@ const DirectionsDashboard: React.FC = () => {
       console.error("Error al eliminar el proyecto: ", error);
     }
   };
-  const handleAssociatePerson = async () => {
-    if (selectedDirectionId !== null && selectedPersonId !== -1) {
-      try {
-        await associatePerson(selectedDirectionId, selectedPersonId);
-        fetchData();
-        setShowAssociationModal(false);
-        setSelectedPersonId(-1); // resetear selección
-
-        const direction = directions.find(d => d.id === selectedDirectionId);
-        const person = people.find(p => p.id === selectedPersonId);
-
-        if (direction && person) {
-          saveRecentChange({
-            type: 'Dirección',
-            action: 'Editado/a',
-            name: `Dirección "${direction.street}, ${direction.city}" Asociada a la persona "${person.name}"`,
-            timestamp: Date.now()
-          });
-        }
-
-      } catch (error) {
-          console.error("Error al asociar el proyecto: ", error);
-      }
-    }
-  };
-
-  const handleUpdateDirection = async (directionId: number, directionStreet: string, directionCity: string) => {
-      try{
-        const updatedDirection = await updateDirection(directionId, directionStreet, directionCity);
-  
-        saveRecentChange({
-          type: 'Dirección',
-          action: 'Editado/a',
-          name: `"${updatedDirection.street}, ${updatedDirection.city}"`,
-          timestamp: Date.now()
-        });
-  
-        fetchData();
-        setUpdateModal(false);
-        setDirectionStreet("");
-        setDirectionCity("");
-      } catch(error){
-        console.error("Error al modificar la dirección: ", error);
-      }
-    };
 
   const columns: { header: string; accessor?: keyof Direction; width?: number;
     render?: (value: any, row: Direction) => React.ReactNode }[] = [
@@ -142,11 +98,6 @@ const DirectionsDashboard: React.FC = () => {
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
         return (
           <View style={{ flexDirection: 'row', gap: 10 }}>
-
-            <View style = {{backgroundColor}}>
-              <Button title="Asociar Persona" type="associate" onPress={() => {
-                setSelectedDirectionId(row.id); setShowAssociationModal(true); setSelectedPersonId(-1); }} />
-            </View>
 
             <View style = {{backgroundColor}}>
               <Button title="Modificar" type = "associate" onPress= {() => {
@@ -178,30 +129,8 @@ const DirectionsDashboard: React.FC = () => {
         </View>
       </ScrollView>
 
-      <Modal title= "Asociar Persona" visible={showAssociationModal} onClose={() => setShowAssociationModal(false)} size="m">
-        <View>
-          <Select
-            options={people}
-            getOptionLabel={(person) => person.name}
-            getOptionValue={(person) => person.id.toString()}
-            onChange={(selectedOption) => setSelectedPersonId(Number(selectedOption?.id))}
-            placeholder="Selecciona una persona"
-            value={people.find((person) => person.id === selectedPersonId)}
-          />
-          <Button title="Asociar" onPress={handleAssociatePerson} type = 'save'/>
-        </View>
-      </Modal>
-
-      <Modal title = "Modificar dirección" visible = {showUpdateModal} onClose = {() => setUpdateModal(false)} size = "xs" >
-        <View>
-          <TextInput label= 'Calle' value = {directionStreet} onChangeText = {setDirectionStreet} style= {styles.input} autoFocus />
-          <TextInput label= 'Ciudad' value={directionCity} onChangeText= {setDirectionCity} style={styles.input} autoFocus />
-          <Button
-            title= "Guardar" type = 'save' onPress={() => {
-              if (selectedDirectionId !== null) {
-                handleUpdateDirection(selectedDirectionId, directionStreet, directionCity);
-              }}} />
-        </View>
+      <Modal title = "Modificar dirección" visible = {showUpdateModal} onClose = {() => {setUpdateModal(false); fetchData()}} size = "xl" >
+        <DirectionModification directionId={selectedDirectionId} />
       </Modal>
 
       <Modal title="Añadir Dirección" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs" >

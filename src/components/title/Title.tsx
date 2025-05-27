@@ -3,6 +3,7 @@ import { Text, StyleSheet, type TextStyle } from 'react-native';
 import {TitleProps} from './TitleInterface'
 
 const Title: React.FC<TitleProps> = ({
+  type,
   text,
   size = 'm',
   color,
@@ -20,13 +21,37 @@ const Title: React.FC<TitleProps> = ({
     }
   };
 
+  const getPosition = () => {
+    switch (align) {
+      case 'left': return 'left'
+      case 'center': return 'center'
+      case 'right': return 'right'
+      default: return typeof align == 'string' ? align : 'center';
+    }
+  };
+
+  const getType = (): TextStyle | undefined => {
+    switch (type) {
+      case 'Main': return {fontSize: 30, textAlign: 'center', fontWeight: 'bold', textDecorationLine: 'underline'}
+      case 'Subtitle': return {fontSize: 24, textAlign: 'left', fontWeight: 'bold'}
+      default: return undefined;
+    }
+  }
+  
+  if (type) {
+    return(
+      <Text style={[getType(), style]}>
+        {text}
+      </Text>
+    )
+  }
   return (
     <Text
       style={[
         {
           fontSize: getSize(),
           color,
-          textAlign: align,
+          textAlign: getPosition(),
           fontWeight: bold ? 'bold' : 'normal',
           textDecorationLine: underline ? 'underline' : 'none',
         },

@@ -76,27 +76,7 @@ const PeopleDashboard: React.FC = () => {
     }
   };
 
-  const handleUpdatePerson = async (personId: number, personName: string, personAge: number) => {
-    try{
-      await updatePerson(personId, personName, personAge);
-
-      saveRecentChange({
-        type: 'Persona',
-        action: 'Editado/a',
-        name: personName,
-        timestamp: Date.now()
-      });
-
-      fetchData();
-      setUpdateModal(false);
-      setPersonName('');
-      setPersonAge(0);
-    } catch(error){
-      console.error("Error al modificar la persona: ", error);
-    }
-  };
-
-  const columns: { header: string; accessor?: keyof IPerson; width?: number; 
+ const columns: { header: string; accessor?: keyof IPerson; width?: number; 
       render?: (value: any, row: IPerson) => React.ReactNode }[] = [
       { header: 'Nombre', accessor: 'name', width: 100 },
       { header: 'Edad', accessor: 'age', width: 80},
@@ -171,7 +151,7 @@ const PeopleDashboard: React.FC = () => {
         </View>
       </Modal>
       
-      <Modal title="Modificar persona" visible={showUpdateModal} onClose = {() => setUpdateModal(false)} size = "xl">
+      <Modal title="Modificar persona" visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
         <PersonModification personId={selectedPersonId} />
       </Modal>
 

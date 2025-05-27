@@ -5,6 +5,6 @@ export interface IPerson {
   directionIds: number[];
   streets: string[];
   cities: string[];
-  projectIds: number[];
+  projectIds: number[] | null;
   projectNames: string[];
 }

@@ -13,6 +13,15 @@ export const fetchProjects = async (): Promise<Project[]> => {
   return response.data;
 };
 
+export const fetchProject = async (projectId: number): Promise<Project> => {
+  const response = await axios.get(`${API_URL}/${projectId}`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`
+    }
+  });
+  return response.data;
+};
+
 export const createProject = async (name: string) => {
   const token = getToken();
   

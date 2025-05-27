@@ -1,31 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { fetchPerson, updatePerson,createEmptyPerson, associateProject, removeProject } from '../../../services/PersonService';
-import { fetchProjects } from '../../../services/ProjectService';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { fetchPerson, updatePerson, createEmptyPerson, associateProject, removeProject } from '../../../services/PersonService';
+import { fetchProjects, fetchProject } from '../../../services/ProjectService';
 import { fetchDirections, createDirection, deleteDirection, associatePerson, removePerson } from '../../../services/DirectionService';
 import { Direction } from '../../../types/IDirection';
 import { Project } from '../../../types/IProject';
 import { IPerson } from '../../../types/IPerson';
 import TextInput from '../../../components/textInput/TextInput';
+import Button from '../../../components/button/Button';
 import { saveRecentChange } from '../../../services/localStorage';
+import Title from '../../../components/title/Title';
+import Select from '../../../components/select/Select';
 
 type Props = {
   personId: number | null;
 };
 
 export default function PersonModification({ personId }: Props) {
-
   const [person, setPerson] = useState<IPerson>(createEmptyPerson());
-  const [people, setPeople] = useState<IPerson[]>([])
+  const [people, setPeople] = useState<IPerson[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [directions, setDirections] = useState<Direction[]>([]);
 
   const [personName, setPersonName] = useState('');
   const [personAge, setPersonAge] = useState<number>(0);
 
-  const [newProjectId, setNewProjectId] = useState<number>(0);
+  const [newProjectId, setNewProjectId] = useState<number | undefined>(undefined);
   const [newStreet, setNewStreet] = useState('');
   const [newCity, setNewCity] = useState('');
+
+  const [associatedProjects, setAssociatedProjects] = useState<Project[]>([]);
 
   const loadPerson = async () => {
     try {
@@ -40,17 +44,32 @@ export default function PersonModification({ personId }: Props) {
   };
 
   const loadProjects = async () => {
-      try {
-        const data = await fetchProjects();
-        setProjects(data);
-      } catch (error) {
-        console.error('Error al cargar los proyectos: ', error);
-      }
+    try {
+      const data = await fetchProjects();
+      setProjects(data);
+    } catch (error) {
+      console.error('Error al cargar los proyectos: ', error);
+    }
   };
 
   const loadDirections = async () => {
     const data = await fetchDirections();
     setDirections(data);
+  };
+
+  const loadAssociatedProjects = async () => {
+    if (!person.projectIds || person.projectIds.length === 0) {
+      setAssociatedProjects([]);
+      return;
+    }
+    try {
+      const projectsData = await Promise.all(
+        person.projectIds.map((id) => fetchProject(id))
+      );
+      setAssociatedProjects(projectsData);
+    } catch (error) {
+      console.error('Error cargando proyectos asociados:', error);
+    }
   };
 
   useEffect(() => {
@@ -59,26 +78,31 @@ export default function PersonModification({ personId }: Props) {
     loadDirections();
   }, []);
 
+  useEffect(() => {
+    loadAssociatedProjects();
+  }, [person.projectIds]);
+
   const handleUpdate = async () => {
     if (personId === null) return;
-    await updatePerson(personId, person.name, person.age);
+    await updatePerson(personId, personName, personAge);
     await loadPerson();
-    saveRecentChange({type: 'Persona',action: 'Editado/a',name: person.name,timestamp: Date.now()});
+    saveRecentChange({ type: 'Persona', action: 'Editado/a', name: personName, timestamp: Date.now() });
   };
 
   const handleAddProject = async () => {
-    if (personId === null) return;
+    if (personId === null || !newProjectId) return;
     await associateProject(personId, newProjectId);
     await loadPerson();
+    await loadAssociatedProjects();
 
-    const person = people.find(p => p.id === personId);
-    const project = projects.find(p => p.id === newProjectId);
+    const personFound = people.find(p => p.id === personId);
+    const projectFound = projects.find(p => p.id === newProjectId);
 
-    if (person && project) {
+    if (personFound && projectFound) {
       saveRecentChange({
         type: 'Persona',
         action: 'Editado/a',
-        name: `Persona "${person.name}" Asociado al proyecto "${project.name}"`,
+        name: `Persona "${personFound.name}" Asociado al proyecto "${projectFound.name}"`,
         timestamp: Date.now()
       });
     }
@@ -88,15 +112,16 @@ export default function PersonModification({ personId }: Props) {
     if (personId === null) return;
     await removeProject(personId, projectId);
     await loadPerson();
+    await loadAssociatedProjects();
 
-    const person = people.find(p => p.id === personId);
-    const project = projects.find(p => p.id === newProjectId);
+    const personFound = people.find(p => p.id === personId);
+    const projectFound = projects.find(p => p.id === projectId);
 
-    if (person && project) {
+    if (personFound && projectFound) {
       saveRecentChange({
         type: 'Persona',
         action: 'Editado/a',
-        name: `Proyecto "${project.name}" eliminado de persona: "${person.name}"`,
+        name: `Proyecto "${projectFound.name}" eliminado de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
     }
@@ -109,13 +134,13 @@ export default function PersonModification({ personId }: Props) {
     await loadPerson();
     await loadDirections();
 
-    const person = people.find(p => p.id === personId);
+    const personFound = people.find(p => p.id === personId);
 
-    if (person && direction) {
+    if (personFound && direction) {
       saveRecentChange({
         type: 'Persona',
         action: 'Editado/a',
-        name: `Dirección "${direction.street}"("${direction.city}") añadidia a persona: "${person.name}"`,
+        name: `Dirección "${direction.street}"("${direction.city}") añadida a persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
     }
@@ -128,20 +153,20 @@ export default function PersonModification({ personId }: Props) {
     await loadPerson();
     await loadDirections();
 
-    const person = people.find(p => p.id === personId);
-    const direction = directions.find(d => d.id == directionId);
+    const personFound = people.find(p => p.id === personId);
+    const directionFound = directions.find(d => d.id === directionId);
 
-    if (person && direction) {
+    if (personFound && directionFound) {
       saveRecentChange({
         type: 'Persona',
         action: 'Editado/a',
-        name: `Dirección "${direction.street}"("${direction.city}") eliminada de persona: "${person.name}"`,
+        name: `Dirección "${directionFound.street}"("${directionFound.city}") eliminada de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
       saveRecentChange({
         type: 'Dirección',
         action: 'Eliminado/a',
-        name: `"${direction.street}"("${direction.city}") eliminada de persona: "${person.name}"`,
+        name: `"${directionFound.street}"("${directionFound.city}") eliminada de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
     }
@@ -149,46 +174,59 @@ export default function PersonModification({ personId }: Props) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modificar Persona</Text>
-
-      <TextInput label = 'Nombre' value={personName} onChangeText={setPersonName} style={styles.input} />
-
-      <TextInput label = 'Edad' value={personAge} onChangeText={
-        (text) => setPersonAge(Number(text))} keyboardType="numeric" style={styles.input} />
-
-      <Button title="Guardar cambios" onPress={handleUpdate} />
-
-      <Text style={styles.sectionTitle}>Proyectos Asociados</Text>
-      {person.projectIds.map((id, idx) => (
-        <View key={id} style={styles.listItem}>
-          <Text>{person.projectNames[idx]}</Text>
-          <Button title="Eliminar" onPress={() => handleRemoveProject(id)} />
-        </View>
-      ))}
-
-      <Text>Añadir Proyecto:</Text>
-      <FlatList
-        data={projects}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => setNewProjectId(item.id)}>
-            <Text style={styles.listItem}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
+      <Title text='Modificar Persona' type='Subtitle' style={{ marginBottom: 20 }} />
+      <TextInput label='Nombre' value={personName} onChangeText={setPersonName} style={styles.input} />
+      <TextInput
+        label='Edad'
+        value={personAge.toString()}
+        onChangeText={(text) => setPersonAge(Number(text))}
+        keyboardType="numeric"
+        style={styles.input}
       />
-      <Button title="Asociar Proyecto" onPress={handleAddProject} />
+      <Button title="Guardar cambios" onPress={handleUpdate} type="save" />
 
-      <Text style={styles.sectionTitle}>Direcciones Asociadas</Text>
+      <Title text='Proyectos Asociados' type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      {(person.projectIds || []).map((id) => {
+        const project = projects.find(p => p.id === id);
+        if (!project) return null;
+        return (
+          <View key={id} style={styles.listItem}>
+            <Text>{project.name}</Text>
+            <Button title="Eliminar" onPress={() => handleRemoveProject(id)} type="delete" />
+          </View>
+        );
+      })}
+
+      <Title text='Añadir Proyecto' type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Select
+        selectedValue={newProjectId}
+        onValueChange={(value) => {
+          if (typeof value === 'string') {
+            const parsed = parseInt(value, 10);
+            setNewProjectId(isNaN(parsed) ? undefined : parsed);
+          } else {
+            setNewProjectId(value);
+          }
+        }}
+        options={projects.map((project) => ({
+          label: project.name,
+          value: project.id,
+        }))}
+        placeholder="Selecciona un proyecto"
+      />
+      <Button title="Asociar Proyecto" onPress={handleAddProject} type='save' />
+
+      <Title text='Direcciones Asociadas' type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       {person.directionIds.map((id, idx) => (
         <View key={id} style={styles.listItem}>
           <Text>{person.streets[idx]} - {person.cities[idx]}</Text>
-          <Button title="Eliminar" onPress={() => handleRemoveDirection(id)} />
+          <Button title="Eliminar" onPress={() => handleRemoveDirection(id)} type= 'delete' />
         </View>
       ))}
 
       <TextInput label="Calle" value={newStreet} onChangeText={setNewStreet} style={styles.input} />
       <TextInput label="Ciudad" value={newCity} onChangeText={setNewCity} style={styles.input} />
-      <Button title="Añadir Dirección" onPress={handleAddDirection} />
+      <Button title="Añadir Dirección" onPress={handleAddDirection} type='save' />
     </View>
   );
 }
@@ -198,16 +236,6 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
     backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
   },
   input: {
     borderColor: '#ccc',

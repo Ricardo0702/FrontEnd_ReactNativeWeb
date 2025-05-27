@@ -4,8 +4,25 @@ import { getToken } from './AuthService';
 
 const API_URL = 'http://localhost:8080/auth/directions';
 
+export const createEmptyDirection = (): Direction => ({
+  id: 0,
+  street: "",
+  city: "",
+  personId: 0,
+  personName: ""
+});
+
 export const fetchDirections = async (): Promise<Direction[]> => {
   const response = await axios.get(API_URL, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`
+    }
+  });
+  return response.data;
+};
+
+export const fetchDirection = async (directionId: number): Promise<Direction> => {
+  const response = await axios.get(`${API_URL}/${directionId}`,{
     headers: {
       Authorization: `Bearer ${getToken()}`
     }
@@ -44,7 +61,7 @@ export const deleteDirection = async (directionId: number) => {
   });
 };
 
-export const associatePerson = async (directionId: number, personId: number) => {
+export const associatePerson = async (directionId: number, personId: number | undefined) => {
   const token = getToken();
 
   if (!token) {

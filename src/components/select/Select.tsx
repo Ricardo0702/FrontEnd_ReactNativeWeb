@@ -1,0 +1,63 @@
+import React from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
+import { SelectProps } from './SelectInterface';
+import { Picker } from '@react-native-picker/picker';
+
+const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, placeholder, style }) => {
+
+  if (Platform.OS === 'web') {
+    return (
+      <View style={[styles.webContainer, style]}>
+        <select
+          value={selectedValue === null || selectedValue === undefined ? '' : selectedValue}
+          onChange={(e) => onValueChange(e.target.value)}
+          style={styles.webSelect}
+        >
+          {placeholder && (
+            <option value="" disabled hidden>
+              {placeholder}
+            </option>
+          )}
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </View>
+    );
+  }
+
+  return (
+    <View style={style}>
+      <Picker
+        selectedValue={selectedValue ?? undefined}
+        onValueChange={onValueChange}
+        style={{ height: 50, width: '100%' }}
+      >
+        {placeholder && (
+          <Picker.Item label={placeholder} value={undefined} enabled={false} color="#999" />
+        )}
+        {options.map((option) => (
+          <Picker.Item key={option.value} label={option.label} value={option.value} />
+        ))}
+      </Picker>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  webContainer: {
+    marginBottom: 20,
+  },
+  webSelect: {
+    width: '100%',
+    padding: 10,
+    fontSize: 16,
+    borderRadius: 4,
+    borderColor: '#ccc',
+    borderWidth: 1,
+  },
+});
+
+export default Select;
