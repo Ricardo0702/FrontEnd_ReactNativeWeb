@@ -10,6 +10,7 @@ import { fetchProjects } from '../../../services/ProjectService';
 import type { IPerson } from '../../../types/IPerson';
 import { View, Text, StyleSheet,ScrollView } from 'react-native';
 import PersonModification from './PersonModification';
+import { Skeleton } from '../../../components/skeleton/Skeleton';
 
 const PeopleDashboard: React.FC = () => {
   
@@ -23,8 +24,12 @@ const PeopleDashboard: React.FC = () => {
 
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const fetchData = async () => {
     try {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
       const [peopleData] = await Promise.all([
         fetchPeople(),
       ]);
@@ -108,7 +113,7 @@ const PeopleDashboard: React.FC = () => {
       },
       {
         header: 'Acciones',
-        width: 400,
+        width: 200,
         render: (_: any, row: IPerson, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
@@ -126,18 +131,30 @@ const PeopleDashboard: React.FC = () => {
     }
   ];
 
+  const skeletonRows = Array.from({ length: 5 }, (_, i) => (
+      <View key={i} style={{ flexDirection: 'row', gap: 20, marginBottom: 12 }}>
+        <Skeleton width={300} height={20} />
+        <Skeleton width={150} height={35} />
+      </View>
+    ));
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+
         <View style={{paddingBottom: 10}}>
           <Title text = 'Personas Registradas' size = 'xl' align = 'center' underline/>
         </View>
+
         <View style={styles.tableContainer}>
-          <Table columns={columns} data={people} minRowHeight={50} minRowWidth={800}/>
+          {isLoading ? skeletonRows : (
+            <Table columns={columns} data={people} minRowHeight={50} />
+          )}
           <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
             <Button title="Añadir Persona" onPress={() => setShowModalForm(true)} type = 'add'/>
           </View>
         </View>
+
       </ScrollView>
 
       <Modal title="Añadir Persona" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
@@ -168,8 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     paddingTop: 60,
-    width: '90%',
-    maxWidth: '100%',   // Un poco más ancho para que el Table tenga espacio
+    width: '100%',  // Un poco más ancho para que el Table tenga espacio
     marginHorizontal: 'auto',
   },
 

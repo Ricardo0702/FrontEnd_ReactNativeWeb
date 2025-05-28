@@ -10,4 +10,5 @@ export interface TextInput extends Omit<RNTextInputProps, 'value'> {
   labelStyle?: object;
   errorStyle?: object;
   onChangeText?: (text: string) => void;
+  secure?: boolean;
 }

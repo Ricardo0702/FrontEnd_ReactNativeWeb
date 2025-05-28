@@ -9,9 +9,7 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import useResponsiveXS from '../useResponsives/useResponsiveXS';
-import useResponsiveM from '../useResponsives/useResponsiveM';
-import useResponsiveXL from '../useResponsives/useResponsiveXL';
+import useResponsive from '../useResponsives/useResponsive';
 import type { Modal as ModalProps } from './ModalInterface';
 
 const Modal: React.FC<ModalProps> = ({
@@ -46,13 +44,13 @@ const Modal: React.FC<ModalProps> = ({
   const getSizeStyle = () => {
     switch (size) {
       case 'xs':
-        return useResponsiveXS();
+        return useResponsive({type: 'Modal', size: 's'});
       case 'm':
-        return useResponsiveM();
+        return useResponsive({type: 'Modal', size: 'm'});
       case 'xl':
-        return useResponsiveXL();
+        return useResponsive({type: 'Modal', size: 'l'});
       default:
-        return useResponsiveM();
+        return useResponsive({type: 'Modal', size: 'm'});
     }
   };
 

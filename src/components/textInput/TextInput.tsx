@@ -10,7 +10,8 @@ const TextInput: React.FC<TextInputProps> = ({
   labelStyle,
   errorStyle,
   value,
-  onChangeText
+  onChangeText,
+  secure,
 }) => {
   const stringValue = value !== undefined && value !== null ? String(value) : '';
 
@@ -21,6 +22,7 @@ const TextInput: React.FC<TextInputProps> = ({
         style={[styles.input, inputStyle]}
         value={stringValue}
         onChangeText={(text) => onChangeText?.(text)}
+        secureTextEntry =  {secure}
       />
       {errorMessage ? (
         <Text style={[styles.error, errorStyle]}>{errorMessage}</Text>

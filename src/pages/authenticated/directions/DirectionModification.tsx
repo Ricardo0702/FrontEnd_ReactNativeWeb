@@ -17,12 +17,10 @@ type Props = {
 export default function directionModification({directionId}: Props){
 
     const [direction, setDirection] = useState<Direction>(createEmptyDirection());
-    const [directions, setDirections] = useState<Direction[]>([]);
     const [people, setPeople] = useState<IPerson[]>([]);
 
     const [directionStreet, setDirectionStreet] = useState('');
     const [directionCity, setDirectionCity] = useState('');
-    const [newPersonName, setNewPersonName] = useState('');
     const [newPersonId, setNewPersonId] = useState<number | undefined>(undefined);
 
     const loadDirection = async () => {

@@ -60,7 +60,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       <Modal title="Crear usuario" visible= {showSignInModal} onClose={() => setShowSignInModal(false)} position="center" size="m" >
         <View style={styles.formContainer}>
           <TextInput label="Usuario" value={username} onChangeText={setUsername} style={styles.inputField} />
-          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
+          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secure style={styles.inputField} />
           <Button title="Crear" onPress={handleSignIn} type = 'save' />
         </View>
       </Modal>
@@ -68,7 +68,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       <Modal title="Iniciar Sesión" visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="m" >
         <View style={styles.formContainer}>
           <TextInput label="Usuario" value={username} onChangeText={setUsername} style={styles.inputField} />
-          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secureTextEntry style={styles.inputField} />
+          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secure style={styles.inputField} />
           <Button title="Iniciar Sesión" onPress={handleLogin} type = 'save' />
         </View>
       </Modal>

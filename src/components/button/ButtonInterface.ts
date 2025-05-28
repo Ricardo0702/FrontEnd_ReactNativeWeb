@@ -3,7 +3,10 @@ export interface ButtonProps {
   onPress: () => void;
   width?: number | string;    // Puede ser número o porcentaje (e.g. '100%')
   height?: number;
-  type?: 'delete' | 'save' | 'link' | 'add' | 'associate';
+  type?: 'delete' | 'save' | 'link' | 'add' | 'associate';  
+  size?: 'xs' | 'm' | 'xl';
   disabled?: boolean;
   fontSize?: number;
+  style?: any;
+  minWidth?: number | string;
 }

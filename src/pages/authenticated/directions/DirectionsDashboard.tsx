@@ -12,6 +12,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Select from 'react-select'
 import { saveRecentChange } from '../../../services/localStorage';
 import DirectionModification from './DirectionModification';
+import { Skeleton } from '../../../components/skeleton/Skeleton';
 
 
 const DirectionsDashboard: React.FC = () => {
@@ -19,18 +20,17 @@ const DirectionsDashboard: React.FC = () => {
   const [people, setPeople] = useState<IPerson[]>([]);
 
   const [showModalForm, setShowModalForm] = useState(false);
-  const [showAssociationModal, setShowAssociationModal] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
 
   const [selectedDirectionId, setSelectedDirectionId] = useState<number | null>(null);
-  const [selectedPersonId, setSelectedPersonId] = useState<number>(-1);
 
-  // Estado del formulario
   const [directionStreet, setDirectionStreet] = useState('');
   const [directionCity, setDirectionCity] = useState('');
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const fetchData = async () => {
     try {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 500));
       const [peopleData, directionsData] = await Promise.all([
         fetchPeople(),
         fetchDirections(),
@@ -46,7 +46,6 @@ const DirectionsDashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  // Función para crear dirección
   const handleCreateDirection = async () => {
     try {
       const newDirection = await createDirection(directionStreet, directionCity);
@@ -92,7 +91,7 @@ const DirectionsDashboard: React.FC = () => {
       { header: 'Calle', accessor: 'street', width: 200 },
       { header: 'Ciudad', accessor: 'city', width: 200},
       { header: 'Persona', accessor: 'personName', width: 150 },
-      { header: 'Acciones', width: 400, 
+      { header: 'Acciones', width: 200, 
         render: (_: any, row: Direction, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
@@ -112,6 +111,13 @@ const DirectionsDashboard: React.FC = () => {
       }
     ];
 
+    const skeletonRows = Array.from({ length: 5 }, (_, i) => (
+        <View key={i} style={{ flexDirection: 'row', gap: 20, marginBottom: 12 }}>
+          <Skeleton width={300} height={20} />
+          <Skeleton width={150} height={35} />
+        </View>
+      ));
+
   return (
     <View style={styles.container}>
 
@@ -121,7 +127,7 @@ const DirectionsDashboard: React.FC = () => {
         </View>
 
         <View style={styles.tableContainer}>
-          <Table columns={columns} data={directions} minRowHeight={50} minRowWidth={800} />
+          <Table columns={columns} data={directions} minRowHeight={50} />
         </View>
 
         <View style = {{alignItems: 'center'}}>
@@ -154,8 +160,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     paddingTop: 60,
-    width: '90%',
-    maxWidth: '100%',
+    width: '100%',
     marginHorizontal: 'auto',
   },
   scrollContainer: {

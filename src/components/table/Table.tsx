@@ -8,7 +8,6 @@ const Table = <T,>({
   data,
   style,
   minRowHeight = 40,
-  minRowWidth = 600,
 }: TableProps<T>): React.ReactElement | null => {
   if (!data.length || !columns.length) return null;
 
@@ -17,7 +16,6 @@ const Table = <T,>({
       <ScrollView
         horizontal
         style={[styles.container, style]}
-        contentContainerStyle={{ minWidth: minRowWidth }}
       >
         <View>
           <View style={[styles.row, styles.headerRow, { minHeight: minRowHeight }]}>

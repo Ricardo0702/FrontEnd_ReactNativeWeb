@@ -1,17 +1,22 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet, type DimensionValue } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, type DimensionValue } from 'react-native';
 import type { ButtonProps } from './ButtonInterface';
 import colors from '../colors/Colors'
+import useResponsive from '../useResponsives/useResponsive';
 
 const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
+  minWidth,
   width,
   height,
   type,
   disabled = false,
-  fontSize
+  fontSize,
+  style,
+  size
 }) => {
+  const minWidthValue = minWidth as DimensionValue;
   const widthValue = width as DimensionValue;
   const heightValue = height as DimensionValue;
   const fontSizeValue = fontSize;
@@ -51,22 +56,37 @@ const Button: React.FC<ButtonProps> = ({
     }
   };
 
+  const getSizeStyle = () => {
+    switch (size) {
+      case 'xs':
+        return useResponsive({type: 'Button', size: 's'});
+      case 'm':
+        return useResponsive({type: 'Button', size: 'm'});
+      case 'xl':
+        return useResponsive({type: 'Button', size: 'l'});
+      default:
+        return;
+    }
+  };
+
   const { buttonStyle, textStyle } = getType();
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      disabled={disabled}
-      style={[
-        styles.button,
-        { width: widthValue, height: heightValue },
-        buttonStyle,
-        disabled && { backgroundColor: '#f5f5f5' },
-      ]}
-      activeOpacity={0.7}
-    >
-      <Text style={[styles.text, { fontSize: fontSizeValue}, textStyle, ]}>{title}</Text>
-    </TouchableOpacity>
+    <View style= {style}>
+      <TouchableOpacity
+        onPress={onPress}
+        disabled={disabled}
+        style={[
+          styles.button, getSizeStyle(),
+          { width: widthValue, height: heightValue, minWidth: minWidthValue },
+          buttonStyle,
+          disabled && { backgroundColor: '#f5f5f5' },
+        ]}
+        activeOpacity={0.7}
+      >
+        <Text style={[styles.text, { fontSize: fontSizeValue}, textStyle, ]}>{title}</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -74,7 +94,6 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    minHeight: 40,
     borderRadius: 8,
   },
   text: {

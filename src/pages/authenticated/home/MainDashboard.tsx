@@ -4,56 +4,62 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/button/Button';
 import { RecentChange } from '../../../types/IRecentChange';
 import Title from '../../../components/title/Title';
+import { LoadingSpinner } from '../../../components/loadingSpinner/LoadingSpinner';  
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [recentChanges, setRecentChanges] = useState<RecentChange[]>([]);
+  const [recentChanges, setRecentChanges] = useState<RecentChange[] | null>(null); 
 
   useEffect(() => {
-    const storedChanges = localStorage.getItem('recentChanges');
-    if (storedChanges) {
-      setRecentChanges(JSON.parse(storedChanges));
-    }
+    setTimeout(() => {
+      const storedChanges = localStorage.getItem('recentChanges');
+      if (storedChanges) {
+        setRecentChanges(JSON.parse(storedChanges));
+      } else {
+        setRecentChanges([]);
+      }
+    }, 1500);
   }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Title style = {styles.title}
-        text = 'Selecciona una página:'
-        size = 'xl'
-        align = 'center'
+      <Title
+        style={styles.title}
+        text="Selecciona una página:"
+        size="xl"
+        align="center"
         underline
       />
       <View style={styles.peopleButton}>
         <Button
           title="Personas"
-          width={320}
-          height={75}
+          size = 'xl'
           fontSize={20}
-          onPress={() => navigate('/auth/people')}          
+          onPress={() => navigate('/auth/people')}
         />
       </View>
       <View style={styles.projectsButton}>
         <Button
           title="Proyectos"
-          width={320}
-          height={75}
+          size = 'xl'
           fontSize={20}
-          onPress={() => navigate('/auth/projects')}      
+          onPress={() => navigate('/auth/projects')}
         />
       </View>
       <View style={styles.directionsButton}>
         <Button
           title="Direcciones"
-          width={320}
-          height={75}
+          size = 'xl'
           fontSize={20}
           onPress={() => navigate('/auth/directions')}
         />
       </View>
 
       <Text style={styles.subtitle}>Cambios recientes:</Text>
-      {recentChanges.length === 0 ? (
+
+      {recentChanges === null ? (
+        <LoadingSpinner size={50} color="#3498db" />
+      ) : recentChanges.length === 0 ? (
         <Text style={styles.noChanges}>No hay cambios recientes.</Text>
       ) : (
         recentChanges.map((change, index) => (
@@ -75,11 +81,12 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   title: {
-   paddingTop: 20,
-   paddingBottom: 20
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   subtitle: {
     fontSize: 18,
+    textAlign: 'center',
     fontWeight: '600',
     marginTop: 40,
     marginBottom: 10,
@@ -101,17 +108,17 @@ const styles = StyleSheet.create({
   peopleButton: {
     backgroundColor: '#fdecea',
     marginBottom: 10,
-    borderRadius: 15
+    borderRadius: 15,
   },
   projectsButton: {
     backgroundColor: '#e6f4ea',
     marginBottom: 10,
-    borderRadius: 15
+    borderRadius: 15,
   },
   directionsButton: {
     backgroundColor: '#e6f0fa',
     marginBottom: 10,
-    borderRadius: 15
+    borderRadius: 15,
   },
 });
 

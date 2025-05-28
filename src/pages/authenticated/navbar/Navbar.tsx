@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../../../components/colors/Colors';
 
@@ -7,31 +7,62 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 700);
+    };
+    handleResize(); // inicializa
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <View style={styles.navbar}>
-
       <TouchableOpacity onPress={() => window.location.pathname = '/'}>
-      <Text style={styles.logo}>My Dashboard</Text>
+        <Text style={styles.logo}>My Dashboard</Text>
       </TouchableOpacity>
 
-      <View style={styles.navLinks}>
-        <TouchableOpacity onPress={() => window.location.pathname = '/auth/people'}>
-          <Text style={styles.navLink}>Personas</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => window.location.pathname = '/auth/projects'}>
-          <Text style={styles.navLink}>Proyectos</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => window.location.pathname = '/auth/directions'}>
-          <Text style={styles.navLink}>Direcciones</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={onLogout}>
-          <Text style={styles.navLink}>Cerrar sesión</Text>
-        </TouchableOpacity>
-      </View>
-
+      {isMobile ? (
+        <View style={styles.mobileMenu}>
+          <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)}>
+            <Text style={styles.burger}>☰</Text>
+          </TouchableOpacity>
+          {menuOpen && (
+            <View style={styles.dropdown}>
+              <TouchableOpacity onPress={() => window.location.pathname = '/auth/people'}>
+                <Text style={styles.navLink}>Personas</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => window.location.pathname = '/auth/projects'}>
+                <Text style={styles.navLink}>Proyectos</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => window.location.pathname = '/auth/directions'}>
+                <Text style={styles.navLink}>Direcciones</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={onLogout}>
+                <Text style={styles.navLink}>Cerrar sesión</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      ) : (
+        <View style={styles.navLinks}>
+          <TouchableOpacity onPress={() => window.location.pathname = '/auth/people'}>
+            <Text style={styles.navLink}>Personas</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => window.location.pathname = '/auth/projects'}>
+            <Text style={styles.navLink}>Proyectos</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => window.location.pathname = '/auth/directions'}>
+            <Text style={styles.navLink}>Direcciones</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onLogout}>
+            <Text style={styles.navLink}>Cerrar sesión</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -49,8 +80,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1000,
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
     maxWidth: '100%',
+    flexWrap: 'wrap',
   },
   logo: {
     fontSize: 24,
@@ -60,12 +91,30 @@ const styles = StyleSheet.create({
   navLinks: {
     flexDirection: 'row',
     gap: 15,
+    flexWrap: 'wrap',
   },
   navLink: {
     color: 'white',
     fontSize: 17,
     textDecorationLine: 'none',
     cursor: 'pointer',
+    marginTop: 5,
+  },
+  mobileMenu: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  burger: {
+    fontSize: 26,
+    color: 'white',
+    padding: 5,
+  },
+  dropdown: {
+    marginTop: 10,
+    backgroundColor: Colors.darksteel,
+    padding: 10,
+    borderRadius: 8,
+    gap: 10,
   },
 });
 
