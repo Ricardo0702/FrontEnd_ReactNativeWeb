@@ -11,12 +11,16 @@ import Button from '../../../components/button/Button';
 import { saveRecentChange } from '../../../services/localStorage';
 import Title from '../../../components/title/Title';
 import Select from '../../../components/select/Select';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   personId: number | null;
 };
 
 export default function PersonModification({ personId }: Props) {
+
+  const {t} = useTranslation();
+  
   const [person, setPerson] = useState<IPerson>(createEmptyPerson());
   const [people, setPeople] = useState<IPerson[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -174,30 +178,30 @@ export default function PersonModification({ personId }: Props) {
 
   return (
     <View style={styles.container}>
-      <Title text='Modificar Persona' type='Subtitle' style={{ marginBottom: 20 }} />
-      <TextInput label='Nombre' value={personName} onChangeText={setPersonName} style={styles.input} />
+      <Title text={t('Modificar Persona')} type='Subtitle' style={{ marginBottom: 20 }} />
+      <TextInput label={t('Nombre')} value={personName} onChangeText={setPersonName} style={styles.input} />
       <TextInput
-        label='Edad'
+        label={t('Edad')}
         value={personAge.toString()}
         onChangeText={(text) => setPersonAge(Number(text))}
         keyboardType="numeric"
         style={styles.input}
       />
-      <Button title="Guardar cambios" onPress={handleUpdate} type="save" />
+      <Button title={t("Guardar cambios")} onPress={handleUpdate} type="save" />
 
-      <Title text='Proyectos Asociados' type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('Proyectos Asociados')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       {(person.projectIds || []).map((id) => {
         const project = projects.find(p => p.id === id);
         if (!project) return null;
         return (
           <View key={id} style={styles.listItem}>
             <Text>{project.name}</Text>
-            <Button title="Eliminar" onPress={() => handleRemoveProject(id)} type="delete" />
+            <Button title={t("Eliminar")} onPress={() => handleRemoveProject(id)} type="delete" />
           </View>
         );
       })}
 
-      <Title text='Añadir Proyecto' type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('Añadir Proyecto')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       <Select
         selectedValue={newProjectId}
         onValueChange={(value) => {
@@ -212,21 +216,21 @@ export default function PersonModification({ personId }: Props) {
           label: project.name,
           value: project.id,
         }))}
-        placeholder="Selecciona un proyecto"
+        placeholder={t("Selecciona un proyecto")}
       />
-      <Button title="Asociar Proyecto" onPress={handleAddProject} type='save' />
+      <Button title={t("Asociar Proyecto")} onPress={handleAddProject} type='save' />
 
-      <Title text='Direcciones Asociadas' type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('Direcciones Asociadas')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       {person.directionIds.map((id, idx) => (
         <View key={id} style={styles.listItem}>
           <Text>{person.streets[idx]} - {person.cities[idx]}</Text>
-          <Button title="Eliminar" onPress={() => handleRemoveDirection(id)} type= 'delete' />
+          <Button title={t("Eliminar")} onPress={() => handleRemoveDirection(id)} type= 'delete' />
         </View>
       ))}
 
-      <TextInput label="Calle" value={newStreet} onChangeText={setNewStreet} style={styles.input} />
-      <TextInput label="Ciudad" value={newCity} onChangeText={setNewCity} style={styles.input} />
-      <Button title="Añadir Dirección" onPress={handleAddDirection} type='save' />
+      <TextInput label={t("Calle")} value={newStreet} onChangeText={setNewStreet} style={styles.input} />
+      <TextInput label={t("Ciudad")} value={newCity} onChangeText={setNewCity} style={styles.input} />
+      <Button title={t("Añadir Dirección")} onPress={handleAddDirection} type='save' />
     </View>
   );
 }

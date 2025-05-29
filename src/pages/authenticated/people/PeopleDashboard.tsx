@@ -4,17 +4,23 @@ import Table from '../../../components/table/Table';
 import Button from '../../../components/button/Button'
 import Title from '../../../components/title/Title'
 import TextInput from '../../../components/textInput/TextInput';
+import colors from '../../../components/colors/Colors';
+import { Skeleton } from '../../../components/skeleton/Skeleton';
 import { fetchPeople, createPerson, deletePerson, associateProject, updatePerson } from '../../../services/PersonService';
 import { saveRecentChange } from '../../../services/localStorage';
 import { fetchProjects } from '../../../services/ProjectService';
 import type { IPerson } from '../../../types/IPerson';
 import { View, Text, StyleSheet,ScrollView } from 'react-native';
 import PersonModification from './PersonModification';
-import { Skeleton } from '../../../components/skeleton/Skeleton';
+import { useTranslation } from 'react-i18next';
+
+
 
 const PeopleDashboard: React.FC = () => {
   
   const [people, setPeople] = useState<IPerson[]>([]);
+
+  const {t} = useTranslation();
 
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
@@ -34,7 +40,11 @@ const PeopleDashboard: React.FC = () => {
         fetchPeople(),
       ]);
       setPeople(peopleData);
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error al cargar los proyectos: ', error);
+    }finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -81,20 +91,19 @@ const PeopleDashboard: React.FC = () => {
     }
   };
 
- const columns: { header: string; accessor?: keyof IPerson; width?: number; 
+ const columns: { header: string; accessor?: keyof IPerson; width?: number; minRowWidth?: number;
       render?: (value: any, row: IPerson) => React.ReactNode }[] = [
-      { header: 'Nombre', accessor: 'name', width: 100 },
-      { header: 'Edad', accessor: 'age', width: 80},
+      { header: t('Nombre'), accessor: 'name' },
+      { header: t('Edad'), accessor: 'age' },
       {
-        header: 'Direcciones',
-        width: 300,
+        header: t('Direcciones'),
         render: (_: any, row: IPerson) => {
           const streets = row.streets ?? [];
           const cities = row.cities ?? [];
 
           const directions = streets.map((street, index) => ({
             street,
-            city: cities[index] ?? "Ciudad desconocida",
+            city: cities[index] ?? t("Ciudad desconocida"),
           }));
 
           return (
@@ -109,22 +118,23 @@ const PeopleDashboard: React.FC = () => {
         },
       },
       {
-        header: 'Proyectos', accessor:'projectNames', width: 200,
+        header: t('Proyectos'), accessor:'projectNames',
       },
       {
-        header: 'Acciones',
-        width: 200,
+        header: t('Acciones'), minRowWidth: 180,
         render: (_: any, row: IPerson, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
         return (
-          <View style={{ flexDirection: 'row', gap: 10 }}>
+          <View style={{ flexDirection: 'column', gap: 10 }}>
             <View style = {{backgroundColor}}>
-              <Button title="Modificar" onPress={() => {
+              <Button title= {t("Modificar")} onPress={() => {
                 setSelectedPersonId(row.id); setPersonName(row.name); setPersonAge(row.age); setUpdateModal(true);}}
-                type='associate'/>
+                type='associate' />
             </View>
-            <Button title="Eliminar" onPress={() => handleDeletePerson(row.id)} type='delete' />
+            <View>
+              <Button title={t("Eliminar")} onPress={() => handleDeletePerson(row.id)} type='delete' />
+            </View>
           </View>
         );
       }
@@ -143,7 +153,7 @@ const PeopleDashboard: React.FC = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
 
         <View style={{paddingBottom: 10}}>
-          <Title text = 'Personas Registradas' size = 'xl' align = 'center' underline/>
+          <Title text = {t('Personas Registradas')} size = 'xl' align = 'center' underline/>
         </View>
 
         <View style={styles.tableContainer}>
@@ -151,24 +161,24 @@ const PeopleDashboard: React.FC = () => {
             <Table columns={columns} data={people} minRowHeight={50} />
           )}
           <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
-            <Button title="Añadir Persona" onPress={() => setShowModalForm(true)} type = 'add'/>
+            <Button title={t("Añadir Persona")} onPress={() => setShowModalForm(true)} type = 'add'/>
           </View>
         </View>
 
       </ScrollView>
 
-      <Modal title="Añadir Persona" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t("Añadir Persona")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <TextInput label= 'Nombre' value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
+          <TextInput label= {t('Nombre')} value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
 
-          <TextInput label= 'Edad' value={personAge.toString()} onChangeText={
+          <TextInput label= {t('Edad')} value={personAge.toString()} onChangeText={
             (value) => setPersonAge(Number(value))} style={styles.input} keyboardType="numeric" />
 
-          <Button title="Guardar" onPress={handleCreatePerson} type = 'save'/>
+          <Button title={t("Guardar")} onPress={handleCreatePerson} type = 'save'/>
         </View>
       </Modal>
       
-      <Modal title="Modificar persona" visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
+      <Modal title={t("Modificar persona")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
         <PersonModification personId={selectedPersonId} />
       </Modal>
 
@@ -178,14 +188,12 @@ const PeopleDashboard: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'column',
     flexWrap: 'nowrap',
     alignContent: 'stretch',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     paddingTop: 60,
-    width: '100%',  // Un poco más ancho para que el Table tenga espacio
     marginHorizontal: 'auto',
   },
 
@@ -198,7 +206,7 @@ const styles = StyleSheet.create({
   tableContainer: 
   { marginBottom: 10,
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
   },
 
   actionButtonsContainer: 

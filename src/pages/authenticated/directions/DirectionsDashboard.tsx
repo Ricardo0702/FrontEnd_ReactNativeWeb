@@ -8,14 +8,17 @@ import Table from '../../../components/table/Table';
 import Button from '../../../components/button/Button';
 import Title from '../../../components/title/Title';
 import TextInput from '../../../components/textInput/TextInput';
+import colors from '../../../components/colors/Colors';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import Select from 'react-select'
 import { saveRecentChange } from '../../../services/localStorage';
 import DirectionModification from './DirectionModification';
 import { Skeleton } from '../../../components/skeleton/Skeleton';
+import { useTranslation } from 'react-i18next';
 
 
 const DirectionsDashboard: React.FC = () => {
+  const {t} = useTranslation();
+  
   const [directions, setDirections] = useState<Direction[]>([]);
   const [people, setPeople] = useState<IPerson[]>([]);
 
@@ -86,24 +89,26 @@ const DirectionsDashboard: React.FC = () => {
     }
   };
 
-  const columns: { header: string; accessor?: keyof Direction; width?: number;
+  const columns: { header: string; accessor?: keyof Direction; width?: number; minRowWidth?: number;
     render?: (value: any, row: Direction) => React.ReactNode }[] = [
-      { header: 'Calle', accessor: 'street', width: 200 },
-      { header: 'Ciudad', accessor: 'city', width: 200},
-      { header: 'Persona', accessor: 'personName', width: 150 },
-      { header: 'Acciones', width: 200, 
+      { header: t('Calle'), accessor: 'street'},
+      { header: t('Ciudad'), accessor: 'city'},
+      { header: t('Persona'), accessor: 'personName'},  
+      { header: t('Acciones'), minRowWidth: 180,
         render: (_: any, row: Direction, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
         return (
-          <View style={{ flexDirection: 'row', gap: 10 }}>
+          <View style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
 
             <View style = {{backgroundColor}}>
-              <Button title="Modificar" type = "associate" onPress= {() => {
+              <Button title={t("Modificar")} type = "associate" onPress= {() => {
                 setSelectedDirectionId(row.id); setDirectionStreet(row.street); setDirectionCity(row.city); setUpdateModal(true);}} />
             </View>
 
-            <Button title="Eliminar" onPress={() => handleDeleteDirection(row.id)} type = 'delete' />
+            <View style= {{backgroundColor: colors.lightRed}}>
+              <Button title={t("Eliminar")} onPress={() => handleDeleteDirection(row.id)} type = 'associate' />
+            </View>
 
           </View>
         );
@@ -123,7 +128,7 @@ const DirectionsDashboard: React.FC = () => {
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title text = 'Direcciones Registradas' size = 'xl' align = 'center' underline />
+          <Title text = {t('Direcciones Registradas')} size = 'xl' align = 'center' underline />
         </View>
 
         <View style={styles.tableContainer}>
@@ -131,20 +136,20 @@ const DirectionsDashboard: React.FC = () => {
         </View>
 
         <View style = {{alignItems: 'center'}}>
-        <Button title="Añadir Dirección" onPress={() => setShowModalForm(true)} type = 'add' />
+        <Button title={t("Añadir Dirección")} onPress={() => setShowModalForm(true)} type = 'add' />
         </View>
       </ScrollView>
 
-      <Modal title = "Modificar dirección" visible = {showUpdateModal} onClose = {() => {setUpdateModal(false); fetchData()}} size = "xl" >
+      <Modal title = {t("Modificar dirección")} visible = {showUpdateModal} onClose = {() => {setUpdateModal(false); fetchData()}} size = "xs" >
         <DirectionModification directionId={selectedDirectionId} />
       </Modal>
 
-      <Modal title="Añadir Dirección" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs" >
+      <Modal title={t("Añadir Dirección")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs" >
         <View>
-          <TextInput label= 'Calle' value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
+          <TextInput label= {t('Calle')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
           <Text style={styles.label}>Ciudad:</Text>
-          <TextInput label= 'Ciudad' value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
-          <Button title="Guardar" onPress={handleCreateDirection} type = 'save' />
+          <TextInput label= {t('Ciudad')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
+          <Button title={t("Guardar")} onPress={handleCreateDirection} type = 'save' />
         </View>
       </Modal>
       

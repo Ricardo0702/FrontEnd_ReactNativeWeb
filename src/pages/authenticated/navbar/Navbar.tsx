@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Colors from '../../../components/colors/Colors';
+import { useTranslation } from 'react-i18next';
 
 interface NavbarProps {
   onLogout: () => void;
@@ -9,6 +10,8 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   return (
     <View style={styles.navbar}>
       <TouchableOpacity onPress={() => window.location.pathname = '/'}>
-        <Text style={styles.logo}>My Dashboard</Text>
+        <Text style={styles.logo}>{t('My Dashboard')}</Text>
       </TouchableOpacity>
 
       {isMobile ? (
@@ -33,16 +36,16 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
           {menuOpen && (
             <View style={styles.dropdown}>
               <TouchableOpacity onPress={() => window.location.pathname = '/auth/people'}>
-                <Text style={styles.navLink}>Personas</Text>
+                <Text style={styles.navLink}>{t('Personas')}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => window.location.pathname = '/auth/projects'}>
-                <Text style={styles.navLink}>Proyectos</Text>
+                <Text style={styles.navLink}>{t('Proyectos')}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => window.location.pathname = '/auth/directions'}>
-                <Text style={styles.navLink}>Direcciones</Text>
+                <Text style={styles.navLink}>{t('Direcciones')}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={onLogout}>
-                <Text style={styles.navLink}>Cerrar sesión</Text>
+                <Text style={styles.navLink}>t{('Cerrar sesión')}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -50,16 +53,16 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
       ) : (
         <View style={styles.navLinks}>
           <TouchableOpacity onPress={() => window.location.pathname = '/auth/people'}>
-            <Text style={styles.navLink}>Personas</Text>
+            <Text style={styles.navLink}>{t('Personas')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => window.location.pathname = '/auth/projects'}>
-            <Text style={styles.navLink}>Proyectos</Text>
+            <Text style={styles.navLink}>{t('Proyectos')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => window.location.pathname = '/auth/directions'}>
-            <Text style={styles.navLink}>Direcciones</Text>
+            <Text style={styles.navLink}>{t('Direcciones')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onLogout}>
-            <Text style={styles.navLink}>Cerrar sesión</Text>
+            <Text style={styles.navLink}>{t('Cerrar sesión')}</Text>
           </TouchableOpacity>
         </View>
       )}

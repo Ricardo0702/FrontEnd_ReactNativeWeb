@@ -9,6 +9,7 @@ import { isLoggedIn, logout } from './services/AuthService';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import PersonModification from './pages/authenticated/people/PersonModification';
+import './types/I18n';
 
 const PersonModificationWrapper: React.FC = () => {
   const { personId } = useParams<{ personId: string }>();

@@ -9,12 +9,15 @@ import Button from '../../../components/button/Button';
 import { saveRecentChange } from '../../../services/localStorage';
 import Title from '../../../components/title/Title';
 import Select from '../../../components/select/Select';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   directionId: number | null;
 };
 
 export default function directionModification({directionId}: Props){
+
+    const {t} = useTranslation();
 
     const [direction, setDirection] = useState<Direction>(createEmptyDirection());
     const [people, setPeople] = useState<IPerson[]>([]);
@@ -72,16 +75,19 @@ export default function directionModification({directionId}: Props){
 
     return (
     <View style={styles.container}>
-      <Title text= "Modificar Dirección" type= 'Subtitle' style= {{marginBottom: 20}}/>
-      <TextInput label = 'Calle' value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} />
-      <TextInput label = 'Ciudad' value={directionCity} onChangeText={setDirectionCity} style = {styles.input} />
-      <Button title="Guardar cambios" onPress={handleUpdate} type= "save"/>
+      <Title text= {t("Modificar Dirección")} type= 'Subtitle' style= {{marginBottom: 20}}/>
+      <TextInput label = {t('Calle')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} />
+      <TextInput label = {t('Ciudad')} value={directionCity} onChangeText={setDirectionCity} style = {styles.input} />
+      <Button title= {t("Guardar cambios")} onPress={handleUpdate} type= "save"/>
       
-      <Title text="Persona Asociada" type = 'Subtitle' style= {{marginTop: 2, marginBottom: 20}}/>
-      <Text>{direction.personName}</Text>
-      <Button title="Eliminar" onPress={() => handleRemovePerson()} type= "delete" />
+      
+      <Title text={t("Persona Asociada")} type = 'Subtitle' style= {{marginTop: 2, marginBottom: 20}}/>
+      <View style = {{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <Text>{direction.personName}</Text>
+          <Button title={t("Eliminar")} onPress={() => handleRemovePerson()} type= "delete" />
+      </View>
 
-      <Title text= 'Asociar Pesona' type= 'Subtitle' style= {{marginTop: 20, marginBottom: 20}}/>
+      <Title text= {t('Asociar Pesona')} type= 'Subtitle' style= {{marginTop: 20, marginBottom: 20}}/>
       <Select
         selectedValue={newPersonId}
         onValueChange={(value) =>{
@@ -96,9 +102,9 @@ export default function directionModification({directionId}: Props){
           label: person.name,
           value: person.id,
         }))}
-        placeholder="Selecciona una persona"
+        placeholder={t("Selecciona una persona")}
       />
-      <Button title="Asociar Persona" onPress={handleChangePerson} type= 'save'/>
+      <Button title={t("Asociar Persona")} onPress={handleChangePerson} type= 'save'/>
     </View>
   );
 }

@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, StyleSheet, type DimensionValue } from 'r
 import type { ButtonProps } from './ButtonInterface';
 import colors from '../colors/Colors'
 import useResponsive from '../useResponsives/useResponsive';
+import { useTranslation, Trans } from 'react-i18next';
 
 const Button: React.FC<ButtonProps> = ({
   title,
@@ -20,13 +21,14 @@ const Button: React.FC<ButtonProps> = ({
   const widthValue = width as DimensionValue;
   const heightValue = height as DimensionValue;
   const fontSizeValue = fontSize;
+  const {t} = useTranslation();
 
   const getType = () => {
     switch (type) {
       case 'delete':
         return {
-          buttonStyle: { backgroundColor: "transparent"},
-          textStyle: { color: colors.red , textDecorationLine: "underline" as "underline"}
+          buttonStyle: { backgroundColor: colors.lightRed},
+          textStyle: { color: 'black' }
         };
       case 'save':
         return {
@@ -58,6 +60,8 @@ const Button: React.FC<ButtonProps> = ({
 
   const getSizeStyle = () => {
     switch (size) {
+      case 'xxs':
+        return useResponsive({type: 'Button', size: 'xs'});
       case 'xs':
         return useResponsive({type: 'Button', size: 's'});
       case 'm':
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
+    padding: 5
   },
   text: {
     fontSize: 16,

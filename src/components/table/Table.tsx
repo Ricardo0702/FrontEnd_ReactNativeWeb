@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  useWindowDimensions,
+} from 'react-native';
 import type { Table as TableProps } from './TableInterface';
 import Colors from '../colors/Colors';
 
@@ -9,15 +15,17 @@ const Table = <T,>({
   style,
   minRowHeight = 40,
 }: TableProps<T>): React.ReactElement | null => {
+  const { width: windowWidth } = useWindowDimensions();
+
   if (!data.length || !columns.length) return null;
 
+  const flexibleColumns = columns.filter((col) => !col.width);
+  const flexibleColumnCount = flexibleColumns.length;
+
   return (
-    <View style={{ flex: 1, minHeight: minRowHeight * (data.length + 1) }}>
-      <ScrollView
-        horizontal
-        style={[styles.container, style]}
-      >
-        <View>
+    <View style={{ minHeight: minRowHeight * (data.length + 1) }}>
+      <ScrollView horizontal style={[styles.container, style]}>
+        <View style={{ width: windowWidth * 0.8 }}>
           <View style={[styles.row, styles.headerRow, { minHeight: minRowHeight }]}>
             {columns.map((col, idx) => (
               <View
@@ -25,7 +33,9 @@ const Table = <T,>({
                 style={[
                   styles.cell,
                   styles.headerCell,
-                  col.width ? { width: col.width } : { minWidth: 100 },
+                  col.width
+                    ? { width: col.width }
+                    : { width: windowWidth * 0.8 / flexibleColumnCount },
                   { minHeight: minRowHeight },
                 ]}
               >
@@ -50,13 +60,15 @@ const Table = <T,>({
                     key={colIndex}
                     style={[
                       styles.cell,
-                      col.width ? { width: col.width } : { minWidth: 100 },
+                      col.width
+                        ? { width: col.width }
+                        : { width: windowWidth *0.8 / flexibleColumnCount },
                       { minHeight: minRowHeight },
                     ]}
                   >
                     {col.render
                       ? col.render(cellValue, row, rowIndex)
-                      : <Text style={styles.cellText}>{String(cellValue)}</Text>}
+                      : <Text>{String(cellValue)}</Text>}
                   </View>
                 );
               })}
@@ -70,7 +82,6 @@ const Table = <T,>({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: 15,
   },
   row: {
@@ -89,15 +100,10 @@ const styles = StyleSheet.create({
     borderRightColor: '#ccc',
     justifyContent: 'center',
   },
-  headerCell: {
-    // puedes agregar estilos especiales para header
-  },
+  headerCell: {},
   headerText: {
     fontSize: 15,
-    color: 'white'
-  },
-  cellText: {
-    fontSize: 15,
+    color: 'white',
   },
   evenRow: {
     backgroundColor: '#f9f9f9',

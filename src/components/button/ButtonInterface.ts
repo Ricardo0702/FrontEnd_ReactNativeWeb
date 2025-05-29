@@ -4,9 +4,10 @@ export interface ButtonProps {
   width?: number | string;    // Puede ser número o porcentaje (e.g. '100%')
   height?: number;
   type?: 'delete' | 'save' | 'link' | 'add' | 'associate';  
-  size?: 'xs' | 'm' | 'xl';
+  size?: 'xxs' | 'xs' | 'm' | 'xl';
   disabled?: boolean;
   fontSize?: number;
   style?: any;
   minWidth?: number | string;
+  color?: string
 }

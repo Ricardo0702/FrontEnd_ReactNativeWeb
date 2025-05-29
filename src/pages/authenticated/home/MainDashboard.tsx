@@ -5,10 +5,13 @@ import Button from '../../../components/button/Button';
 import { RecentChange } from '../../../types/IRecentChange';
 import Title from '../../../components/title/Title';
 import { LoadingSpinner } from '../../../components/loadingSpinner/LoadingSpinner';  
+import { useTranslation } from 'react-i18next';
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [recentChanges, setRecentChanges] = useState<RecentChange[] | null>(null); 
+
+  const {t} = useTranslation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -18,21 +21,21 @@ const MainDashboard: React.FC = () => {
       } else {
         setRecentChanges([]);
       }
-    }, 1500);
+    }, 500);
   }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Title
         style={styles.title}
-        text="Selecciona una página:"
+        text= {t("Selecciona una página:")}
         size="xl"
         align="center"
         underline
       />
       <View style={styles.peopleButton}>
         <Button
-          title="Personas"
+          title={t("Personas")}
           size = 'xl'
           fontSize={20}
           onPress={() => navigate('/auth/people')}
@@ -40,7 +43,7 @@ const MainDashboard: React.FC = () => {
       </View>
       <View style={styles.projectsButton}>
         <Button
-          title="Proyectos"
+          title={t("Proyectos")}
           size = 'xl'
           fontSize={20}
           onPress={() => navigate('/auth/projects')}
@@ -48,19 +51,19 @@ const MainDashboard: React.FC = () => {
       </View>
       <View style={styles.directionsButton}>
         <Button
-          title="Direcciones"
+          title={t("Direcciones")}
           size = 'xl'
           fontSize={20}
           onPress={() => navigate('/auth/directions')}
         />
       </View>
 
-      <Text style={styles.subtitle}>Cambios recientes:</Text>
+      <Text style={styles.subtitle}>{t('Cambios recientes:')}</Text>
 
       {recentChanges === null ? (
         <LoadingSpinner size={50} color="#3498db" />
       ) : recentChanges.length === 0 ? (
-        <Text style={styles.noChanges}>No hay cambios recientes.</Text>
+        <Text style={styles.noChanges}>{t('No hay cambios recientes.')}</Text>
       ) : (
         recentChanges.map((change, index) => (
           <View key={index} style={styles.changeItem}>

@@ -5,11 +5,11 @@ export interface Table<T> {
     header: string;
     accessor?: keyof T;
     width?: number;
-    render?: (value: any, row: T, rowIndex?: number) => React.ReactNode;
+    minRowWidth?: number;
+    render?: (value: any, row: T, rowIndex?: number) => React.ReactNode;    
   }>;
   data: T[];
   style?: object;
   minRowHeight?: number;
-  minRowWidth?: number;
   //children: React.ReactNode; // ✅ Añadido para permitir renderizado adicional
 }

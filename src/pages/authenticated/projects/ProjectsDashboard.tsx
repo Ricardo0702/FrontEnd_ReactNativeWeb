@@ -5,6 +5,7 @@ import Modal from '../../../components/modal/Modal';
 import Table from '../../../components/table/Table';
 import Button from '../../../components/button/Button';
 import TextInput from '../../../components/textInput/TextInput';
+import colors from '../../../components/colors/Colors';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import Title from '../../../components/title/Title';
 import { saveRecentChange } from '../../../services/localStorage';
@@ -89,15 +90,14 @@ const ProjectsDashboard: React.FC = () => {
   };
 
   const columns: { header: string; accessor?: keyof Project; width?: number; render?: (value: any, row: Project, rowIndex?: number) => React.ReactNode }[] = [
-    { header: 'Nombre', accessor: 'name', width: 300 },
+    { header: 'Nombre', accessor: 'name' }, //, width: 300
     {
-      header: 'Acciones',
-      width: 300,
+      header: 'Acciones', // width: 300,
       render: (_: any, row: Project, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
         return (
-          <View style={{ flexDirection: 'row', gap: 10 }}>
+          <View style={{ flexDirection: 'column', gap: 10 }}>
             <View style={{ backgroundColor }}>
               <Button
                 title="Modificar"
@@ -109,7 +109,9 @@ const ProjectsDashboard: React.FC = () => {
                 }}
               />
             </View>
-            <Button title="Eliminar" onPress={() => handleDeleteProject(row.id)} type="delete" />
+            <View style={{ backgroundColor: colors.lightRed }}>
+              <Button title="Eliminar" onPress={() => handleDeleteProject(row.id)} type="associate"   />
+            </View>
           </View>
         );
       }
