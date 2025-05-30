@@ -9,8 +9,17 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import useResponsive from '../useResponsives/useResponsive';
-import type { Modal as ModalProps } from './ModalInterface';
+import useResponsive from './useResponsive';
+
+export interface ModalProps {
+  title: string;
+  visible: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  size?: 'xs' | 'm' | 'xl';
+  position?: 'center' | 'top' | 'bottom'; // Posición opcional
+}
+
 
 const Modal: React.FC<ModalProps> = ({
   title,

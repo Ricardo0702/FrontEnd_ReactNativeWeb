@@ -5,12 +5,12 @@ import { fetchProjects, fetchProject } from '../../../services/ProjectService';
 import { fetchDirections, createDirection, deleteDirection, associatePerson, removePerson } from '../../../services/DirectionService';
 import { Direction } from '../../../types/IDirection';
 import { Project } from '../../../types/IProject';
-import { IPerson } from '../../../types/IPerson';
-import TextInput from '../../../components/textInput/TextInput';
-import Button from '../../../components/button/Button';
+import { Person } from '../../../types/IPerson';
+import TextInput from '../../../components/TextInput';
+import Button from '../../../components/Button';
 import { saveRecentChange } from '../../../services/localStorage';
-import Title from '../../../components/title/Title';
-import Select from '../../../components/select/Select';
+import Title from '../../../components/Title';
+import Select from '../../../components/Select';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
@@ -21,8 +21,8 @@ export default function PersonModification({ personId }: Props) {
 
   const {t} = useTranslation();
   
-  const [person, setPerson] = useState<IPerson>(createEmptyPerson());
-  const [people, setPeople] = useState<IPerson[]>([]);
+  const [person, setPerson] = useState<Person>(createEmptyPerson());
+  const [people, setPeople] = useState<Person[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [directions, setDirections] = useState<Direction[]>([]);
 
@@ -43,7 +43,7 @@ export default function PersonModification({ personId }: Props) {
       setPersonName(data.name);
       setPersonAge(data.age);
     } catch (error) {
-      console.error('Error loading person:', error);
+      console.error(t('Error loading person:'), error);
     }
   };
 
@@ -52,7 +52,7 @@ export default function PersonModification({ personId }: Props) {
       const data = await fetchProjects();
       setProjects(data);
     } catch (error) {
-      console.error('Error al cargar los proyectos: ', error);
+      console.error(t('Error al cargar los proyectos: '), error);
     }
   };
 
@@ -72,7 +72,7 @@ export default function PersonModification({ personId }: Props) {
       );
       setAssociatedProjects(projectsData);
     } catch (error) {
-      console.error('Error cargando proyectos asociados:', error);
+      console.error(t('Error cargando proyectos asociados:'), error);
     }
   };
 
@@ -90,7 +90,7 @@ export default function PersonModification({ personId }: Props) {
     if (personId === null) return;
     await updatePerson(personId, personName, personAge);
     await loadPerson();
-    saveRecentChange({ type: 'Persona', action: 'Editado/a', name: personName, timestamp: Date.now() });
+    saveRecentChange({ type: t('Persona'), action: t('Editado/a'), name: personName, timestamp: Date.now() });
   };
 
   const handleAddProject = async () => {
@@ -104,8 +104,8 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && projectFound) {
       saveRecentChange({
-        type: 'Persona',
-        action: 'Editado/a',
+        type: t('Persona'),
+        action: t('Editado/a'),
         name: `Persona "${personFound.name}" Asociado al proyecto "${projectFound.name}"`,
         timestamp: Date.now()
       });
@@ -123,8 +123,8 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && projectFound) {
       saveRecentChange({
-        type: 'Persona',
-        action: 'Editado/a',
+        type: t('Persona'),
+        action: t('Editado/a'),
         name: `Proyecto "${projectFound.name}" eliminado de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
@@ -142,8 +142,8 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && direction) {
       saveRecentChange({
-        type: 'Persona',
-        action: 'Editado/a',
+        type: t('Persona'),
+        action: t('Editado/a'),
         name: `Dirección "${direction.street}"("${direction.city}") añadida a persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
@@ -162,14 +162,14 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && directionFound) {
       saveRecentChange({
-        type: 'Persona',
-        action: 'Editado/a',
+        type: t('Persona'),
+        action: t('Editado/a'),
         name: `Dirección "${directionFound.street}"("${directionFound.city}") eliminada de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
       saveRecentChange({
-        type: 'Dirección',
-        action: 'Eliminado/a',
+        type: t('Dirección'),
+        action: t('Eliminado/a'),
         name: `"${directionFound.street}"("${directionFound.city}") eliminada de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });

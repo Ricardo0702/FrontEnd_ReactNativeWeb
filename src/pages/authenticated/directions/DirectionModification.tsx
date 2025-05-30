@@ -3,12 +3,12 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react
 import { fetchPeople } from '../../../services/PersonService';
 import { fetchDirection, createEmptyDirection, associatePerson, removePerson, updateDirection } from '../../../services/DirectionService';
 import { Direction } from '../../../types/IDirection';
-import { IPerson } from '../../../types/IPerson';
-import TextInput from '../../../components/textInput/TextInput';
-import Button from '../../../components/button/Button';
+import { Person } from '../../../types/IPerson';
+import TextInput from '../../../components/TextInput';
+import Button from '../../../components/Button';
 import { saveRecentChange } from '../../../services/localStorage';
-import Title from '../../../components/title/Title';
-import Select from '../../../components/select/Select';
+import Title from '../../../components/Title';
+import Select from '../../../components/Select';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
@@ -20,7 +20,7 @@ export default function directionModification({directionId}: Props){
     const {t} = useTranslation();
 
     const [direction, setDirection] = useState<Direction>(createEmptyDirection());
-    const [people, setPeople] = useState<IPerson[]>([]);
+    const [people, setPeople] = useState<Person[]>([]);
 
     const [directionStreet, setDirectionStreet] = useState('');
     const [directionCity, setDirectionCity] = useState('');
@@ -34,7 +34,7 @@ export default function directionModification({directionId}: Props){
             setDirectionStreet(data.street);
             setDirectionCity(data.city);
         } catch (error) {
-            console.error('Error loading direction:', error);
+            console.error(t('Error loading direction:'), error);
         }
     };
 
@@ -43,7 +43,7 @@ export default function directionModification({directionId}: Props){
             const data = await fetchPeople();
             setPeople(data);
         }catch(error){
-            console.error('Error al cargar las personas: ', error);
+            console.error(t('Error al cargar las personas: '), error);
         }
     };
 
@@ -56,7 +56,7 @@ export default function directionModification({directionId}: Props){
         if (directionId === null) return;
         await updateDirection(directionId, directionStreet, directionCity);
         await loadDirection();
-        saveRecentChange({type: 'Dirección',action: 'Editado/a',name: direction.street,timestamp: Date.now()});
+        saveRecentChange({type: t('Dirección'),action: t('Editado/a'),name: direction.street,timestamp: Date.now()});
     };
 
     const handleChangePerson = async () => {

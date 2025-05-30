@@ -1,6 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, ViewStyle } from 'react-native';
-import { SkeletonProps } from './SkeletonInterface';
+
+export interface SkeletonProps {
+  width?: number | string;
+  height?: number;
+  circle?: boolean;
+  style?: ViewStyle;
+}
 
 export const Skeleton: React.FC<SkeletonProps> = ({
   width,

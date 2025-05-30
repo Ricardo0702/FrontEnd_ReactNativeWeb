@@ -1,7 +1,20 @@
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
-import { SelectProps } from './SelectInterface';
 import { Picker } from '@react-native-picker/picker';
+
+export interface SelectOption {
+  label: string;
+  value: number | string;
+};
+
+export interface SelectProps {
+  options: SelectOption[];
+  selectedValue: number | string | undefined;
+  onValueChange: (value: number | string) => void;
+  placeholder?: string;
+  style?: any;
+};
+
 
 const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, placeholder, style }) => {
 

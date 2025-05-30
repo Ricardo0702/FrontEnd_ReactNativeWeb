@@ -1,13 +1,19 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  useWindowDimensions,
-} from 'react-native';
-import type { Table as TableProps } from './TableInterface';
-import Colors from '../colors/Colors';
+import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import Colors from './Colors';
+
+export interface TableProps<T> {
+  columns: Array<{
+    header: string;
+    accessor?: keyof T;
+    width?: number;
+    minRowWidth?: number;
+    render?: (value: any, row: T, rowIndex?: number) => React.ReactNode;
+  }>;
+  data: T[];
+  style?: object;
+  minRowHeight?: number;
+}
 
 const Table = <T,>({
   columns,
@@ -18,6 +24,30 @@ const Table = <T,>({
   const { width: windowWidth } = useWindowDimensions();
 
   if (!data.length || !columns.length) return null;
+
+  const isSmallScreen = windowWidth < 600;
+
+  if (isSmallScreen) {
+    return (
+      <ScrollView style={[styles.cardsContainer, style]}>
+        {data.map((row, rowIndex) => (
+          <View key={rowIndex} style={styles.card}>
+            {columns.map((col, colIndex) => {
+              const cellValue = col.accessor ? row[col.accessor] : null;
+              return (
+                <View key={colIndex} style={styles.cardRow}>
+                  <Text style={styles.cardHeader}>{col.header}:</Text>
+                  <Text style={styles.cardValue}>
+                    {col.render ? col.render(cellValue, row, rowIndex) : String(cellValue)}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
+        ))}
+      </ScrollView>
+    );
+  }
 
   const flexibleColumns = columns.filter((col) => !col.width);
   const flexibleColumnCount = flexibleColumns.length;
@@ -35,7 +65,7 @@ const Table = <T,>({
                   styles.headerCell,
                   col.width
                     ? { width: col.width }
-                    : { width: windowWidth * 0.8 / flexibleColumnCount },
+                    : { width: (windowWidth * 0.8) / flexibleColumnCount },
                   { minHeight: minRowHeight },
                 ]}
               >
@@ -62,13 +92,11 @@ const Table = <T,>({
                       styles.cell,
                       col.width
                         ? { width: col.width }
-                        : { width: windowWidth *0.8 / flexibleColumnCount },
+                        : { width: (windowWidth * 0.8) / flexibleColumnCount },
                       { minHeight: minRowHeight },
                     ]}
                   >
-                    {col.render
-                      ? col.render(cellValue, row, rowIndex)
-                      : <Text>{String(cellValue)}</Text>}
+                    {col.render ? col.render(cellValue, row, rowIndex) : <Text>{String(cellValue)}</Text>}
                   </View>
                 );
               })}
@@ -110,6 +138,30 @@ const styles = StyleSheet.create({
   },
   oddRow: {
     backgroundColor: '#f0f0f0',
+  },
+  cardsContainer: {
+    marginTop: 15,
+  },
+  card: {
+    backgroundColor: 'white',
+    padding: 12,
+    marginVertical: 8,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  cardRow: {
+    flexDirection: 'row',
+    marginBottom: 6,
+  },
+  cardHeader: {
+    fontWeight: '700',
+    marginRight: 8,
+  },
+  cardValue: {
+    flexShrink: 1,
   },
 });
 

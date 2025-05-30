@@ -1,6 +1,18 @@
 import React from 'react';
-import { View, Text, TextInput as RNTextInput, StyleSheet } from 'react-native';
-import type { TextInput as TextInputProps } from './TextInputInterface';
+import { View, Text, TextInput as RNTextInput, StyleSheet, TextInputProps as RNTextInputProps } from 'react-native';
+
+export interface TextInputProps extends Omit<RNTextInputProps, 'value'> {
+  value?: string | number | null;
+  label?: string;
+  errorMessage?: string;
+  containerStyle?: object;
+  inputStyle?: object;
+  labelStyle?: object;
+  errorStyle?: object;
+  onChangeText?: (text: string) => void;
+  secure?: boolean;
+}
+
 
 const TextInput: React.FC<TextInputProps> = ({
   label,

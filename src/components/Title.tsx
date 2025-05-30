@@ -1,6 +1,16 @@
 import React from 'react';
 import { Text, StyleSheet, type TextStyle } from 'react-native';
-import {TitleProps} from './TitleInterface'
+
+export interface TitleProps{
+    type?: 'Main' | 'Subtitle'
+    text?: string;
+    size?: 'xs' | 'm' | 'xl' | number;
+    color?: string;
+    align?: 'left' | 'center' | 'right';
+    style?: TextStyle;
+    bold?: boolean;
+    underline?: boolean;
+}
 
 const Title: React.FC<TitleProps> = ({
   type,

@@ -1,5 +1,5 @@
 module.exports = {
-  locales: ['en', 'es'],
+  locales: ['en', 'es', 'ca'],
   defaultNamespace: 'translation',
   output: 'src/languages/$LOCALE.json',
   keySeparator: false, // permite usar claves como "welcome.title" sin dividirlas

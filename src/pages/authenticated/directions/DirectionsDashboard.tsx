@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { fetchDirections, createDirection, deleteDirection, associatePerson, updateDirection } from '../../../services/DirectionService';
+import { fetchDirections, createDirection, deleteDirection } from '../../../services/DirectionService';
 import { fetchPeople } from '../../../services/PersonService';
 import type { Direction } from '../../../types/IDirection';
-import { IPerson } from '../../../types/IPerson';
-import Modal from '../../../components/modal/Modal'; // Importando el Modal genérico
-import Table from '../../../components/table/Table';
-import Button from '../../../components/button/Button';
-import Title from '../../../components/title/Title';
-import TextInput from '../../../components/textInput/TextInput';
-import colors from '../../../components/colors/Colors';
+import { Person } from '../../../types/IPerson';
+import Modal from '../../../components/Modal';
+import Button from '../../../components/Button';
+import Title from '../../../components/Title';
+import TextInput from '../../../components/TextInput';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { saveRecentChange } from '../../../services/localStorage';
 import DirectionModification from './DirectionModification';
-import { Skeleton } from '../../../components/skeleton/Skeleton';
 import { useTranslation } from 'react-i18next';
-
+import DirectionsTable from './DirectionsTable';  // Importar tabla separada
 
 const DirectionsDashboard: React.FC = () => {
-  const {t} = useTranslation();
-  
+  const { t } = useTranslation();
+
   const [directions, setDirections] = useState<Direction[]>([]);
-  const [people, setPeople] = useState<IPerson[]>([]);
+  const [people, setPeople] = useState<Person[]>([]);
 
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
@@ -30,6 +27,7 @@ const DirectionsDashboard: React.FC = () => {
   const [directionStreet, setDirectionStreet] = useState('');
   const [directionCity, setDirectionCity] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const fetchData = async () => {
     try {
       setIsLoading(true);
@@ -40,8 +38,10 @@ const DirectionsDashboard: React.FC = () => {
       ]);
       setPeople(peopleData);
       setDirections(directionsData);
+      setIsLoading(false);
     } catch (error) {
-      console.error("Error al cargar los datos: ", error);
+      console.error(t("Error al cargar los datos: "), error);
+      setIsLoading(false);
     }
   };
 
@@ -54,18 +54,18 @@ const DirectionsDashboard: React.FC = () => {
       const newDirection = await createDirection(directionStreet, directionCity);
 
       saveRecentChange({
-        type: 'Dirección',
-        action: 'Eliminado/a',
-        name: `"${newDirection.street}, ${newDirection.city}"`, 
+        type: t('Dirección'),
+        action: t('Creado/a'),
+        name: `"${newDirection.street}, ${newDirection.city}"`,
         timestamp: Date.now(),
-      })
+      });
 
       fetchData();
-      setShowModalForm(false); // Cerramos el modal
-      setDirectionStreet(''); // Limpiamos el formulario
+      setShowModalForm(false);
+      setDirectionStreet('');
       setDirectionCity('');
     } catch (error) {
-      console.error('Error al crear la dirección:', error);
+      console.error(t('Error al crear la dirección:'), error);
     }
   };
 
@@ -73,86 +73,66 @@ const DirectionsDashboard: React.FC = () => {
     try {
       const deletedDirection = directions.find(d => d.id === directionId);
       await deleteDirection(directionId);
-      setDirections((prevDirections) => prevDirections.filter((direction) => direction.id !== directionId));
+      setDirections((prev) => prev.filter(d => d.id !== directionId));
 
       if (deletedDirection) {
         saveRecentChange({
-          type: 'Dirección',
-          action: 'Eliminado/a',
-          name: `"${deletedDirection.street}, ${deletedDirection.city}"`, 
+          type: t('Dirección'),
+          action: t('Eliminado/a'),
+          name: `"${deletedDirection.street}, ${deletedDirection.city}"`,
           timestamp: Date.now(),
         });
       }
-      
     } catch (error) {
-      console.error("Error al eliminar el proyecto: ", error);
+      console.error(t("Error al eliminar la dirección: "), error);
     }
   };
 
-  const columns: { header: string; accessor?: keyof Direction; width?: number; minRowWidth?: number;
-    render?: (value: any, row: Direction) => React.ReactNode }[] = [
-      { header: t('Calle'), accessor: 'street'},
-      { header: t('Ciudad'), accessor: 'city'},
-      { header: t('Persona'), accessor: 'personName'},  
-      { header: t('Acciones'), minRowWidth: 180,
-        render: (_: any, row: Direction, rowIndex?: number) => {
-        const isEven = (rowIndex ?? 0) % 2 === 0;
-        const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
-        return (
-          <View style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
-
-            <View style = {{backgroundColor}}>
-              <Button title={t("Modificar")} type = "associate" onPress= {() => {
-                setSelectedDirectionId(row.id); setDirectionStreet(row.street); setDirectionCity(row.city); setUpdateModal(true);}} />
-            </View>
-
-            <View style= {{backgroundColor: colors.lightRed}}>
-              <Button title={t("Eliminar")} onPress={() => handleDeleteDirection(row.id)} type = 'associate' />
-            </View>
-
-          </View>
-        );
-        }
-      }
-    ];
-
-    const skeletonRows = Array.from({ length: 5 }, (_, i) => (
-        <View key={i} style={{ flexDirection: 'row', gap: 20, marginBottom: 12 }}>
-          <Skeleton width={300} height={20} />
-          <Skeleton width={150} height={35} />
-        </View>
-      ));
+  const handleEditDirection = (direction: Direction) => {
+    setSelectedDirectionId(direction.id);
+    setDirectionStreet(direction.street);
+    setDirectionCity(direction.city);
+    setUpdateModal(true);
+  };
 
   return (
     <View style={styles.container}>
-
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={{paddingBottom: 10}}>
-          <Title text = {t('Direcciones Registradas')} size = 'xl' align = 'center' underline />
+        <View style={{ paddingBottom: 10 }}>
+          <Title text={t('Direcciones Registradas')} size='xl' align='center' underline />
         </View>
 
         <View style={styles.tableContainer}>
-          <Table columns={columns} data={directions} minRowHeight={50} />
+          <DirectionsTable directions={directions} onDelete={handleDeleteDirection} onEdit={handleEditDirection} />
         </View>
 
-        <View style = {{alignItems: 'center'}}>
-        <Button title={t("Añadir Dirección")} onPress={() => setShowModalForm(true)} type = 'add' />
+        <View style={{ alignItems: 'center' }}>
+          <Button title={t("Añadir Dirección")} onPress={() => setShowModalForm(true)} type='add' />
         </View>
       </ScrollView>
 
-      <Modal title = {t("Modificar dirección")} visible = {showUpdateModal} onClose = {() => {setUpdateModal(false); fetchData()}} size = "xs" >
+      <Modal
+        title={t("Modificar dirección")}
+        visible={showUpdateModal}
+        onClose={() => { setUpdateModal(false); fetchData(); }}
+        size="xs"
+      >
         <DirectionModification directionId={selectedDirectionId} />
       </Modal>
 
-      <Modal title={t("Añadir Dirección")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs" >
+      <Modal
+        title={t("Añadir Dirección")}
+        visible={showModalForm}
+        onClose={() => setShowModalForm(false)}
+        size="xs"
+      >
         <View>
-          <TextInput label= {t('Calle')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
+          <TextInput label={t('Calle')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
           <Text style={styles.label}>Ciudad:</Text>
-          <TextInput label= {t('Ciudad')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
-          <Button title={t("Guardar")} onPress={handleCreateDirection} type = 'save' />
+          <TextInput label={t('Ciudad')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
+          <Button title={t("Guardar")} onPress={handleCreateDirection} type='save' />
         </View>
       </Modal>
-      
     </View>
   );
 };
@@ -173,22 +153,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: 'flex-start',
   },
-  header: {
-    marginBottom: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
   tableContainer: {
     marginBottom: 20,
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
   },
   label: {
     marginBottom: 5,

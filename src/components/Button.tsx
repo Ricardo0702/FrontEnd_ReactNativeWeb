@@ -1,9 +1,22 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, type DimensionValue } from 'react-native';
-import type { ButtonProps } from './ButtonInterface';
-import colors from '../colors/Colors'
-import useResponsive from '../useResponsives/useResponsive';
+import colors from './Colors'
+import useResponsive from './useResponsive';
 import { useTranslation, Trans } from 'react-i18next';
+
+export interface ButtonProps {
+  title: string;
+  onPress: () => void;
+  width?: number | string;    // Puede ser número o porcentaje (e.g. '100%')
+  height?: number;
+  type?: 'delete' | 'save' | 'link' | 'add' | 'associate';  
+  size?: 'xxs' | 'xs' | 'm' | 'xl';
+  disabled?: boolean;
+  fontSize?: number;
+  style?: any;
+  minWidth?: number | string;
+  color?: string
+}
 
 const Button: React.FC<ButtonProps> = ({
   title,

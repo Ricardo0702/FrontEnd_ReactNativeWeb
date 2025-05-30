@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { login, signIn } from '../../services/AuthService';
-import Modal from '../../components/modal/Modal'; 
-import Button from '../../components/button/Button';
-import Title from '../../components/title/Title';
-import TextInput from '../../components/textInput/TextInput';
+import Modal from '../../components/Modal'; 
+import Button from '../../components/Button';
+import Title from '../../components/Title';
+import TextInput from '../../components/TextInput';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   onLoginSuccess: () => void;
@@ -17,6 +18,8 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
 
+  const {t} = useTranslation();
+
 
   const handleLogin = async () => {
     try {
@@ -24,7 +27,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       setShowLoginModal(false);
       onLoginSuccess();
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+      console.error(t('Error al iniciar sesión:'), error);
     }
   };
 
@@ -34,7 +37,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       setShowSignInModal(false);
       onSignInSuccess?.();
     } catch (error){
-      console.error('Usuario o contraseña no validos', error);
+      console.error(t('Usuario o contraseña no validos'), error);
     }
   };
 
@@ -43,33 +46,33 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title style = {{paddingBottom: 30}} text= 'Web Project' size= 'xl' align= 'center' underline bold />
+          <Title style = {{paddingBottom: 30}} text= {t('Web Project')} size= 'xl' align= 'center' underline bold />
         </View>
 
         <View style = {{alignItems: 'center', justifyContent: 'center', borderRadius: 8}}>
           <View style = {{paddingBottom: 15}}>
-            <Button title="Crear usuario" onPress={() => setShowSignInModal(true)} width={150} height={50} type = 'add' />
+            <Button title={t("Crear usuario")} onPress={() => setShowSignInModal(true)} width={150} height={50} type = 'add' />
           </View>
 
           <View style = {{ paddingBottom: 15}}>
-            <Button title="Iniciar sesion" onPress={() => setShowLoginModal(true)} width={150} height={50} type = 'add' />
+            <Button title={t("Iniciar sesion")} onPress={() => setShowLoginModal(true)} width={150} height={50} type = 'add' />
           </View>
         </View>
       </ScrollView>
 
-      <Modal title="Crear usuario" visible= {showSignInModal} onClose={() => setShowSignInModal(false)} position="center" size="m" >
+      <Modal title={t("Crear usuario")} visible= {showSignInModal} onClose={() => setShowSignInModal(false)} position="center" size="xs" >
         <View style={styles.formContainer}>
-          <TextInput label="Usuario" value={username} onChangeText={setUsername} style={styles.inputField} />
-          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secure style={styles.inputField} />
-          <Button title="Crear" onPress={handleSignIn} type = 'save' />
+          <TextInput label={t("Usuario")} value={username} onChangeText={setUsername} style={styles.inputField} />
+          <TextInput label={t("Contraseña")} value={password} onChangeText={setPassword} secure style={styles.inputField} />
+          <Button title={("Crear")} onPress={handleSignIn} type = 'save' />
         </View>
       </Modal>
 
-      <Modal title="Iniciar Sesión" visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="m" >
+      <Modal title={t("Iniciar Sesión")} visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="xs" >
         <View style={styles.formContainer}>
-          <TextInput label="Usuario" value={username} onChangeText={setUsername} style={styles.inputField} />
-          <TextInput label="Contraseña" value={password} onChangeText={setPassword} secure style={styles.inputField} />
-          <Button title="Iniciar Sesión" onPress={handleLogin} type = 'save' />
+          <TextInput label={t("Usuario")} value={username} onChangeText={setUsername} style={styles.inputField} />
+          <TextInput label={t("Contraseña")} value={password} onChangeText={setPassword} secure style={styles.inputField} />
+          <Button title={t("Iniciar Sesión")} onPress={handleLogin} type = 'save' />
         </View>
       </Modal>
 

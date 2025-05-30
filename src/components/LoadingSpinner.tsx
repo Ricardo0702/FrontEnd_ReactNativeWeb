@@ -1,7 +1,12 @@
 // LoadingSpinner.tsx
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, AccessibilityProps } from 'react-native';
-import { LoadingSpinnerProps } from './LoadingSpinnerInterface';
+
+export interface LoadingSpinnerProps {
+  size?: number;
+  color?: string;
+}
+
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps & AccessibilityProps> = ({
   size = 40,

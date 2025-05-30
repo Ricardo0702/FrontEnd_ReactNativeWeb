@@ -1,16 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Modal from '../../../components/modal/Modal'; // El nuevo modal responsivo
-import Table from '../../../components/table/Table';
-import Button from '../../../components/button/Button'
-import Title from '../../../components/title/Title'
-import TextInput from '../../../components/textInput/TextInput';
-import colors from '../../../components/colors/Colors';
-import { Skeleton } from '../../../components/skeleton/Skeleton';
-import { fetchPeople, createPerson, deletePerson, associateProject, updatePerson } from '../../../services/PersonService';
+import Modal from '../../../components/Modal';
+import Button from '../../../components/Button'
+import Title from '../../../components/Title'
+import TextInput from '../../../components/TextInput';
+import { Skeleton } from '../../../components/Skeleton';
+import { fetchPeople, createPerson, deletePerson } from '../../../services/PersonService';
 import { saveRecentChange } from '../../../services/localStorage';
-import { fetchProjects } from '../../../services/ProjectService';
-import type { IPerson } from '../../../types/IPerson';
-import { View, Text, StyleSheet,ScrollView } from 'react-native';
+import type { Person } from '../../../types/IPerson';
+import { View, StyleSheet,ScrollView } from 'react-native';
+import PeopleTable from './PeopleTable';
 import PersonModification from './PersonModification';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 const PeopleDashboard: React.FC = () => {
   
-  const [people, setPeople] = useState<IPerson[]>([]);
+  const [people, setPeople] = useState<Person[]>([]);
 
   const {t} = useTranslation();
 
@@ -41,7 +39,7 @@ const PeopleDashboard: React.FC = () => {
       ]);
       setPeople(peopleData);
     } catch (error) {
-      console.error('Error al cargar los proyectos: ', error);
+      console.error(t('Error al cargar los proyectos: '), error);
     }finally {
       setIsLoading(false);
     }
@@ -59,14 +57,14 @@ const PeopleDashboard: React.FC = () => {
 
       if (deletedPerson) {
         saveRecentChange({
-          type: 'Persona',
-          action: 'Eliminado/a',
+          type: t('Persona'),
+          action: t('Eliminado/a'),
           name: deletedPerson.name,
           timestamp: Date.now(),
         });
       }
     } catch (error) {
-      console.error("Error al eliminar la persona: ", error);
+      console.error(t("Error al eliminar la persona: "), error);
     }
   }, [people]);
 
@@ -76,8 +74,8 @@ const PeopleDashboard: React.FC = () => {
       const newPerson = await createPerson(personName, personAge);
 
       saveRecentChange({
-        type: 'Persona',
-        action: 'Añadido/a',
+        type: t('Persona'),
+        action: t('Añadido/a'),
         name: newPerson.name,
         timestamp: Date.now(),
       });
@@ -87,59 +85,16 @@ const PeopleDashboard: React.FC = () => {
       setPersonName('');
       setPersonAge(0);
     } catch (error) {
-      console.error('Error al crear la persona:', error);
+      console.error(t('Error al crear la persona:'), error);
     }
   };
 
- const columns: { header: string; accessor?: keyof IPerson; width?: number; minRowWidth?: number;
-      render?: (value: any, row: IPerson) => React.ReactNode }[] = [
-      { header: t('Nombre'), accessor: 'name' },
-      { header: t('Edad'), accessor: 'age' },
-      {
-        header: t('Direcciones'),
-        render: (_: any, row: IPerson) => {
-          const streets = row.streets ?? [];
-          const cities = row.cities ?? [];
-
-          const directions = streets.map((street, index) => ({
-            street,
-            city: cities[index] ?? t("Ciudad desconocida"),
-          }));
-
-          return (
-            <View style={{ flexDirection: 'column' }}>
-              {directions.map((direction, index) => (
-                <Text key={index}>
-                  {direction.street} ({direction.city})
-                </Text>
-              ))}
-            </View>
-          );
-        },
-      },
-      {
-        header: t('Proyectos'), accessor:'projectNames',
-      },
-      {
-        header: t('Acciones'), minRowWidth: 180,
-        render: (_: any, row: IPerson, rowIndex?: number) => {
-        const isEven = (rowIndex ?? 0) % 2 === 0;
-        const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
-        return (
-          <View style={{ flexDirection: 'column', gap: 10 }}>
-            <View style = {{backgroundColor}}>
-              <Button title= {t("Modificar")} onPress={() => {
-                setSelectedPersonId(row.id); setPersonName(row.name); setPersonAge(row.age); setUpdateModal(true);}}
-                type='associate' />
-            </View>
-            <View>
-              <Button title={t("Eliminar")} onPress={() => handleDeletePerson(row.id)} type='delete' />
-            </View>
-          </View>
-        );
-      }
-    }
-  ];
+  const handleEditPerson = async(person: Person) => {
+    setSelectedPersonId(person.id);
+    setPersonAge(person.age);
+    setPersonName(person.name);
+    setUpdateModal(true);
+  }
 
   const skeletonRows = Array.from({ length: 5 }, (_, i) => (
       <View key={i} style={{ flexDirection: 'row', gap: 20, marginBottom: 12 }}>
@@ -158,7 +113,7 @@ const PeopleDashboard: React.FC = () => {
 
         <View style={styles.tableContainer}>
           {isLoading ? skeletonRows : (
-            <Table columns={columns} data={people} minRowHeight={50} />
+            <PeopleTable people={people} onDelete={handleDeletePerson} onEdit={handleEditPerson} />
           )}
           <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
             <Button title={t("Añadir Persona")} onPress={() => setShowModalForm(true)} type = 'add'/>

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/button/Button';
+import Button from '../../../components/Button';
 import { RecentChange } from '../../../types/IRecentChange';
-import Title from '../../../components/title/Title';
-import { LoadingSpinner } from '../../../components/loadingSpinner/LoadingSpinner';  
+import Title from '../../../components/Title';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';  
 import { useTranslation } from 'react-i18next';
+import RecentChanges from './RecentChanges';
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -26,53 +27,23 @@ const MainDashboard: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Title
-        style={styles.title}
-        text= {t("Selecciona una página:")}
-        size="xl"
-        align="center"
-        underline
-      />
+
+      <Title style={styles.title} text= {t("Selecciona una página:")} size="xl" align="center" underline />
+
       <View style={styles.peopleButton}>
-        <Button
-          title={t("Personas")}
-          size = 'xl'
-          fontSize={20}
-          onPress={() => navigate('/auth/people')}
-        />
+        <Button title={t("Personas")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/people')} />
       </View>
+
       <View style={styles.projectsButton}>
-        <Button
-          title={t("Proyectos")}
-          size = 'xl'
-          fontSize={20}
-          onPress={() => navigate('/auth/projects')}
-        />
+        <Button title={t("Proyectos")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/projects')} />
       </View>
+
       <View style={styles.directionsButton}>
-        <Button
-          title={t("Direcciones")}
-          size = 'xl'
-          fontSize={20}
-          onPress={() => navigate('/auth/directions')}
-        />
+        <Button title={t("Direcciones")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/directions')} />
       </View>
 
       <Text style={styles.subtitle}>{t('Cambios recientes:')}</Text>
-
-      {recentChanges === null ? (
-        <LoadingSpinner size={50} color="#3498db" />
-      ) : recentChanges.length === 0 ? (
-        <Text style={styles.noChanges}>{t('No hay cambios recientes.')}</Text>
-      ) : (
-        recentChanges.map((change, index) => (
-          <View key={index} style={styles.changeItem}>
-            <Text style={styles.changeText}>
-              [{new Date(change.timestamp).toLocaleTimeString()}] {change.type} - {change.name}: {change.action}
-            </Text>
-          </View>
-        ))
-      )}
+      <RecentChanges/>
     </ScrollView>
   );
 };

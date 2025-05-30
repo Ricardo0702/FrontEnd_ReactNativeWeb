@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { fetchProjects, createProject, deleteProject, updateProject } from '../../../services/ProjectService';
 import type { Project } from '../../../types/IProject';
-import Modal from '../../../components/modal/Modal';
-import Table from '../../../components/table/Table';
-import Button from '../../../components/button/Button';
-import TextInput from '../../../components/textInput/TextInput';
-import colors from '../../../components/colors/Colors';
+import Modal from '../../../components/Modal';
+import Button from '../../../components/Button';
+import TextInput from '../../../components/TextInput';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import Title from '../../../components/title/Title';
+import Title from '../../../components/Title';
 import { saveRecentChange } from '../../../services/localStorage';
-import { Skeleton } from '../../../components/skeleton/Skeleton';
+import { Skeleton } from '../../../components/Skeleton';
+import { useTranslation } from 'react-i18next';
+import ProjectsTable from './ProjectsTable';
 
 const ProjectsDashboard: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -19,6 +19,8 @@ const ProjectsDashboard: React.FC = () => {
   const [projectName, setProjectName] = useState('');
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
+  const {t} = useTranslation();
+
   const fetchData = async () => {
     try {
       setIsLoading(true);
@@ -26,7 +28,7 @@ const ProjectsDashboard: React.FC = () => {
       const data = await fetchProjects();
       setProjects(data);
     } catch (error) {
-      console.error('Error al cargar los proyectos: ', error);
+      console.error(t('Error al cargar los proyectos: '), error);
     } finally {
       setIsLoading(false);
     }
@@ -40,8 +42,8 @@ const ProjectsDashboard: React.FC = () => {
     try {
       const newProject = await createProject(projectName);
       saveRecentChange({
-        type: 'Proyecto',
-        action: 'Añadido/a',
+        type: t('Proyecto'),
+        action: t('Añadido/a'),
         name: newProject.name,
         timestamp: Date.now(),
       });
@@ -49,7 +51,7 @@ const ProjectsDashboard: React.FC = () => {
       setShowModalForm(false);
       setProjectName('');
     } catch (error) {
-      console.error('Error al crear el proyecto:', error);
+      console.error(t('Error al crear el proyecto:'), error);
     }
   };
 
@@ -61,23 +63,29 @@ const ProjectsDashboard: React.FC = () => {
 
       if (deletedProject) {
         saveRecentChange({
-          type: 'Proyecto',
-          action: 'Eliminado/a',
+          type: t('Proyecto'),
+          action: t('Eliminado/a'),
           name: deletedProject.name,
           timestamp: Date.now(),
         });
       }
     } catch (error) {
-      console.error("Error al eliminar el proyecto: ", error);
+      console.error(t("Error al eliminar el proyecto: "), error);
     }
   };
+
+  const handleEditProject = (project: Project) => {
+      setSelectedProjectId(project.id);
+      setProjectName(project.name);
+      setUpdateModal(true);
+    };
 
   const handleUpdateProject = async (projectId: number, projectName: string) => {
     try {
       await updateProject(projectId, projectName);
       saveRecentChange({
-        type: 'Proyecto',
-        action: 'Editado/a',
+        type: t('Proyecto'),
+        action: t('Editado/a'),
         name: projectName,
         timestamp: Date.now()
       });
@@ -85,38 +93,9 @@ const ProjectsDashboard: React.FC = () => {
       setUpdateModal(false);
       setProjectName('');
     } catch (error) {
-      console.error("Error al modificar el proyecto: ", error);
+      console.error(t("Error al modificar el proyecto: "), error);
     }
   };
-
-  const columns: { header: string; accessor?: keyof Project; width?: number; render?: (value: any, row: Project, rowIndex?: number) => React.ReactNode }[] = [
-    { header: 'Nombre', accessor: 'name' }, //, width: 300
-    {
-      header: 'Acciones', // width: 300,
-      render: (_: any, row: Project, rowIndex?: number) => {
-        const isEven = (rowIndex ?? 0) % 2 === 0;
-        const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
-        return (
-          <View style={{ flexDirection: 'column', gap: 10 }}>
-            <View style={{ backgroundColor }}>
-              <Button
-                title="Modificar"
-                type="associate"
-                onPress={() => {
-                  setSelectedProjectId(row.id);
-                  setProjectName(row.name);
-                  setUpdateModal(true);
-                }}
-              />
-            </View>
-            <View style={{ backgroundColor: colors.lightRed }}>
-              <Button title="Eliminar" onPress={() => handleDeleteProject(row.id)} type="associate"   />
-            </View>
-          </View>
-        );
-      }
-    }
-  ];
 
   const skeletonRows = Array.from({ length: 5 }, (_, i) => (
     <View key={i} style={{ flexDirection: 'row', gap: 20, marginBottom: 12 }}>
@@ -129,25 +108,25 @@ const ProjectsDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 10 }}>
-          <Title text='Proyectos Registrados' size='xl' align='center' underline />
+          <Title text={t('Proyectos Registrados')} size='xl' align='center' underline />
         </View>
 
         <View style={styles.tableContainer}>
           {isLoading ? skeletonRows : (
-            <Table columns={columns} data={projects} minRowHeight={50} />
+            <ProjectsTable projects = {projects} onDelete={handleDeleteProject} onEdit={handleEditProject} />
           )}
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <Button title="Añadir Proyecto" onPress={() => setShowModalForm(true)} type='add' />
+          <Button title={t("Añadir Proyecto")} onPress={() => setShowModalForm(true)} type='add' />
         </View>
       </ScrollView>
 
-      <Modal title="Modificar proyecto" visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">
+      <Modal title={t("Modificar proyecto")} visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">
         <View>
-          <TextInput label='Nombre del proyecto' value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
+          <TextInput label={t('Nombre del proyecto')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
           <Button
-            title="Guardar"
+            title={t("Guardar")}
             onPress={() => {
               if (selectedProjectId !== null) {
                 handleUpdateProject(selectedProjectId, projectName);
@@ -158,10 +137,10 @@ const ProjectsDashboard: React.FC = () => {
         </View>
       </Modal>
 
-      <Modal title="Añadir Proyecto" visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t("Añadir Proyecto")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <TextInput label='Nombre del proyecto' value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
-          <Button title="Guardar" onPress={handleCreateProject} type='save' />
+          <TextInput label={t('Nombre del proyecto')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
+          <Button title={t("Guardar")} onPress={handleCreateProject} type='save' />
         </View>
       </Modal>
     </View>
