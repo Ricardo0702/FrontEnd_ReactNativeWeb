@@ -187,7 +187,7 @@ export default function PersonModification({ personId }: Props) {
         keyboardType="numeric"
         style={styles.input}
       />
-      <Button title={t("button.save.changes")} onPress={handleUpdate} type="save" />
+      <Button title={t("button.save")} onPress={handleUpdate} type="save" />
 
       <Title text={t('title.associated.projects')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       {(person.projectIds || []).map((id) => {

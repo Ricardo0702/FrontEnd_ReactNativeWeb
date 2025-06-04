@@ -78,7 +78,7 @@ export default function directionModification({directionId}: Props){
       <Title text= {t("title.edit.address")} type= 'Subtitle' style= {{marginBottom: 20}}/>
       <TextInput label = {t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} />
       <TextInput label = {t('label.city')} value={directionCity} onChangeText={setDirectionCity} style = {styles.input} />
-      <Button title= {t("button.save.changes")} onPress={handleUpdate} type= "save"/>
+      <Button title= {t("button.save")} onPress={handleUpdate} type= "save"/>
       
       
       <Title text={t("title.associated.person")} type = 'Subtitle' style= {{marginTop: 2, marginBottom: 20}}/>

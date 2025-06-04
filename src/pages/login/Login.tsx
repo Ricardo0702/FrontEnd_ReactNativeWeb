@@ -87,7 +87,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
             errorMessage={touchedSignIn && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
           />
           <TextInput
-            label={t("label.password")} value={password} onChangeText={setPassword}
+            label={t("label.password")} value={password} onChangeText={setPassword} secure
             inputStyle={[
               styles.inputField,
               touchedLogin && password.trim() === '' && styles.inputError,
@@ -110,7 +110,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
             errorMessage={touchedLogin && username.trim() === '' ? t('error.username.cannot be empty') : ''}
           />
           <TextInput 
-            label={t("label.password")} value={password} onChangeText={setPassword} 
+            label={t("label.password")} value={password} onChangeText={setPassword} secure
             inputStyle={[
               styles.inputField,
               touchedLogin && password.trim() === '' && styles.inputError, 

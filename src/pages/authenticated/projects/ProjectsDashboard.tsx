@@ -24,7 +24,7 @@ const ProjectsDashboard: React.FC = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve));
       const data = await fetchProjects();
       setProjects(data);
     } catch (error) {

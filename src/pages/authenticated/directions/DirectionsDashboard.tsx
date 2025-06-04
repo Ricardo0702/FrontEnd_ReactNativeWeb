@@ -31,7 +31,7 @@ const DirectionsDashboard: React.FC = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve));
       const [peopleData, directionsData] = await Promise.all([
         fetchPeople(),
         fetchDirections(),

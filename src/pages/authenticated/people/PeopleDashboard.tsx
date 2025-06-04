@@ -33,7 +33,7 @@ const PeopleDashboard: React.FC = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve));
       const [peopleData] = await Promise.all([
         fetchPeople(),
       ]);

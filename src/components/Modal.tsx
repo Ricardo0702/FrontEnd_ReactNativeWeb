@@ -8,6 +8,7 @@ import {
   ViewStyle,
   ScrollView,
   Dimensions,
+  GestureResponderEvent,
 } from 'react-native';
 import useResponsive from './UseResponsive';
 
@@ -19,7 +20,6 @@ export interface ModalProps {
   size?: 'xs' | 'm' | 'xl';
   position?: 'center' | 'top' | 'bottom'; // Posición opcional
 }
-
 
 const Modal: React.FC<ModalProps> = ({
   title,
@@ -63,10 +63,24 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
+  // Esta función evita que el evento de toque se propague cuando clicas dentro del modal
+  const handleModalContentPress = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+  };
+
   return (
     <RNModal transparent visible={visible} animationType="slide">
-      <View style={[styles.overlay, getPositionStyle()]}>
-        <View style={[styles.modalContainer, getSizeStyle()]}>
+      {/* Capa overlay que captura clics fuera del modal */}
+      <View
+        style={[styles.overlay, getPositionStyle()]}
+        onStartShouldSetResponder={() => true}  // Para que capture toques
+        onResponderRelease={onClose}            // Cuando sueltas el toque fuera del modal, se cierra
+      >
+        <View
+          style={[styles.modalContainer, getSizeStyle()]}
+          onStartShouldSetResponder={() => true}  // Para que capture toques dentro del modal
+          onResponderRelease={handleModalContentPress} // Evita que el toque cierre el modal
+        >
           <View style={styles.header}>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={onClose}>
@@ -74,9 +88,7 @@ const Modal: React.FC<ModalProps> = ({
             </TouchableOpacity>
           </View>
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View style={styles.content}>
-              {children}
-            </View>
+            <View style={styles.content}>{children}</View>
           </ScrollView>
         </View>
       </View>
@@ -84,7 +96,7 @@ const Modal: React.FC<ModalProps> = ({
   );
 };
 
-const { height: screenHeight } = Dimensions.get('window');
+const {height: screenHeight} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   overlay: {
