@@ -79,12 +79,20 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       <Modal title={t("modal.create.user")} visible= {showSignInModal} onClose={() => setShowSignInModal(false)} position="center" size="xs" >
         <View style={styles.formContainer}>
           <TextInput
-            label={t("label.user")} value={username} onChangeText={setUsername} style={styles.inputField} 
+            label={t("label.user")} value={username} onChangeText={setUsername}
+            inputStyle={[
+              styles.inputField,
+              touchedLogin && username.trim() === '' && styles.inputError, 
+            ]}  
             errorMessage={touchedSignIn && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
           />
           <TextInput
-            label={t("label.password")} value={password} onChangeText={setPassword} secure style={styles.inputField} 
-            errorMessage={touchedSignIn && password.trim() === '' ? t('error.password.cannot be empty') : ''} 
+            label={t("label.password")} value={password} onChangeText={setPassword}
+            inputStyle={[
+              styles.inputField,
+              touchedLogin && password.trim() === '' && styles.inputError,
+            ]}  
+            errorMessage={touchedSignIn && password.trim() === '' ? t('error.password.cannot be empty') : ''}
           />
           {signInError !== '' && <Text style={styles.errorText}>{signInError}</Text>}
           <Button title={("button.create")} onPress={handleSignIn} type = 'save' />
@@ -94,11 +102,19 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       <Modal title={t("modal.login")} visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="xs" >
         <View style={styles.formContainer}>
           <TextInput 
-            label={t("label.user")} value={username} onChangeText={setUsername} style={styles.inputField} 
-            errorMessage={touchedLogin && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
+            label={t("label.user")} value={username} onChangeText={setUsername}
+            inputStyle={[
+              styles.inputField,
+              touchedLogin && username.trim() === '' && styles.inputError,
+            ]} 
+            errorMessage={touchedLogin && username.trim() === '' ? t('error.username.cannot be empty') : ''}
           />
           <TextInput 
-            label={t("label.password")} value={password} onChangeText={setPassword} secure style={styles.inputField} 
+            label={t("label.password")} value={password} onChangeText={setPassword} 
+            inputStyle={[
+              styles.inputField,
+              touchedLogin && password.trim() === '' && styles.inputError, 
+            ]} 
             errorMessage= {touchedLogin && password.trim() === '' ? t('error.password.cannot be empty') : ''} 
           />
           {loginError !== '' && <Text style={styles.errorText}>{loginError}</Text>}
@@ -144,6 +160,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 15,
+  },
+  inputError: {
+    borderColor: 'red',
   },
     errorText: {
     color: 'red',
