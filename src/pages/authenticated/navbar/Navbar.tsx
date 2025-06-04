@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Colors from '../../../components/Colors';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   return (
     <View style={styles.navbar}>
       <TouchableOpacity onPress={() => (window.location.pathname = '/')}>
-        <Text style={styles.logo}>{t('My Dashboard')}</Text>
+        <Text style={styles.logo}>{t('title.My Dashboard')}</Text>
       </TouchableOpacity>
 
       {isMobile ? (

@@ -17,11 +17,11 @@ const DirectionsTable: React.FC<DirectionsTableProps> = ({ directions, onDelete,
   const { width: windowWidth } = useWindowDimensions() 
 
   const columns = [
-    { header: t('Calle'), accessor: 'street' as keyof Direction },
-    { header: t('Ciudad'), accessor: 'city' as keyof Direction },
-    { header: t('Persona'), accessor: 'personName' as keyof Direction },
+    { header: t('columns.street'), accessor: 'street' as keyof Direction },
+    { header: t('columns.city'), accessor: 'city' as keyof Direction },
+    { header: t('columns.person'), accessor: 'personName' as keyof Direction },
     {
-      header: t('Acciones'),
+      header: t('columns.actions'),
       minRowWidth: 180,
       render: (_: any, row: Direction, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
@@ -30,11 +30,11 @@ const DirectionsTable: React.FC<DirectionsTableProps> = ({ directions, onDelete,
             return (
                 <View style={{ flex: 1, flexDirection: 'row', gap: 10 }}>
                     <View style={{ backgroundColor }}>
-                        <Button title={t("Modificar")} type="associate" onPress={() => onEdit(row)}/>
+                        <Button title={t("button.edit")} type="associate" onPress={() => onEdit(row)}/>
                     </View>
 
                     <View style={{ backgroundColor: colors.lightRed }}>
-                        <Button title={t("Eliminar")} type="associate" onPress={() => onDelete(row.id)}/>
+                        <Button title={t("button.delete")} type="associate" onPress={() => onDelete(row.id)}/>
                     </View>             
                 </View>
             );
@@ -42,11 +42,11 @@ const DirectionsTable: React.FC<DirectionsTableProps> = ({ directions, onDelete,
         return (
           <View style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
             <View style={{ backgroundColor }}>
-              <Button title={t("Modificar")} type="associate" onPress={() => onEdit(row)}/>
+              <Button title={t("button.edit")} type="associate" onPress={() => onEdit(row)}/>
             </View>
 
             <View style={{ backgroundColor: colors.lightRed }}>
-              <Button title={t("Eliminar")} type="associate" onPress={() => onDelete(row.id)}/>
+              <Button title={t("button.delete")} type="associate" onPress={() => onDelete(row.id)}/>
             </View>
           </View>
         );

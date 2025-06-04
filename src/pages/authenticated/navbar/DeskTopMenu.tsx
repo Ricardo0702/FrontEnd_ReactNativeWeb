@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Colors from '../../../components/Colors';
-import { useTranslation } from 'react-i18next';
 import LanguageDropdown from './LanguageDropdown';
+import { useTranslation } from 'react-i18next';
 
 interface DesktopMenuProps {
   onLogout: () => void;
@@ -11,7 +10,6 @@ interface DesktopMenuProps {
 
 const DesktopMenu: React.FC<DesktopMenuProps> = ({ onLogout, onChangeLanguage }) => {
   const { t } = useTranslation();
-
   const navigateTo = (path: string) => {
     window.location.pathname = path;
   };
@@ -19,16 +17,16 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ onLogout, onChangeLanguage })
   return (
     <View style={styles.navLinks}>
       <TouchableOpacity onPress={() => navigateTo('/auth/people')}>
-        <Text style={styles.navLink}>{t('Personas')}</Text>
+        <Text style={styles.navLink}>{t('navbar.people')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigateTo('/auth/projects')}>
-        <Text style={styles.navLink}>{t('Proyectos')}</Text>
+        <Text style={styles.navLink}>{t('navbar.projects')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigateTo('/auth/directions')}>
-        <Text style={styles.navLink}>{t('Direcciones')}</Text>
+        <Text style={styles.navLink}>{t('navbar.addresses')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={onLogout}>
-        <Text style={styles.navLink}>{t('Cerrar sesión')}</Text>
+        <Text style={styles.navLink}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <LanguageDropdown onChangeLanguage={onChangeLanguage} />
     </View>

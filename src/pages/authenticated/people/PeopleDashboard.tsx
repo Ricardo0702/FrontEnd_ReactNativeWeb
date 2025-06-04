@@ -39,7 +39,7 @@ const PeopleDashboard: React.FC = () => {
       ]);
       setPeople(peopleData);
     } catch (error) {
-      console.error(t('Error al cargar los proyectos: '), error);
+      console.error(t('error.loading.people'), error);
     }finally {
       setIsLoading(false);
     }
@@ -57,14 +57,14 @@ const PeopleDashboard: React.FC = () => {
 
       if (deletedPerson) {
         saveRecentChange({
-          type: t('Persona'),
-          action: t('Eliminado/a'),
+          type: t('type.person'),
+          action: t('action.deleted'),
           name: deletedPerson.name,
           timestamp: Date.now(),
         });
       }
     } catch (error) {
-      console.error(t("Error al eliminar la persona: "), error);
+      console.error(t("error.deleting.person"), error);
     }
   }, [people]);
 
@@ -74,8 +74,8 @@ const PeopleDashboard: React.FC = () => {
       const newPerson = await createPerson(personName, personAge);
 
       saveRecentChange({
-        type: t('Persona'),
-        action: t('Añadido/a'),
+        type: t('type.person'),
+        action: t('action.added'),
         name: newPerson.name,
         timestamp: Date.now(),
       });
@@ -85,7 +85,7 @@ const PeopleDashboard: React.FC = () => {
       setPersonName('');
       setPersonAge(0);
     } catch (error) {
-      console.error(t('Error al crear la persona:'), error);
+      console.error(t('error.creating.person'), error);
     }
   };
 
@@ -108,7 +108,7 @@ const PeopleDashboard: React.FC = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
 
         <View style={{paddingBottom: 10}}>
-          <Title text = {t('Personas Registradas')} size = 'xl' align = 'center' underline/>
+          <Title text = {t('title.registered.people')} size = 'xl' align = 'center' underline/>
         </View>
 
         <View style={styles.tableContainer}>
@@ -116,24 +116,24 @@ const PeopleDashboard: React.FC = () => {
             <PeopleTable people={people} onDelete={handleDeletePerson} onEdit={handleEditPerson} />
           )}
           <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
-            <Button title={t("Añadir Persona")} onPress={() => setShowModalForm(true)} type = 'add'/>
+            <Button title={t("button.add.person")} onPress={() => setShowModalForm(true)} type = 'add'/>
           </View>
         </View>
 
       </ScrollView>
 
-      <Modal title={t("Añadir Persona")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t("modal.add.person")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <TextInput label= {t('Nombre')} value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
+          <TextInput label= {t('label.name')} value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
 
-          <TextInput label= {t('Edad')} value={personAge.toString()} onChangeText={
+          <TextInput label= {t('label.age')} value={personAge.toString()} onChangeText={
             (value) => setPersonAge(Number(value))} style={styles.input} keyboardType="numeric" />
 
-          <Button title={t("Guardar")} onPress={handleCreatePerson} type = 'save'/>
+          <Button title={t("button.save")} onPress={handleCreatePerson} type = 'save'/>
         </View>
       </Modal>
       
-      <Modal title={t("Modificar persona")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
+      <Modal title={t("modal.edit.person")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
         <PersonModification personId={selectedPersonId} />
       </Modal>
 

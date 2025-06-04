@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { getToken } from './AuthService';
-import { IPerson } from '../types/IPerson';
+import { Person } from '../types/IPerson';
 
-const API_URL = 'http://localhost:8080/auth';
+const API_URL = 'http://localhost:8081/auth';
 
 
-export const createEmptyPerson = (): IPerson => ({
+export const createEmptyPerson = (): Person => ({
   id: 0,
   name: '',
   age: 0,
@@ -39,7 +39,7 @@ export const fetchPerson = async (personId: number) => {
     throw new Error('Token no disponible. Usuario no autenticado.');
   }
   
-  const response = await axios.get<IPerson>(`${API_URL}/person/${personId}`, {
+  const response = await axios.get<Person>(`${API_URL}/person/${personId}`, {
     headers: {
       Authorization: `Bearer ${token}`, // Agregar token en los encabezados
     },
@@ -53,9 +53,6 @@ export const createPerson = async (name: string, age: number) => {
   if (!token) {
     throw new Error('Token no disponible. Usuario no autenticado.');
   }
-
-
-
   const response = await axios.post(
     `${API_URL}/person`,
     { name, age },

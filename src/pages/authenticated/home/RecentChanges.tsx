@@ -24,7 +24,7 @@ const RecentChanges: React.FC = () => {
   }
 
   if (recentChanges.length === 0) {
-    return <Text style={styles.noChanges}>{t('No hay cambios recientes.')}</Text>;
+    return <Text style={styles.noChanges}>{t('There are no recent changes')}</Text>;
   }
 
   return (

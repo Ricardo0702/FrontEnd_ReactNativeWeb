@@ -9,7 +9,7 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import useResponsive from './useResponsive';
+import useResponsive from './UseResponsive';
 
 export interface ModalProps {
   title: string;

@@ -1,6 +1,7 @@
-import axios from 'axios';
+// AuthService.ts
+import axios from './AxiosConfig';  // instancia axios con config global
 
-const API_URL = 'http://localhost:8080/auth';
+const API_URL = '/auth';
 
 export const login = async (username: string, password: string) => {
   const response = await axios.post(`${API_URL}/login`, { username, password });
@@ -9,9 +10,9 @@ export const login = async (username: string, password: string) => {
   return token;
 };
 
-export const signIn = async (username: string, password: string) =>{
-  await axios.post(`${API_URL}/register`, { username, password});
-}
+export const signIn = async (username: string, password: string) => {
+  await axios.post(`${API_URL}/register`, { username, password });
+};
 
 export const getToken = () => {
   return sessionStorage.getItem('token');

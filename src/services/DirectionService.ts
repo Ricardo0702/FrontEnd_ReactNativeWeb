@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { Direction } from '../types/IDirection';
 import { getToken } from './AuthService';
 
-const API_URL = 'http://localhost:8080/auth/directions';
+const API_URL = 'http://localhost:8081/auth/directions';
 
 export const createEmptyDirection = (): Direction => ({
   id: 0,

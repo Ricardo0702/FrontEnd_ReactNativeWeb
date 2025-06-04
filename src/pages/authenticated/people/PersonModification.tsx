@@ -43,7 +43,7 @@ export default function PersonModification({ personId }: Props) {
       setPersonName(data.name);
       setPersonAge(data.age);
     } catch (error) {
-      console.error(t('Error loading person:'), error);
+      console.error(t('error.loading.person'), error);
     }
   };
 
@@ -52,7 +52,7 @@ export default function PersonModification({ personId }: Props) {
       const data = await fetchProjects();
       setProjects(data);
     } catch (error) {
-      console.error(t('Error al cargar los proyectos: '), error);
+      console.error(t('error.loading.projects'), error);
     }
   };
 
@@ -72,7 +72,7 @@ export default function PersonModification({ personId }: Props) {
       );
       setAssociatedProjects(projectsData);
     } catch (error) {
-      console.error(t('Error cargando proyectos asociados:'), error);
+      console.error(t('error.loading.associated.projects'), error);
     }
   };
 
@@ -90,7 +90,7 @@ export default function PersonModification({ personId }: Props) {
     if (personId === null) return;
     await updatePerson(personId, personName, personAge);
     await loadPerson();
-    saveRecentChange({ type: t('Persona'), action: t('Editado/a'), name: personName, timestamp: Date.now() });
+    saveRecentChange({ type: t('type.persona'), action: t('action.editado/a'), name: personName, timestamp: Date.now() });
   };
 
   const handleAddProject = async () => {
@@ -104,8 +104,8 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && projectFound) {
       saveRecentChange({
-        type: t('Persona'),
-        action: t('Editado/a'),
+        type: t('type.person'),
+        action: t('action.edited'),
         name: `Persona "${personFound.name}" Asociado al proyecto "${projectFound.name}"`,
         timestamp: Date.now()
       });
@@ -123,8 +123,8 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && projectFound) {
       saveRecentChange({
-        type: t('Persona'),
-        action: t('Editado/a'),
+        type: t('type.person'),
+        action: t('action.edited'),
         name: `Proyecto "${projectFound.name}" eliminado de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
@@ -142,8 +142,8 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && direction) {
       saveRecentChange({
-        type: t('Persona'),
-        action: t('Editado/a'),
+        type: t('type.person'),
+        action: t('action.edited'),
         name: `Dirección "${direction.street}"("${direction.city}") añadida a persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
@@ -162,14 +162,14 @@ export default function PersonModification({ personId }: Props) {
 
     if (personFound && directionFound) {
       saveRecentChange({
-        type: t('Persona'),
-        action: t('Editado/a'),
+        type: t('type.person'),
+        action: t('action.edited'),
         name: `Dirección "${directionFound.street}"("${directionFound.city}") eliminada de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
       saveRecentChange({
-        type: t('Dirección'),
-        action: t('Eliminado/a'),
+        type: t('type.address'),
+        action: t('action.deleted'),
         name: `"${directionFound.street}"("${directionFound.city}") eliminada de persona: "${personFound.name}"`,
         timestamp: Date.now()
       });
@@ -178,30 +178,30 @@ export default function PersonModification({ personId }: Props) {
 
   return (
     <View style={styles.container}>
-      <Title text={t('Modificar Persona')} type='Subtitle' style={{ marginBottom: 20 }} />
-      <TextInput label={t('Nombre')} value={personName} onChangeText={setPersonName} style={styles.input} />
+      <Title text={t('title.edit.person')} type='Subtitle' style={{ marginBottom: 20 }} />
+      <TextInput label={t('label.Name')} value={personName} onChangeText={setPersonName} style={styles.input} />
       <TextInput
-        label={t('Edad')}
+        label={t('label.age')}
         value={personAge.toString()}
         onChangeText={(text) => setPersonAge(Number(text))}
         keyboardType="numeric"
         style={styles.input}
       />
-      <Button title={t("Guardar cambios")} onPress={handleUpdate} type="save" />
+      <Button title={t("button.save.changes")} onPress={handleUpdate} type="save" />
 
-      <Title text={t('Proyectos Asociados')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.associated.projects')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       {(person.projectIds || []).map((id) => {
         const project = projects.find(p => p.id === id);
         if (!project) return null;
         return (
           <View key={id} style={styles.listItem}>
             <Text>{project.name}</Text>
-            <Button title={t("Eliminar")} onPress={() => handleRemoveProject(id)} type="delete" />
+            <Button title={t("button.delete")} onPress={() => handleRemoveProject(id)} type="delete" />
           </View>
         );
       })}
 
-      <Title text={t('Añadir Proyecto')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.add.project')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       <Select
         selectedValue={newProjectId}
         onValueChange={(value) => {
@@ -216,21 +216,25 @@ export default function PersonModification({ personId }: Props) {
           label: project.name,
           value: project.id,
         }))}
-        placeholder={t("Selecciona un proyecto")}
+        placeholder={t("select.project")}
       />
-      <Button title={t("Asociar Proyecto")} onPress={handleAddProject} type='save' />
+      <Button title={t("button.associate.project")} onPress={handleAddProject} type='save' />
 
-      <Title text={t('Direcciones Asociadas')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
-      {person.directionIds.map((id, idx) => (
+      <Title text={t('title.associated.directions')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      {(person.directionIds || []).map((id, idx) => {
+        const direction = directions.find(d => d.id === id);
+        if (!direction) return null;
+        return(
         <View key={id} style={styles.listItem}>
           <Text>{person.streets[idx]} - {person.cities[idx]}</Text>
-          <Button title={t("Eliminar")} onPress={() => handleRemoveDirection(id)} type= 'delete' />
+          <Button title={t("button.delete")} onPress={() => handleRemoveDirection(id)} type= 'delete' />
         </View>
-      ))}
+        );
+        })}
 
-      <TextInput label={t("Calle")} value={newStreet} onChangeText={setNewStreet} style={styles.input} />
-      <TextInput label={t("Ciudad")} value={newCity} onChangeText={setNewCity} style={styles.input} />
-      <Button title={t("Añadir Dirección")} onPress={handleAddDirection} type='save' />
+      <TextInput label={t("label.sreet")} value={newStreet} onChangeText={setNewStreet} style={styles.input} />
+      <TextInput label={t("label.city")} value={newCity} onChangeText={setNewCity} style={styles.input} />
+      <Button title={t("button.add.address")} onPress={handleAddDirection} type='save' />
     </View>
   );
 }

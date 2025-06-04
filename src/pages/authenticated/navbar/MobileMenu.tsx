@@ -22,16 +22,16 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
   return (
     <View style={styles.dropdown}>
       <TouchableOpacity onPress={() => navigateTo('/auth/people')}>
-        <Text style={styles.navLink}>{t('Personas')}</Text>
+        <Text style={styles.navLink}>{t('navbar.people')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigateTo('/auth/projects')}>
-        <Text style={styles.navLink}>{t('Proyectos')}</Text>
+        <Text style={styles.navLink}>{t('navbar.projects')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigateTo('/auth/directions')}>
-        <Text style={styles.navLink}>{t('Direcciones')}</Text>
+        <Text style={styles.navLink}>{t('navbar.addresses')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => { onLogout(); closeMenu(); }}>
-        <Text style={styles.navLink}>{t('Cerrar sesión')}</Text>
+        <Text style={styles.navLink}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <LanguageDropdown onChangeLanguage={onChangeLanguage} />
     </View>

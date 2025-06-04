@@ -40,7 +40,7 @@ const DirectionsDashboard: React.FC = () => {
       setDirections(directionsData);
       setIsLoading(false);
     } catch (error) {
-      console.error(t("Error al cargar los datos: "), error);
+      console.error(t("error.loading.data"), error);
       setIsLoading(false);
     }
   };
@@ -54,8 +54,8 @@ const DirectionsDashboard: React.FC = () => {
       const newDirection = await createDirection(directionStreet, directionCity);
 
       saveRecentChange({
-        type: t('Dirección'),
-        action: t('Creado/a'),
+        type: t('type.address'),
+        action: t('action.created'),
         name: `"${newDirection.street}, ${newDirection.city}"`,
         timestamp: Date.now(),
       });
@@ -65,7 +65,7 @@ const DirectionsDashboard: React.FC = () => {
       setDirectionStreet('');
       setDirectionCity('');
     } catch (error) {
-      console.error(t('Error al crear la dirección:'), error);
+      console.error(t('error.creating.address'), error);
     }
   };
 
@@ -77,14 +77,14 @@ const DirectionsDashboard: React.FC = () => {
 
       if (deletedDirection) {
         saveRecentChange({
-          type: t('Dirección'),
-          action: t('Eliminado/a'),
+          type: t('type.address'),
+          action: t('action.deleted'),
           name: `"${deletedDirection.street}, ${deletedDirection.city}"`,
           timestamp: Date.now(),
         });
       }
     } catch (error) {
-      console.error(t("Error al eliminar la dirección: "), error);
+      console.error(t("error.deleting.address"), error);
     }
   };
 
@@ -99,7 +99,7 @@ const DirectionsDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 10 }}>
-          <Title text={t('Direcciones Registradas')} size='xl' align='center' underline />
+          <Title text={t('title.registered.addresses')} size='xl' align='center' underline />
         </View>
 
         <View style={styles.tableContainer}>
@@ -107,12 +107,12 @@ const DirectionsDashboard: React.FC = () => {
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <Button title={t("Añadir Dirección")} onPress={() => setShowModalForm(true)} type='add' />
+          <Button title={t("button.add.address")} onPress={() => setShowModalForm(true)} type='add' />
         </View>
       </ScrollView>
 
       <Modal
-        title={t("Modificar dirección")}
+        title={t("modal.edit.address")}
         visible={showUpdateModal}
         onClose={() => { setUpdateModal(false); fetchData(); }}
         size="xs"
@@ -121,16 +121,16 @@ const DirectionsDashboard: React.FC = () => {
       </Modal>
 
       <Modal
-        title={t("Añadir Dirección")}
+        title={t("modal.add.address")}
         visible={showModalForm}
         onClose={() => setShowModalForm(false)}
         size="xs"
       >
         <View>
-          <TextInput label={t('Calle')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
+          <TextInput label={t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
           <Text style={styles.label}>Ciudad:</Text>
-          <TextInput label={t('Ciudad')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
-          <Button title={t("Guardar")} onPress={handleCreateDirection} type='save' />
+          <TextInput label={t('label.city')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
+          <Button title={t("button.save")} onPress={handleCreateDirection} type='save' />
         </View>
       </Modal>
     </View>

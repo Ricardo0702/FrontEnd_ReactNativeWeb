@@ -17,9 +17,9 @@ const ProjectsTable: React.FC<ProjectTableProps> = ({ projects, onDelete, onEdit
   const {width: windowWidth} = useWindowDimensions();
 
   const columns: { header: string; accessor?: keyof Project; width?: number; render?: (value: any, row: Project, rowIndex?: number) => React.ReactNode }[] = [
-    { header: t('Nombre'), accessor: 'name' }, 
+    { header: t('columns.name'), accessor: 'name' }, 
     {
-      header: t('Acciones'),
+      header: t('columns.actions'),
       render: (_: any, row: Project, rowIndex?: number) => {
         const isEven = (rowIndex ?? 0) % 2 === 0;
         const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
@@ -27,11 +27,11 @@ const ProjectsTable: React.FC<ProjectTableProps> = ({ projects, onDelete, onEdit
             return(
                 <View style={{ flexDirection: 'row', gap: 10 }}>
                     <View style={{ backgroundColor }}>
-                        <Button title={t("Modificar")} type="associate" onPress={() => onEdit(row)}/>
+                        <Button title={t("button.edit")} type="associate" onPress={() => onEdit(row)}/>
                     </View>
                     
                     <View style={{ backgroundColor: colors.lightRed }}>
-                        <Button title={t("Eliminar")} onPress={() => onDelete(row.id)} type="associate"   />
+                        <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type="associate"   />
                     </View>
                 </View>
             )
@@ -39,11 +39,11 @@ const ProjectsTable: React.FC<ProjectTableProps> = ({ projects, onDelete, onEdit
         return (
           <View style={{ flexDirection: 'column', gap: 10 }}>
             <View style={{ backgroundColor }}>
-              <Button title={t("Modificar")} type="associate" onPress={() => onEdit(row)}/>
+              <Button title={t("button.edit")} type="associate" onPress={() => onEdit(row)}/>
             </View>
 
             <View style={{ backgroundColor: colors.lightRed }}>
-              <Button title={t("Eliminar")} onPress={() => onDelete(row.id)} type="associate"   />
+              <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type="associate"   />
             </View>
           </View>
         );

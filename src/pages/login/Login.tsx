@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { login, signIn } from '../../services/AuthService';
 import Modal from '../../components/Modal'; 
 import Button from '../../components/Button';
@@ -18,26 +18,42 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
 
+  const [loginError, setLoginError] = useState('');
+  const [signInError, setSignInError] = useState('');
+
+  const [touchedLogin, setTouchedLogin] = useState(false);
+  const [touchedSignIn, setTouchedSignIn] = useState(false);
+
+
   const {t} = useTranslation();
 
-
   const handleLogin = async () => {
+    setTouchedLogin(true);
+    if (username.trim() === '' || password.trim() === '') return;
     try {
+      setLoginError('');
       await login(username, password);
       setShowLoginModal(false);
       onLoginSuccess();
-    } catch (error) {
-      console.error(t('Error al iniciar sesión:'), error);
+    } catch (error: any) {
+      
+      const backendMessage = error.response.data;
+      setLoginError(backendMessage || t('error.login'));
     }
   };
 
   const handleSignIn = async () => {
-    try{
+
+    setTouchedSignIn(true);
+    if (username.trim() === '' || password.trim() === '') return;
+    try {
+      setSignInError('');
       await signIn(username, password);
       setShowSignInModal(false);
       onSignInSuccess?.();
-    } catch (error){
-      console.error(t('Usuario o contraseña no validos'), error);
+    } catch (error: any) {
+      const backendMessage = error.response.data
+      setSignInError(backendMessage || t('error.creating.user'));
     }
   };
 
@@ -46,33 +62,47 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
       
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{paddingBottom: 10}}>
-          <Title style = {{paddingBottom: 30}} text= {t('Web Project')} size= 'xl' align= 'center' underline bold />
+          <Title style = {{paddingBottom: 30}} text= {t('title.web project')} size= 'xl' align= 'center' underline bold />
         </View>
 
         <View style = {{alignItems: 'center', justifyContent: 'center', borderRadius: 8}}>
           <View style = {{paddingBottom: 15}}>
-            <Button title={t("Crear usuario")} onPress={() => setShowSignInModal(true)} width={150} height={50} type = 'add' />
+            <Button title={t("button.create.user")} onPress={() => setShowSignInModal(true)} width={150} height={50} type = 'add' />
           </View>
 
           <View style = {{ paddingBottom: 15}}>
-            <Button title={t("Iniciar sesion")} onPress={() => setShowLoginModal(true)} width={150} height={50} type = 'add' />
+            <Button title={t("button.login")} onPress={() => setShowLoginModal(true)} width={150} height={50} type = 'add' />
           </View>
         </View>
       </ScrollView>
 
-      <Modal title={t("Crear usuario")} visible= {showSignInModal} onClose={() => setShowSignInModal(false)} position="center" size="xs" >
+      <Modal title={t("modal.create.user")} visible= {showSignInModal} onClose={() => setShowSignInModal(false)} position="center" size="xs" >
         <View style={styles.formContainer}>
-          <TextInput label={t("Usuario")} value={username} onChangeText={setUsername} style={styles.inputField} />
-          <TextInput label={t("Contraseña")} value={password} onChangeText={setPassword} secure style={styles.inputField} />
-          <Button title={("Crear")} onPress={handleSignIn} type = 'save' />
+          <TextInput
+            label={t("label.user")} value={username} onChangeText={setUsername} style={styles.inputField} 
+            errorMessage={touchedSignIn && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
+          />
+          <TextInput
+            label={t("label.password")} value={password} onChangeText={setPassword} secure style={styles.inputField} 
+            errorMessage={touchedSignIn && password.trim() === '' ? t('error.password.cannot be empty') : ''} 
+          />
+          {signInError !== '' && <Text style={styles.errorText}>{signInError}</Text>}
+          <Button title={("button.create")} onPress={handleSignIn} type = 'save' />
         </View>
       </Modal>
 
-      <Modal title={t("Iniciar Sesión")} visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="xs" >
+      <Modal title={t("modal.login")} visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="xs" >
         <View style={styles.formContainer}>
-          <TextInput label={t("Usuario")} value={username} onChangeText={setUsername} style={styles.inputField} />
-          <TextInput label={t("Contraseña")} value={password} onChangeText={setPassword} secure style={styles.inputField} />
-          <Button title={t("Iniciar Sesión")} onPress={handleLogin} type = 'save' />
+          <TextInput 
+            label={t("label.user")} value={username} onChangeText={setUsername} style={styles.inputField} 
+            errorMessage={touchedLogin && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
+          />
+          <TextInput 
+            label={t("label.password")} value={password} onChangeText={setPassword} secure style={styles.inputField} 
+            errorMessage= {touchedLogin && password.trim() === '' ? t('error.password.cannot be empty') : ''} 
+          />
+          {loginError !== '' && <Text style={styles.errorText}>{loginError}</Text>}
+          <Button title={t("button.login")} onPress={handleLogin} type = 'save' />
         </View>
       </Modal>
 
@@ -114,6 +144,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 15,
+  },
+    errorText: {
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'center',
   }
 });
 

@@ -1,69 +1,157 @@
 {
-  "Error loading direction:": "Error loading direction:",
-  "Error al cargar las personas: ": "Error loading people:",
-  "Dirección": "Address",
-  "Editado/a": "Edited",
-  "Modificar Dirección": "Modify Address",
-  "Calle": "Street",
-  "Ciudad": "City",
-  "Guardar cambios": "Save Changes",
-  "Persona Asociada": "Associated Person",
-  "Eliminar": "Delete",
-  "Asociar Pesona": "Associate Person",
-  "Selecciona una persona": "Select a Person",
-  "Asociar Persona": "Associate Person",
-  "Error al cargar los datos: ": "Error loading the data",
-  "Creado/a": "Created",
-  "Error al crear la dirección:": "Error creating the address",
-  "Eliminado/a": "Deleted",
-  "Error al eliminar la dirección: ": "Error deleting the address",
-  "Direcciones Registradas": "Registered Addresses",
-  "Añadir Dirección": "Add Address",
-  "Modificar dirección": "Edit Address",
-  "Guardar": "Save",
-  "Persona": "Person",
-  "Acciones": "Actions",
-  "Modificar": "Edit",
-  "Selecciona una página:": "Select a Page:",
-  "Personas": "People",
-  "Proyectos": "Projects",
-  "Direcciones": "Addresses",
-  "Cambios recientes:": "Recent Changes:",
-  "No hay cambios recientes.": "No recent changes.",
-  "Cerrar sesión": "Log Out",
-  "Idioma": "Language",
-  "My Dashboard": "My Dashboard",
-  "Error al cargar los proyectos: ": "Error loading projects:",
-  "Error al eliminar la persona: ": "Error loading the person",
-  "Añadido/a": "Added",
-  "Error al crear la persona:": "Error creating the person",
-  "Personas Registradas": "Registered People",
-  "Añadir Persona": "Add Person",
-  "Nombre": "Name",
-  "Edad": "Age",
-  "Modificar persona": "Edit Person",
-  "Ciudad desconocida": "Unknown City",
-  "Error loading person:": "Error loading person",
-  "Error cargando proyectos asociados:": "Error loading associated projects",
-  "Modificar Persona": "Edit Person",
-  "Proyectos Asociados": "Associated Projects",
-  "Añadir Proyecto": "Add Project",
-  "Selecciona un proyecto": "Select a Project",
-  "Asociar Proyecto": "Associate Project",
-  "Direcciones Asociadas": "Associated Addresses",
-  "Proyecto": "Project",
-  "Error al crear el proyecto:": "Error creating project:",
-  "Error al eliminar el proyecto: ": "Error deleting project:",
-  "Error al modificar el proyecto: ": "Error editing project:",
-  "Proyectos Registrados": "Registered Projects",
-  "Modificar proyecto": "Edit Project",
-  "Nombre del proyecto": "Project Name",
-  "Error al iniciar sesión:": "Login error:",
-  "Usuario o contraseña no validos": "Invalid username or password",
-  "Web Project": "Web Project",
-  "Crear usuario": "Create User",
-  "Iniciar sesion": "Log In",
-  "Usuario": "Username",
-  "Contraseña": "Password",
-  "Iniciar Sesión": "Log In"
+  "error": {
+    "loading": {
+      "address": "Error loading addresses.",
+      "people": "Error loading people.",
+      "data": "Error loading data.",
+      "person": "Error loading person.",
+      "projects": "Error loading projects.",
+      "associated": {
+        "projects": "Error loading associated projects."
+      }
+    },
+    "creating": {
+      "address": "Error creating address.",
+      "person": "Error creating person.",
+      "project": "Error creating project.",
+      "user": "Error creating user."
+    },
+    "deleting": {
+      "address": "Error deleting address.",
+      "person": "Error deleting person.",
+      "project": "Error deleting project."
+    },
+    "editing": {
+      "project": "Error editing project."
+    },
+    "login": "Login error.",
+    "username": {
+      "cannot be empty": "Username cannot be empty."
+    },
+    "password": {
+      "cannot be empty": "Password cannot be empty."
+    }
+  },
+  "type": {
+    "address": "Address",
+    "person": "Person",
+    "persona": "Person",
+    "project": "Project"
+  },
+  "action": {
+    "edited": "Edited",
+    "created": "Created",
+    "deleted": "Deleted",
+    "added": "Added",
+    "editado/a": "Edited"
+  },
+  "title": {
+    "edit": {
+      "address": "Edit Address",
+      "person": "Edit Person"
+    },
+    "associated": {
+      "person": "Associated Person",
+      "projects": "Associated Projects",
+      "directions": "Associated Addresses"
+    },
+    "associate": {
+      "person": "Associate Person"
+    },
+    "registered": {
+      "addresses": "Registered Addresses",
+      "people": "Registered People",
+      "projects": "Registered Projects"
+    },
+    "select": {
+      "page": "Select a Page"
+    },
+    "My Dashboard": "My Dashboard",
+    "add": {
+      "project": "Add Project"
+    },
+    "web project": "Web Project"
+  },
+  "label": {
+    "street": "Street",
+    "city": "City",
+    "name": "Name",
+    "age": "Age",
+    "Name": "Name",
+    "sreet": "Street",
+    "project": {
+      "name": "Project Name"
+    },
+    "user": "Username",
+    "password": "Password"
+  },
+  "button": {
+    "save": "Save",
+    "delete": "Delete",
+    "associate": {
+      "person": "Associate Person",
+      "project": "Associate Project"
+    },
+    "add": {
+      "address": "Add Address",
+      "person": "Add Person",
+      "project": "Add Project"
+    },
+    "edit": "Edit",
+    "people": "People",
+    "projects": "Projects",
+    "addresses": "Addresses",
+    "saver": "Save",
+    "create": {
+      "user": "Create User"
+    },
+    "login": "Login"
+  },
+  "select": {
+    "person": "Select a person",
+    "project": "Select a project"
+  },
+  "modal": {
+    "edit": {
+      "address": "Edit Address",
+      "person": "Edit Person",
+      "project": "Edit Project"
+    },
+    "add": {
+      "address": "Add Address",
+      "person": "Add Person",
+      "project": "Add Project"
+    },
+    "create": {
+      "user": "Create New User"
+    },
+    "login": "Login"
+  },
+  "columns": {
+    "street": "Street",
+    "city": "City",
+    "person": "Person",
+    "actions": "Actions",
+    "name": "Name",
+    "age": "Age",
+    "addresses": "Addresses",
+    "projects": "Projects"
+  },
+  "Recent changes:": "Recent changes:",
+  "There are no recent changes": "There are no recent changes.",
+  "navbar": {
+    "people": "People",
+    "projects": "Projects",
+    "addresses": "Addresses",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "language": {
+    "spanish": "Spanish",
+    "catalan": "Catalan",
+    "english": "English"
+  },
+  "unknown": {
+    "city": "Unknown city"
+  }
 }

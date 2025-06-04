@@ -28,21 +28,21 @@ const MainDashboard: React.FC = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
 
-      <Title style={styles.title} text= {t("Selecciona una página:")} size="xl" align="center" underline />
+      <Title style={styles.title} text= {t("title.select.page")} size="xl" align="center" underline />
 
       <View style={styles.peopleButton}>
-        <Button title={t("Personas")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/people')} />
+        <Button title={t("button.people")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/people')} />
       </View>
 
       <View style={styles.projectsButton}>
-        <Button title={t("Proyectos")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/projects')} />
+        <Button title={t("button.projects")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/projects')} />
       </View>
 
       <View style={styles.directionsButton}>
-        <Button title={t("Direcciones")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/directions')} />
+        <Button title={t("button.addresses")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/directions')} />
       </View>
 
-      <Text style={styles.subtitle}>{t('Cambios recientes:')}</Text>
+      <Text style={styles.subtitle}>{t('Recent changes:')}</Text>
       <RecentChanges/>
     </ScrollView>
   );

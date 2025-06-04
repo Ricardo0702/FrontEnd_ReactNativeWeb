@@ -34,7 +34,7 @@ export default function directionModification({directionId}: Props){
             setDirectionStreet(data.street);
             setDirectionCity(data.city);
         } catch (error) {
-            console.error(t('Error loading direction:'), error);
+            console.error(t('error.loading.address'), error);
         }
     };
 
@@ -43,7 +43,7 @@ export default function directionModification({directionId}: Props){
             const data = await fetchPeople();
             setPeople(data);
         }catch(error){
-            console.error(t('Error al cargar las personas: '), error);
+            console.error(t('error.loading.people'), error);
         }
     };
 
@@ -56,7 +56,7 @@ export default function directionModification({directionId}: Props){
         if (directionId === null) return;
         await updateDirection(directionId, directionStreet, directionCity);
         await loadDirection();
-        saveRecentChange({type: t('Dirección'),action: t('Editado/a'),name: direction.street,timestamp: Date.now()});
+        saveRecentChange({type: t('type.address'),action: t('action.edited'),name: direction.street,timestamp: Date.now()});
     };
 
     const handleChangePerson = async () => {
@@ -75,19 +75,19 @@ export default function directionModification({directionId}: Props){
 
     return (
     <View style={styles.container}>
-      <Title text= {t("Modificar Dirección")} type= 'Subtitle' style= {{marginBottom: 20}}/>
-      <TextInput label = {t('Calle')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} />
-      <TextInput label = {t('Ciudad')} value={directionCity} onChangeText={setDirectionCity} style = {styles.input} />
-      <Button title= {t("Guardar cambios")} onPress={handleUpdate} type= "save"/>
+      <Title text= {t("title.edit.address")} type= 'Subtitle' style= {{marginBottom: 20}}/>
+      <TextInput label = {t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} />
+      <TextInput label = {t('label.city')} value={directionCity} onChangeText={setDirectionCity} style = {styles.input} />
+      <Button title= {t("button.save.changes")} onPress={handleUpdate} type= "save"/>
       
       
-      <Title text={t("Persona Asociada")} type = 'Subtitle' style= {{marginTop: 2, marginBottom: 20}}/>
+      <Title text={t("title.associated.person")} type = 'Subtitle' style= {{marginTop: 2, marginBottom: 20}}/>
       <View style = {{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <Text>{direction.personName}</Text>
-          <Button title={t("Eliminar")} onPress={() => handleRemovePerson()} type= "delete" />
+          <Button title={t("button.delete")} onPress={() => handleRemovePerson()} type= "delete" />
       </View>
 
-      <Title text= {t('Asociar Pesona')} type= 'Subtitle' style= {{marginTop: 20, marginBottom: 20}}/>
+      <Title text= {t('title.associate.person')} type= 'Subtitle' style= {{marginTop: 20, marginBottom: 20}}/>
       <Select
         selectedValue={newPersonId}
         onValueChange={(value) =>{
@@ -102,9 +102,9 @@ export default function directionModification({directionId}: Props){
           label: person.name,
           value: person.id,
         }))}
-        placeholder={t("Selecciona una persona")}
+        placeholder={t("select.person")}
       />
-      <Button title={t("Asociar Persona")} onPress={handleChangePerson} type= 'save'/>
+      <Button title={t("button.associate.person")} onPress={handleChangePerson} type= 'save'/>
     </View>
   );
 }

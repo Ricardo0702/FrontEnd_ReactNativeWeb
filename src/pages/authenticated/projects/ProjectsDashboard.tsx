@@ -28,7 +28,7 @@ const ProjectsDashboard: React.FC = () => {
       const data = await fetchProjects();
       setProjects(data);
     } catch (error) {
-      console.error(t('Error al cargar los proyectos: '), error);
+      console.error(t('error.loading.projects'), error);
     } finally {
       setIsLoading(false);
     }
@@ -42,8 +42,8 @@ const ProjectsDashboard: React.FC = () => {
     try {
       const newProject = await createProject(projectName);
       saveRecentChange({
-        type: t('Proyecto'),
-        action: t('Añadido/a'),
+        type: t('type.project'),
+        action: t('action.added'),
         name: newProject.name,
         timestamp: Date.now(),
       });
@@ -51,7 +51,7 @@ const ProjectsDashboard: React.FC = () => {
       setShowModalForm(false);
       setProjectName('');
     } catch (error) {
-      console.error(t('Error al crear el proyecto:'), error);
+      console.error(t('error.creating.project'), error);
     }
   };
 
@@ -63,14 +63,14 @@ const ProjectsDashboard: React.FC = () => {
 
       if (deletedProject) {
         saveRecentChange({
-          type: t('Proyecto'),
-          action: t('Eliminado/a'),
+          type: t('type.project'),
+          action: t('action.deleted'),
           name: deletedProject.name,
           timestamp: Date.now(),
         });
       }
     } catch (error) {
-      console.error(t("Error al eliminar el proyecto: "), error);
+      console.error(t("error.deleting.project"), error);
     }
   };
 
@@ -84,8 +84,8 @@ const ProjectsDashboard: React.FC = () => {
     try {
       await updateProject(projectId, projectName);
       saveRecentChange({
-        type: t('Proyecto'),
-        action: t('Editado/a'),
+        type: t('type.project'),
+        action: t('action.edited'),
         name: projectName,
         timestamp: Date.now()
       });
@@ -93,7 +93,7 @@ const ProjectsDashboard: React.FC = () => {
       setUpdateModal(false);
       setProjectName('');
     } catch (error) {
-      console.error(t("Error al modificar el proyecto: "), error);
+      console.error(t("error.editing.project"), error);
     }
   };
 
@@ -108,7 +108,7 @@ const ProjectsDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 10 }}>
-          <Title text={t('Proyectos Registrados')} size='xl' align='center' underline />
+          <Title text={t('title.registered.projects')} size='xl' align='center' underline />
         </View>
 
         <View style={styles.tableContainer}>
@@ -118,15 +118,15 @@ const ProjectsDashboard: React.FC = () => {
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          <Button title={t("Añadir Proyecto")} onPress={() => setShowModalForm(true)} type='add' />
+          <Button title={t("button.add.project")} onPress={() => setShowModalForm(true)} type='add' />
         </View>
       </ScrollView>
 
-      <Modal title={t("Modificar proyecto")} visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">
+      <Modal title={t("modal.edit.project")} visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">
         <View>
-          <TextInput label={t('Nombre del proyecto')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
+          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
           <Button
-            title={t("Guardar")}
+            title={t("button.save")}
             onPress={() => {
               if (selectedProjectId !== null) {
                 handleUpdateProject(selectedProjectId, projectName);
@@ -137,10 +137,10 @@ const ProjectsDashboard: React.FC = () => {
         </View>
       </Modal>
 
-      <Modal title={t("Añadir Proyecto")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t("modal.add.project")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <TextInput label={t('Nombre del proyecto')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
-          <Button title={t("Guardar")} onPress={handleCreateProject} type='save' />
+          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
+          <Button title={t("button.saver")} onPress={handleCreateProject} type='save' />
         </View>
       </Modal>
     </View>

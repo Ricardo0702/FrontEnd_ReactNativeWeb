@@ -19,18 +19,18 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage })
   return (
     <View>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)}>
-        <Text style={styles.navLink}>{t('Idioma')}</Text>
+        <Text style={styles.navLink}>{t('navbar.language')}</Text>
       </TouchableOpacity>
       {langOpen && (
         <View style={styles.languageDropdown}>
           <TouchableOpacity onPress={() => changeLanguage('es')}>
-            <Text style={styles.navLink}>Español</Text>
+            <Text style={styles.navLink}>{t('language.spanish')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => changeLanguage('ca')}>
-            <Text style={styles.navLink}>Català</Text>
+            <Text style={styles.navLink}>{t('language.catalan')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => changeLanguage('en')}>
-            <Text style={styles.navLink}>English</Text>
+            <Text style={styles.navLink}>{t('language.english')}</Text>
           </TouchableOpacity>
         </View>
       )}

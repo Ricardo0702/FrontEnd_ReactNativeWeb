@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, type DimensionValue } from 'react-native';
 import colors from './Colors'
-import useResponsive from './useResponsive';
+import useResponsive from './UseResponsive';
 import { useTranslation, Trans } from 'react-i18next';
 
 export interface ButtonProps {

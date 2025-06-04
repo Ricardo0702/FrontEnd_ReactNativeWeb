@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import PersonModification from './pages/authenticated/people/PersonModification';
 import './types/I18n';
+import { UserContextProvider } from './context/UserContextProvider';
 
 const PersonModificationWrapper: React.FC = () => {
   const { personId } = useParams<{ personId: string }>();
@@ -71,9 +72,11 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <UserContextProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </UserContextProvider>
   );
 };
 

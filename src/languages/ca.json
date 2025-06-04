@@ -1,69 +1,157 @@
 {
-  "Error loading direction:": "Error en carregar l'adreça:",
-  "Error al cargar las personas: ": "Error en carregar les persones:",
-  "Dirección": "Adreça",
-  "Editado/a": "Editat/da",
-  "Modificar Dirección": "Modificar adreça",
-  "Calle": "Carrer",
-  "Ciudad": "Ciutat",
-  "Guardar cambios": "Desar canvis",
-  "Persona Asociada": "Persona associada",
-  "Eliminar": "Eliminar",
-  "Asociar Pesona": "Associar persona",
-  "Selecciona una persona": "Selecciona una persona",
-  "Asociar Persona": "Associar persona",
-  "Error al cargar los datos: ": "Error en carregar les dades:",
-  "Creado/a": "creat/da",
-  "Error al crear la dirección:": "Error en crear l'adreça:",
-  "Eliminado/a": "Eliminat/da",
-  "Error al eliminar la dirección: ": "Error al eliminar la direcció",
-  "Direcciones Registradas": "Adreces registrades",
-  "Añadir Dirección": "Afegir adreça",
-  "Modificar dirección": "Modificar adreça",
-  "Guardar": "Desar",
-  "Persona": "Persona",
-  "Acciones": "Accions",
-  "Modificar": "Modificar",
-  "Selecciona una página:": "Selecciona una pàgina:",
-  "Personas": "Persones",
-  "Proyectos": "Projectes",
-  "Direcciones": "Adreces",
-  "Cambios recientes:": "Canvis recents:",
-  "No hay cambios recientes.": "No hi ha canvis recents.",
-  "Cerrar sesión": "Tancar sessió",
-  "Idioma": "Idioma",
-  "My Dashboard": "El meu Panell",
-  "Error al cargar los proyectos: ": "Error en carregar els projectes:",
-  "Error al eliminar la persona: ": "Error al eliminar la persona",
-  "Añadido/a": "Afegit/da",
-  "Error al crear la persona:": "Error al crear la persona",
-  "Personas Registradas": "Persones registrades",
-  "Añadir Persona": "Afegir persona",
-  "Nombre": "Nom",
-  "Edad": "Edat",
-  "Modificar persona": "Modificar persona",
-  "Ciudad desconocida": "Ciutat desconeguda",
-  "Error loading person:": "Error al carregar la persona",
-  "Error cargando proyectos asociados:": "Error al carregar projectes associats",
-  "Modificar Persona": "Modificar persona",
-  "Proyectos Asociados": "Projectes associats",
-  "Añadir Proyecto": "Afegir projecte",
-  "Selecciona un proyecto": "Selecciona un projecte",
-  "Asociar Proyecto": "Associar projecte",
-  "Direcciones Asociadas": "Adreces associades",
-  "Proyecto": "Projecte",
-  "Error al crear el proyecto:": "Error en crear el projecte:",
-  "Error al eliminar el proyecto: ": "Error en eliminar el projecte:",
-  "Error al modificar el proyecto: ": "Error en modificar el projecte:",
-  "Proyectos Registrados": "Projectes registrats",
-  "Modificar proyecto": "Modificar projecte",
-  "Nombre del proyecto": "Nom del projecte",
-  "Error al iniciar sesión:": "Error en iniciar sessió:",
-  "Usuario o contraseña no validos": "Usuari o contrasenya no vàlids",
-  "Web Project": "Projecte Web",
-  "Crear usuario": "Crear usuari",
-  "Iniciar sesion": "Iniciar sessió",
-  "Usuario": "Usuari",
-  "Contraseña": "Contrasenya",
-  "Iniciar Sesión": "Iniciar sessió"
+  "error": {
+    "loading": {
+      "address": "Error en carregar les adreces.",
+      "people": "Error en carregar les persones.",
+      "data": "Error en carregar les dades.",
+      "person": "Error en carregar la persona.",
+      "projects": "Error en carregar els projectes.",
+      "associated": {
+        "projects": "Error en carregar els projectes associats."
+      }
+    },
+    "creating": {
+      "address": "Error en crear l’adreça.",
+      "person": "Error en crear la persona.",
+      "project": "Error en crear el projecte.",
+      "user": "Error en crear l’usuari."
+    },
+    "deleting": {
+      "address": "Error en eliminar l’adreça.",
+      "person": "Error en eliminar la persona.",
+      "project": "Error en eliminar el projecte."
+    },
+    "editing": {
+      "project": "Error en editar el projecte."
+    },
+    "login": "Error en iniciar sessió.",
+    "username": {
+      "cannot be empty": "El nom d’usuari no pot estar buit."
+    },
+    "password": {
+      "cannot be empty": "La contrasenya no pot estar buida."
+    }
+  },
+  "type": {
+    "address": "Adreça",
+    "person": "Persona",
+    "persona": "Persona",
+    "project": "Projecte"
+  },
+  "action": {
+    "edited": "Editat/da",
+    "created": "Creat/da",
+    "deleted": "Eliminat/da",
+    "added": "Afegit/ida",
+    "editado/a": "Editat/da"
+  },
+  "title": {
+    "edit": {
+      "address": "Editar adreça",
+      "person": "Editar persona"
+    },
+    "associated": {
+      "person": "Persona associada",
+      "projects": "Projectes associats",
+      "directions": "Adreces associades"
+    },
+    "associate": {
+      "person": "Associar persona"
+    },
+    "registered": {
+      "addresses": "Adreces registrades",
+      "people": "Persones registrades",
+      "projects": "Projectes registrats"
+    },
+    "select": {
+      "page": "Selecciona una pàgina"
+    },
+    "My Dashboard": "El meu panell",
+    "add": {
+      "project": "Afegir projecte"
+    },
+    "web project": "Projecte web"
+  },
+  "label": {
+    "street": "Carrer",
+    "city": "Ciutat",
+    "name": "Nom",
+    "age": "Edat",
+    "Name": "Nom",
+    "sreet": "Carrer",
+    "project": {
+      "name": "Nom del projecte"
+    },
+    "user": "Usuari",
+    "password": "Contrasenya"
+  },
+  "button": {
+    "save": "Desar",
+    "delete": "Eliminar",
+    "associate": {
+      "person": "Associar persona",
+      "project": "Associar projecte"
+    },
+    "add": {
+      "address": "Afegir adreça",
+      "person": "Afegir persona",
+      "project": "Afegir projecte"
+    },
+    "edit": "Editar",
+    "people": "Persones",
+    "projects": "Projectes",
+    "addresses": "Adreces",
+    "saver": "Desar",
+    "create": {
+      "user": "Crear usuari"
+    },
+    "login": "Iniciar sessió"
+  },
+  "select": {
+    "person": "Selecciona una persona",
+    "project": "Selecciona un projecte"
+  },
+  "modal": {
+    "edit": {
+      "address": "Editar adreça",
+      "person": "Editar persona",
+      "project": "Editar projecte"
+    },
+    "add": {
+      "address": "Afegir adreça",
+      "person": "Afegir persona",
+      "project": "Afegir projecte"
+    },
+    "create": {
+      "user": "Crear nou usuari"
+    },
+    "login": "Inici de sessió"
+  },
+  "columns": {
+    "street": "Carrer",
+    "city": "Ciutat",
+    "person": "Persona",
+    "actions": "Accions",
+    "name": "Nom",
+    "age": "Edat",
+    "addresses": "Adreces",
+    "projects": "Projectes"
+  },
+  "Recent changes:": "Canvis recents:",
+  "There are no recent changes": "No hi ha canvis recents.",
+  "navbar": {
+    "people": "Persones",
+    "projects": "Projectes",
+    "addresses": "Adreces",
+    "logout": "Tancar sessió",
+    "language": "Idioma"
+  },
+  "language": {
+    "spanish": "Castellà",
+    "catalan": "Català",
+    "english": "Anglès"
+  },
+  "unknown": {
+    "city": "Ciutat desconeguda"
+  }
 }

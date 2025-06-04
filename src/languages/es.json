@@ -1,69 +1,157 @@
 {
-  "Error loading direction:": "Error al cargar la dirección:",
-  "Error al cargar las personas: ": "Error al cargar las personas: ",
-  "Dirección": "Dirección",
-  "Editado/a": "Editado/a",
-  "Modificar Dirección": "Modificar Dirección",
-  "Calle": "Calle",
-  "Ciudad": "Ciudad",
-  "Guardar cambios": "Guardar cambios",
-  "Persona Asociada": "Persona Asociada",
-  "Eliminar": "Eliminar",
-  "Asociar Pesona": "Asociar Persona",
-  "Selecciona una persona": "Selecciona una persona",
-  "Asociar Persona": "Asociar Persona",
-  "Error al cargar los datos: ": "Error al cargar los datos: ",
-  "Creado/a": "Creado/a",
-  "Error al crear la dirección:": "Error al crear la dirección:",
-  "Eliminado/a": "Eliminado/a",
-  "Error al eliminar la dirección: ": "Error al eliminar la dirección",
-  "Direcciones Registradas": "Direcciones Registradas",
-  "Añadir Dirección": "Añadir Dirección",
-  "Modificar dirección": "Modificar dirección",
-  "Guardar": "Guardar",
-  "Persona": "Persona",
-  "Acciones": "Acciones",
-  "Modificar": "Modificar",
-  "Selecciona una página:": "Selecciona una página:",
-  "Personas": "Personas",
-  "Proyectos": "Proyectos",
-  "Direcciones": "Direcciones",
-  "Cambios recientes:": "Cambios recientes:",
-  "No hay cambios recientes.": "No hay cambios recientes.",
-  "Cerrar sesión": "Cerrar sesión",
-  "Idioma": "Idioma",
-  "My Dashboard": "Mi Panel",
-  "Error al cargar los proyectos: ": "Error al cargar los proyectos: ",
-  "Error al eliminar la persona: ": "Error al eliminar la persona",
-  "Añadido/a": "Añadido/a",
-  "Error al crear la persona:": "Error al crear la persona",
-  "Personas Registradas": "Personas Registradas",
-  "Añadir Persona": "Añadir Persona",
-  "Nombre": "Nombre",
-  "Edad": "Edad",
-  "Modificar persona": "Modificar persona",
-  "Ciudad desconocida": "Ciudad desconocida",
-  "Error loading person:": "Error al cargar persona",
-  "Error cargando proyectos asociados:": "Error cargando proyectos asociados",
-  "Modificar Persona": "Modificar Persona",
-  "Proyectos Asociados": "Proyectos Asociados",
-  "Añadir Proyecto": "Añadir Proyecto",
-  "Selecciona un proyecto": "Selecciona un proyecto",
-  "Asociar Proyecto": "Asociar Proyecto",
-  "Direcciones Asociadas": "Direcciones Asociadas",
-  "Proyecto": "Proyecto",
-  "Error al crear el proyecto:": "Error al crear el proyecto:",
-  "Error al eliminar el proyecto: ": "Error al eliminar el proyecto: ",
-  "Error al modificar el proyecto: ": "Error al modificar el proyecto: ",
-  "Proyectos Registrados": "Proyectos Registrados",
-  "Modificar proyecto": "Modificar proyecto",
-  "Nombre del proyecto": "Nombre del proyecto",
-  "Error al iniciar sesión:": "Error al iniciar sesión:",
-  "Usuario o contraseña no validos": "Usuario o contraseña no válidos",
-  "Web Project": "Proyecto Web",
-  "Crear usuario": "Crear usuario",
-  "Iniciar sesion": "Iniciar sesión",
-  "Usuario": "Usuario",
-  "Contraseña": "Contraseña",
-  "Iniciar Sesión": "Iniciar sesión"
+  "error": {
+    "loading": {
+      "address": "Error al cargar direcciones.",
+      "people": "Error al cargar personas.",
+      "data": "Error al cargar datos.",
+      "person": "Error al cargar persona.",
+      "projects": "Error al cargar proyectos.",
+      "associated": {
+        "projects": "Error al cargar proyectos asociados."
+      }
+    },
+    "creating": {
+      "address": "Error al crear dirección.",
+      "person": "Error al crear persona.",
+      "project": "Error al crear proyecto.",
+      "user": "Error al crear usuario."
+    },
+    "deleting": {
+      "address": "Error al eliminar dirección.",
+      "person": "Error al eliminar persona.",
+      "project": "Error al eliminar proyecto."
+    },
+    "editing": {
+      "project": "Error al editar proyecto."
+    },
+    "login": "Error al iniciar sesión.",
+    "username": {
+      "cannot be empty": "El nombre de usuario no puede estar vacío."
+    },
+    "password": {
+      "cannot be empty": "La contraseña no puede estar vacía."
+    }
+  },
+  "type": {
+    "address": "dirección",
+    "person": "persona",
+    "persona": "persona",
+    "project": "proyecto"
+  },
+  "action": {
+    "edited": "editado",
+    "created": "creado",
+    "deleted": "eliminado",
+    "added": "añadido",
+    "editado/a": "editado/a"
+  },
+  "title": {
+    "edit": {
+      "address": "Editar Dirección",
+      "person": "Editar Persona"
+    },
+    "associated": {
+      "person": "Persona Asociada",
+      "projects": "Proyectos Asociados",
+      "directions": "Direcciones Asociadas"
+    },
+    "associate": {
+      "person": "Asociar Persona"
+    },
+    "registered": {
+      "addresses": "Direcciones Registradas",
+      "people": "Personas Registradas",
+      "projects": "Proyectos Registrados"
+    },
+    "select": {
+      "page": "Selecciona una Página"
+    },
+    "My Dashboard": "Mi Panel",
+    "add": {
+      "project": "Añadir Proyecto"
+    },
+    "web project": "Proyecto Web"
+  },
+  "label": {
+    "street": "Calle",
+    "city": "Ciudad",
+    "name": "Nombre",
+    "age": "Edad",
+    "Name": "Nombre",
+    "sreet": "Calle",
+    "project": {
+      "name": "Nombre del Proyecto"
+    },
+    "user": "Usuario",
+    "password": "Contraseña"
+  },
+  "button": {
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "associate": {
+      "person": "Asociar Persona",
+      "project": "Asociar Proyecto"
+    },
+    "add": {
+      "address": "Añadir Dirección",
+      "person": "Añadir Persona",
+      "project": "Añadir Proyecto"
+    },
+    "edit": "Editar",
+    "people": "Personas",
+    "projects": "Proyectos",
+    "addresses": "Direcciones",
+    "saver": "Guardar",
+    "create": {
+      "user": "Crear Usuario"
+    },
+    "login": "Iniciar Sesión"
+  },
+  "select": {
+    "person": "Selecciona una persona",
+    "project": "Selecciona un proyecto"
+  },
+  "modal": {
+    "edit": {
+      "address": "Editar Dirección",
+      "person": "Editar Persona",
+      "project": "Editar Proyecto"
+    },
+    "add": {
+      "address": "Añadir Dirección",
+      "person": "Añadir Persona",
+      "project": "Añadir Proyecto"
+    },
+    "create": {
+      "user": "Crear Nuevo Usuario"
+    },
+    "login": "Iniciar Sesión"
+  },
+  "columns": {
+    "street": "Calle",
+    "city": "Ciudad",
+    "person": "Persona",
+    "actions": "Acciones",
+    "name": "Nombre",
+    "age": "Edad",
+    "addresses": "Direcciones",
+    "projects": "Proyectos"
+  },
+  "Recent changes:": "Cambios recientes:",
+  "There are no recent changes": "No hay cambios recientes.",
+  "navbar": {
+    "people": "Personas",
+    "projects": "Proyectos",
+    "addresses": "Direcciones",
+    "logout": "Cerrar sesión",
+    "language": "Idioma"
+  },
+  "language": {
+    "spanish": "Español",
+    "catalan": "Catalán",
+    "english": "Inglés"
+  },
+  "unknown": {
+    "city": "Ciudad desconocida"
+  }
 }
