@@ -28,12 +28,14 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   fontSize,
   style,
-  size
+  size,
+  color
 }) => {
   const minWidthValue = minWidth as DimensionValue;
   const widthValue = width as DimensionValue;
   const heightValue = height as DimensionValue;
   const fontSizeValue = fontSize;
+  const fontColor = color;
   const {t} = useTranslation();
 
   const getType = () => {
@@ -66,7 +68,7 @@ const Button: React.FC<ButtonProps> = ({
       default:
         return {
           buttonStyle: {},
-          textStyle: {},
+          textStyle: {color: fontColor},
         };
     }
   };

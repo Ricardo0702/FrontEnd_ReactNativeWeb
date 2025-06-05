@@ -12,7 +12,8 @@ export interface AppColors {
   lightBlue: string,
   yellow: string,
   lightYellow: string,
-  darksteel: string
+  darksteel: string,
+  lightsteel: string
 };
 
 
@@ -29,7 +30,8 @@ const colors: AppColors = {
   lightBlue: '#e6f0fa',
   yellow: '#f1c40f',
   lightYellow: '#fff9e6',
-  darksteel: '#1f2937'
+  darksteel: '#1f2937',
+  lightsteel: '#374151'
 };
 
 export default colors

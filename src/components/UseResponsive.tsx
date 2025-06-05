@@ -47,11 +47,11 @@ const useResponsive = ({ type, size }: IUseResponsive) => {
         responsiveHeight = height * 0.06;
         break;
       case 'm':
-        responsiveWidth = width * 0.25;
+        responsiveWidth = width * 0.2;
         responsiveHeight = height * 0.08;
         break;
       case 'l':
-        responsiveWidth = width * 0.4;
+        responsiveWidth = width * 0.25;
         responsiveHeight = height * 0.1;
         break;
     }

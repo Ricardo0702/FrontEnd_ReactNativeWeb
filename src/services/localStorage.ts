@@ -2,7 +2,7 @@ import { RecentChange } from '../types/IRecentChange';
 
 export const saveRecentChange = (change: RecentChange) => {
   const existing = JSON.parse(localStorage.getItem('recentChanges') || '[]') as RecentChange[];
-  const updated = [change, ...existing].slice(0, 5); // solo los últimos 5 cambios
+  const updated = [change, ...existing].slice(0, 15); // solo los últimos 5 cambios
   localStorage.setItem('recentChanges', JSON.stringify(updated));
 };
 

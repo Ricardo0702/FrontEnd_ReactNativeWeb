@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { RecentChange } from '../../../types/IRecentChange';
-import Title from '../../../components/Title';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';  
+import Title from '../../../components/Title'; 
 import { useTranslation } from 'react-i18next';
 import RecentChanges from './RecentChanges';
+import Colors from '../../../components/Colors';
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -28,31 +28,76 @@ const MainDashboard: React.FC = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
 
-      <Title style={styles.title} text= {t("title.select.page")} size="xl" align="center" underline />
-
-      <View style={styles.peopleButton}>
-        <Button title={t("button.people")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/people')} />
-      </View>
-
-      <View style={styles.projectsButton}>
-        <Button title={t("button.projects")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/projects')} />
-      </View>
-
-      <View style={styles.directionsButton}>
-        <Button title={t("button.addresses")} size = 'xl' fontSize={20} onPress={() => navigate('/auth/directions')} />
-      </View>
-
+      <View style={styles.leftColumn}>
       <Text style={styles.subtitle}>{t('Recent changes:')}</Text>
-      <RecentChanges/>
-    </ScrollView>
-  );
-};
+      <RecentChanges />
+    </View>
+
+      <View style={styles.rightColumn}>
+        <Title
+          style={styles.title}
+          text={t("title.select.page")}
+          size="xl"
+          align="center"
+          underline
+        />
+
+        <View style={styles.peopleButton}>
+          <Button
+            title={t("button.people")}
+            color="white"
+            size="m"
+            fontSize={20}
+            onPress={() => navigate('/auth/people')}
+          />
+        </View>
+
+        <View style={styles.projectsButton}>
+          <Button
+            title={t("button.projects")}
+            color="white"
+            size="m"
+            fontSize={20}
+            onPress={() => navigate('/auth/projects')}
+          />
+        </View>
+
+        <View style={styles.directionsButton}>
+          <Button
+            title={t("button.addresses")}
+            color="white"
+            size="m"
+            fontSize={20}
+            onPress={() => navigate('/auth/directions')}
+          />
+        </View>
+    </View>
+    
+  </ScrollView>
+)};
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingTop: 60,
     paddingBottom: 40,
+    flexWrap: 'nowrap',  
+    alignItems: 'flex-start',
+  },
+   rightColumn: {
+    position: 'absolute',
+    top: 60,
+    left: '50%',
+    transform: [{ translateX: -0.5 * 300 }], // si el ancho es 300
+    width: 300,
+    alignItems: 'center',
+  },
+
+  leftColumn: {
+    flex: 1,
+    alignItems: 'flex-start', 
+    paddingLeft: 20,
   },
   title: {
     paddingTop: 20,
@@ -63,36 +108,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600',
     marginTop: 40,
-    marginBottom: 10,
-  },
-  noChanges: {
-    fontSize: 16,
-    color: '#777',
-  },
-  changeItem: {
-    backgroundColor: '#f4f4f4',
-    padding: 10,
-    marginVertical: 4,
-    borderRadius: 6,
-    width: '80%',
-  },
-  changeText: {
-    fontSize: 14,
+    marginBottom: 15,
   },
   peopleButton: {
-    backgroundColor: '#fdecea',
-    marginBottom: 10,
-    borderRadius: 15,
+    backgroundColor: Colors.lightsteel,
+    marginBottom: 15,
+    borderRadius: 5,
   },
   projectsButton: {
-    backgroundColor: '#e6f4ea',
-    marginBottom: 10,
-    borderRadius: 15,
+    backgroundColor: Colors.lightsteel,
+    marginBottom: 15,
+    borderRadius: 5,
   },
   directionsButton: {
-    backgroundColor: '#e6f0fa',
-    marginBottom: 10,
-    borderRadius: 15,
+    backgroundColor: Colors.lightsteel,
+    marginBottom: 15,
+    borderRadius: 5,
   },
 });
 

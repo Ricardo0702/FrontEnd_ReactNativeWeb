@@ -128,7 +128,6 @@ const DirectionsDashboard: React.FC = () => {
       >
         <View>
           <TextInput label={t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
-          <Text style={styles.label}>Ciudad:</Text>
           <TextInput label={t('label.city')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
           <Button title={t("button.save")} onPress={handleCreateDirection} type='save' />
         </View>

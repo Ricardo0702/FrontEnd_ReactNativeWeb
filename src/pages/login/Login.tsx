@@ -95,7 +95,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignInSuccess }) => {
             errorMessage={touchedSignIn && password.trim() === '' ? t('error.password.cannot be empty') : ''}
           />
           {signInError !== '' && <Text style={styles.errorText}>{signInError}</Text>}
-          <Button title={("button.create")} onPress={handleSignIn} type = 'save' />
+          <Button title={("button.create.user")} onPress={handleSignIn} type = 'save' />
         </View>
       </Modal>
 
