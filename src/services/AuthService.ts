@@ -10,7 +10,15 @@ export const login = async (username: string, password: string) => {
   return token;
 };
 
-export const signIn = async (username: string, password: string) => {
+export const loginByStorage = async() =>{
+  const response = await axios.post(`${API_URL}/refresh`);
+  sessionStorage.removeItem('token');
+  const token = response.data.token;
+  sessionStorage.setItem('token', token);
+  return token;
+}
+
+export const signUp = async (username: string, password: string) => {
   await axios.post(`${API_URL}/register`, { username, password });
 };
 
