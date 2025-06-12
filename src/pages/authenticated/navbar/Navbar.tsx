@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Colors from '../../../components/Colors';
 import { useTranslation } from 'react-i18next';
 
 import MobileMenu from './MobileMenu';
-import DesktopMenu from './DeskTopMenu'
+import DesktopMenu from './DeskTopMenu';
 
 interface NavbarProps {
   onLogout: () => void;
@@ -32,28 +32,31 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   };
 
   return (
-    <View style={styles.navbar}>
-      <TouchableOpacity onPress={() => (window.location.pathname = '/')}>
-        <Text style={styles.logo}>{t('title.My Dashboard')}</Text>
-      </TouchableOpacity>
+    <>
+      <View style={styles.navbar}>
+        <TouchableOpacity onPress={() => (window.location.pathname = '/')}>
+          <Text style={styles.logo}>{t('title.My Dashboard')}</Text>
+        </TouchableOpacity>
 
-      {isMobile ? (
-        <>
+        {isMobile ? (
           <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)}>
             <Text style={styles.burger}>☰</Text>
           </TouchableOpacity>
-          {menuOpen && (
-            <MobileMenu
-              onLogout={onLogout}
-              onChangeLanguage={changeLanguage}
-              closeMenu={() => setMenuOpen(false)}
-            />
-          )}
-        </>
-      ) : (
-        <DesktopMenu onLogout={onLogout} onChangeLanguage={changeLanguage} />
+        ) : (
+          <DesktopMenu onLogout={onLogout} onChangeLanguage={changeLanguage} />
+        )}
+      </View>
+
+      {isMobile && menuOpen && (
+        <View style={styles.menuContainer}>
+          <MobileMenu
+            onLogout={onLogout}
+            onChangeLanguage={changeLanguage}
+            closeMenu={() => setMenuOpen(false)}
+          />
+        </View>
       )}
-    </View>
+    </>
   );
 };
 
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 1000,
     maxWidth: '100%',
-    flexWrap: 'wrap',
   },
   logo: {
     fontSize: 24,
@@ -82,6 +84,15 @@ const styles = StyleSheet.create({
     fontSize: 26,
     color: 'white',
     padding: 5,
+  },
+  menuContainer: {
+    position: 'absolute',
+    top: 60, // Altura del navbar
+    right: 10,
+    backgroundColor: Colors.lightsteel,
+    zIndex: 999,
+    borderRadius: 6,
+    padding: 10,
   },
 });
 

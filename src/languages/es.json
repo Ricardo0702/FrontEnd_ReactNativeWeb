@@ -7,22 +7,30 @@
       "person": "Error al cargar persona.",
       "projects": "Error al cargar proyectos.",
       "associated": {
-        "projects": "Error al cargar proyectos asociados."
-      }
+        "projects": "Error al cargar proyectos asociados.",
+        "roles": "Error al cargar roles asociados."
+      },
+      "roles": "Error al cargar roles.",
+      "user": "Error al cargar usuario.",
+      "users": "Error al cargar usuarios."
     },
     "creating": {
       "address": "Error al crear dirección.",
       "person": "Error al crear persona.",
       "project": "Error al crear proyecto.",
+      "role": "Error al crear rol.",
       "user": "Error al crear usuario."
     },
     "deleting": {
       "address": "Error al eliminar dirección.",
       "person": "Error al eliminar persona.",
-      "project": "Error al eliminar proyecto."
+      "project": "Error al eliminar proyecto.",
+      "role": "Error al eliminar rol.",
+      "user": "Error al eliminar usuario."
     },
     "editing": {
-      "project": "Error al editar proyecto."
+      "project": "Error al editar proyecto.",
+      "role": "Error al editar rol."
     },
     "login": "Error al iniciar sesión.",
     "username": {
@@ -48,7 +56,8 @@
   "title": {
     "edit": {
       "address": "Editar Dirección",
-      "person": "Editar Persona"
+      "person": "Editar Persona",
+      "user": "Editar Usuario"
     },
     "associated": {
       "person": "Persona Asociada",
@@ -61,14 +70,20 @@
     "registered": {
       "addresses": "Direcciones Registradas",
       "people": "Personas Registradas",
-      "projects": "Proyectos Registrados"
+      "projects": "Proyectos Registrados",
+      "roles": "Roles Registrados",
+      "users": "Usuarios Registrados"
     },
     "select": {
       "page": "Selecciona una Página"
     },
     "My Dashboard": "Mi Panel",
     "add": {
-      "project": "Añadir Proyecto"
+      "project": "Añadir Proyecto",
+      "role": "Añadir Rol"
+    },
+    "assigned": {
+      "roles": "Roles Asignados"
     },
     "web project": "Proyecto Web"
   },
@@ -78,12 +93,17 @@
     "name": "Nombre",
     "age": "Edad",
     "Name": "Nombre",
-    "sreet": "Calle",
+    "sreet": "Calle", 
     "project": {
       "name": "Nombre del Proyecto"
     },
-    "user": "Usuario",
-    "password": "Contraseña"
+    "role": {
+      "name": "Nombre del Rol"
+    },
+    "Username": "Nombre de Usuario",
+    "username": "nombre de usuario",
+    "password": "Contraseña",
+    "user": "Usuario"
   },
   "button": {
     "save": "Guardar",
@@ -95,13 +115,18 @@
     "add": {
       "address": "Añadir Dirección",
       "person": "Añadir Persona",
-      "project": "Añadir Proyecto"
+      "project": "Añadir Proyecto",
+      "role": "Añadir Rol",
+      "user": "Añadir Usuario"
     },
     "edit": "Editar",
     "people": "Personas",
     "projects": "Proyectos",
     "addresses": "Direcciones",
     "saver": "Guardar",
+    "assign": {
+      "role": "Asignar Rol"
+    },
     "create": {
       "user": "Crear Usuario"
     },
@@ -109,18 +134,23 @@
   },
   "select": {
     "person": "Selecciona una persona",
-    "project": "Selecciona un proyecto"
+    "project": "Selecciona un proyecto",
+    "role": "Selecciona un rol"
   },
   "modal": {
     "edit": {
       "address": "Editar Dirección",
       "person": "Editar Persona",
-      "project": "Editar Proyecto"
+      "project": "Editar Proyecto",
+      "role": "Editar Rol",
+      "user": "Editar Usuario"
     },
     "add": {
       "address": "Añadir Dirección",
       "person": "Añadir Persona",
-      "project": "Añadir Proyecto"
+      "project": "Añadir Proyecto",
+      "role": "Añadir Rol",
+      "user": "Añadir Usuario"
     },
     "create": {
       "user": "Crear Nuevo Usuario"
@@ -135,7 +165,10 @@
     "name": "Nombre",
     "age": "Edad",
     "addresses": "Direcciones",
-    "projects": "Proyectos"
+    "projects": "Proyectos",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "roles": "Roles"
   },
   "Recent changes:": "Cambios recientes:",
   "There are no recent changes": "No hay cambios recientes.",
@@ -143,6 +176,8 @@
     "people": "Personas",
     "projects": "Proyectos",
     "addresses": "Direcciones",
+    "users": "Usuarios",
+    "roles": "Roles",
     "logout": "Cerrar sesión",
     "language": "Idioma"
   },

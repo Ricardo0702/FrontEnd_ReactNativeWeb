@@ -12,8 +12,6 @@ interface MobileMenuProps {
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, closeMenu }) => {
   const { t } = useTranslation();
-
-  // Navegación simplificada usando window.location.pathname (puedes cambiar a React Router después)
   const navigateTo = (path: string) => {
     closeMenu();
     window.location.pathname = path;
@@ -30,6 +28,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
       <TouchableOpacity onPress={() => navigateTo('/auth/directions')}>
         <Text style={styles.navLink}>{t('navbar.addresses')}</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigateTo('/auth/users')}>
+        <Text style={styles.navLink}>{t('navbar.users')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigateTo('/auth/roles')}>
+        <Text style={styles.navLink}>{t('navbar.roles')}</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => { onLogout(); closeMenu(); }}>
         <Text style={styles.navLink}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
@@ -41,7 +45,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
 const styles = StyleSheet.create({
   dropdown: {
     marginTop: 10,
-    backgroundColor: Colors.darksteel,
+    backgroundColor: Colors.lightsteel,
     padding: 10,
     borderRadius: 8,
   },

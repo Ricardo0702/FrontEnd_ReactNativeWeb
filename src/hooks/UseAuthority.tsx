@@ -1,4 +1,4 @@
-const hasAuthority = () => {
+export const hasAuthority = (authority: string) => {
 
 }
 

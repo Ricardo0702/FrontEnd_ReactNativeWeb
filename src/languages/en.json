@@ -7,22 +7,30 @@
       "person": "Error loading person.",
       "projects": "Error loading projects.",
       "associated": {
-        "projects": "Error loading associated projects."
-      }
+        "projects": "Error loading associated projects.",
+        "roles": "Error loading associated roles."
+      },
+      "roles": "Error loading roles.",
+      "user": "Error loading user.",
+      "users": "Error loading users."
     },
     "creating": {
       "address": "Error creating address.",
       "person": "Error creating person.",
       "project": "Error creating project.",
+      "role": "Error creating role.",
       "user": "Error creating user."
     },
     "deleting": {
       "address": "Error deleting address.",
       "person": "Error deleting person.",
-      "project": "Error deleting project."
+      "project": "Error deleting project.",
+      "role": "Error deleting role.",
+      "user": "Error deleting user."
     },
     "editing": {
-      "project": "Error editing project."
+      "project": "Error editing project.",
+      "role": "Error editing role."
     },
     "login": "Login error.",
     "username": {
@@ -48,7 +56,8 @@
   "title": {
     "edit": {
       "address": "Edit Address",
-      "person": "Edit Person"
+      "person": "Edit Person",
+      "user": "Edit User"
     },
     "associated": {
       "person": "Associated Person",
@@ -61,14 +70,20 @@
     "registered": {
       "addresses": "Registered Addresses",
       "people": "Registered People",
-      "projects": "Registered Projects"
+      "projects": "Registered Projects",
+      "roles": "Registered Roles",
+      "users": "Registered Users"
     },
     "select": {
       "page": "Select a Page"
     },
     "My Dashboard": "My Dashboard",
     "add": {
-      "project": "Add Project"
+      "project": "Add Project",
+      "role": "Add Role"
+    },
+    "assigned": {
+      "roles": "Assigned Roles"
     },
     "web project": "Web Project"
   },
@@ -82,8 +97,13 @@
     "project": {
       "name": "Project Name"
     },
-    "user": "Username",
-    "password": "Password"
+    "role": {
+      "name": "Role Name"
+    },
+    "Username": "Username",
+    "username": "Username",
+    "password": "Password",
+    "user": "Username"
   },
   "button": {
     "save": "Save",
@@ -95,13 +115,18 @@
     "add": {
       "address": "Add Address",
       "person": "Add Person",
-      "project": "Add Project"
+      "project": "Add Project",
+      "role": "Add Role",
+      "user": "Add User"
     },
     "edit": "Edit",
     "people": "People",
     "projects": "Projects",
     "addresses": "Addresses",
     "saver": "Save",
+    "assign": {
+      "role": "Assign Role"
+    },
     "create": {
       "user": "Create User"
     },
@@ -109,18 +134,23 @@
   },
   "select": {
     "person": "Select a person",
-    "project": "Select a project"
+    "project": "Select a project",
+    "role": "Select a role"
   },
   "modal": {
     "edit": {
       "address": "Edit Address",
       "person": "Edit Person",
-      "project": "Edit Project"
+      "project": "Edit Project",
+      "role": "Edit Role",
+      "user": "Edit User"
     },
     "add": {
       "address": "Add Address",
       "person": "Add Person",
-      "project": "Add Project"
+      "project": "Add Project",
+      "role": "Add Role",
+      "user": "Add User"
     },
     "create": {
       "user": "Create New User"
@@ -135,7 +165,10 @@
     "name": "Name",
     "age": "Age",
     "addresses": "Addresses",
-    "projects": "Projects"
+    "projects": "Projects",
+    "username": "Username",
+    "password": "Password",
+    "roles": "Roles"
   },
   "Recent changes:": "Recent changes:",
   "There are no recent changes": "There are no recent changes.",
@@ -143,6 +176,8 @@
     "people": "People",
     "projects": "Projects",
     "addresses": "Addresses",
+    "users": "Users",
+    "roles": "Roles",
     "logout": "Logout",
     "language": "Language"
   },

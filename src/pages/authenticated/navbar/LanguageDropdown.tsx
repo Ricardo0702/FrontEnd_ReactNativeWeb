@@ -45,10 +45,10 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   languageDropdown: {
-    marginTop: 10,
-    backgroundColor: Colors.darksteel,
+    position: 'absolute',
+    marginTop: 43,
+    backgroundColor: Colors.lightsteel,
     padding: 10,
-    borderRadius: 8,
   },
 });
 

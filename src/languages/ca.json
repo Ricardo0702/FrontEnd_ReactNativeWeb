@@ -7,26 +7,34 @@
       "person": "Error en carregar la persona.",
       "projects": "Error en carregar els projectes.",
       "associated": {
-        "projects": "Error en carregar els projectes associats."
-      }
+        "projects": "Error en carregar els projectes associats.",
+        "roles": "Error en carregar els rols associats"
+      },
+      "roles": "Error en carregar els rols",
+      "user": "Error en carregar l'usuari",
+      "users": "Error en carregar els usuaris"
     },
     "creating": {
-      "address": "Error en crear l’adreça.",
+      "address": "Error en crear l'adreça.",
       "person": "Error en crear la persona.",
       "project": "Error en crear el projecte.",
-      "user": "Error en crear l’usuari."
+      "role": "Error en crear el rol",
+      "user": "Error en crear l'usuari."
     },
     "deleting": {
-      "address": "Error en eliminar l’adreça.",
+      "address": "Error en eliminar l'adreça.",
       "person": "Error en eliminar la persona.",
-      "project": "Error en eliminar el projecte."
+      "project": "Error en eliminar el projecte.",
+      "role": "Error en eliminar el rol",
+      "user": "Error en eliminar l'usuari"
     },
     "editing": {
-      "project": "Error en editar el projecte."
+      "project": "Error en editar el projecte.",
+      "role": "Error en editar el rol"
     },
     "login": "Error en iniciar sessió.",
     "username": {
-      "cannot be empty": "El nom d’usuari no pot estar buit."
+      "cannot be empty": "El nom d'usuari no pot estar buit."
     },
     "password": {
       "cannot be empty": "La contrasenya no pot estar buida."
@@ -48,7 +56,8 @@
   "title": {
     "edit": {
       "address": "Editar adreça",
-      "person": "Editar persona"
+      "person": "Editar persona",
+      "user": "Editar usuari"
     },
     "associated": {
       "person": "Persona associada",
@@ -61,14 +70,20 @@
     "registered": {
       "addresses": "Adreces registrades",
       "people": "Persones registrades",
-      "projects": "Projectes registrats"
+      "projects": "Projectes registrats",
+      "roles": "Rols registrats",
+      "users": "Usuaris registrats"
     },
     "select": {
       "page": "Selecciona una pàgina"
     },
     "My Dashboard": "El meu panell",
     "add": {
-      "project": "Afegir projecte"
+      "project": "Afegir projecte",
+      "role": "Afegir rol"
+    },
+    "assigned": {
+      "roles": "Rols assignats"
     },
     "web project": "Projecte web"
   },
@@ -82,8 +97,13 @@
     "project": {
       "name": "Nom del projecte"
     },
-    "user": "Usuari",
-    "password": "Contrasenya"
+    "role": {
+      "name": "Nom del rol"
+    },
+    "Username": "Usuari",
+    "username": "Usuari",
+    "password": "Contrasenya",
+    "user": "Usuari"
   },
   "button": {
     "save": "Desar",
@@ -95,13 +115,18 @@
     "add": {
       "address": "Afegir adreça",
       "person": "Afegir persona",
-      "project": "Afegir projecte"
+      "project": "Afegir projecte",
+      "role": "Afegir rol",
+      "user": "Afegir usuari"
     },
     "edit": "Editar",
     "people": "Persones",
     "projects": "Projectes",
     "addresses": "Adreces",
     "saver": "Desar",
+    "assign": {
+      "role": "Assignar rol"
+    },
     "create": {
       "user": "Crear usuari"
     },
@@ -109,18 +134,23 @@
   },
   "select": {
     "person": "Selecciona una persona",
-    "project": "Selecciona un projecte"
+    "project": "Selecciona un projecte",
+    "role": "Selecciona un rol"
   },
   "modal": {
     "edit": {
       "address": "Editar adreça",
       "person": "Editar persona",
-      "project": "Editar projecte"
+      "project": "Editar projecte",
+      "role": "Editar rol",
+      "user": "Editar usuari"
     },
     "add": {
       "address": "Afegir adreça",
       "person": "Afegir persona",
-      "project": "Afegir projecte"
+      "project": "Afegir projecte",
+      "role": "Afegir rol",
+      "user": "Afegir usuari"
     },
     "create": {
       "user": "Crear nou usuari"
@@ -135,7 +165,10 @@
     "name": "Nom",
     "age": "Edat",
     "addresses": "Adreces",
-    "projects": "Projectes"
+    "projects": "Projectes",
+    "username": "Nom d'usuari",
+    "password": "Contrasenya",
+    "roles": "Rols"
   },
   "Recent changes:": "Canvis recents:",
   "There are no recent changes": "No hi ha canvis recents.",
@@ -143,6 +176,8 @@
     "people": "Persones",
     "projects": "Projectes",
     "addresses": "Adreces",
+    "users": "Usuaris",
+    "roles": "Rols",
     "logout": "Tancar sessió",
     "language": "Idioma"
   },

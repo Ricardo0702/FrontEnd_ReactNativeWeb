@@ -5,7 +5,7 @@ export interface UserContextType {
   loginByStorage: () => void;
   logout: () => void;
   username: string;
-  //authorities: string[];
+  authorities: string[];
   signUp: (username: string, password: string) => void;
 }
 

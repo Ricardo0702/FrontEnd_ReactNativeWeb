@@ -4,7 +4,7 @@ import type { Project } from '../../../types/IProject';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
 import TextInput from '../../../components/TextInput';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Title from '../../../components/Title';
 import { saveRecentChange } from '../../../services/localStorage';
 import { Skeleton } from '../../../components/Skeleton';
