@@ -173,13 +173,15 @@
   "Recent changes:": "Recent changes:",
   "There are no recent changes": "There are no recent changes.",
   "navbar": {
-    "people": "People",
-    "projects": "Projects",
-    "addresses": "Addresses",
+    "admin": "Admin.",
     "users": "Users",
     "roles": "Roles",
     "logout": "Logout",
-    "language": "Language"
+    "language": "Language",
+    "people": "People",
+    "projects": "Projects",
+    "addresses": "Addresses",
+    "pages": "Pages"
   },
   "language": {
     "spanish": "Spanish",

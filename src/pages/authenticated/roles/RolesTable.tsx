@@ -18,6 +18,7 @@ const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit }) => {
 
   const columns: { header: string; accessor?: keyof Role; width?: number; render?: (value: any, row: Role, rowIndex?: number) => React.ReactNode }[] = [
     { header: t('columns.name'), accessor: 'name' }, 
+    { header: t('columns.description'), accessor: 'description' },
     {
       header: t('columns.actions'),
       render: (_: any, row: Role, rowIndex?: number) => {

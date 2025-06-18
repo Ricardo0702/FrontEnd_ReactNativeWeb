@@ -63,7 +63,6 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  // Esta función evita que el evento de toque se propague cuando clicas dentro del modal
   const handleModalContentPress = (event: GestureResponderEvent) => {
     event.stopPropagation();
   };

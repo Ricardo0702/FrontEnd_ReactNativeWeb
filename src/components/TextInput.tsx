@@ -11,8 +11,9 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'value'> {
   errorStyle?: object;
   onChangeText?: (text: string) => void;
   secure?: boolean;
+  onSubmitEditing?: () => void;
+  returnKeyType?: RNTextInputProps['returnKeyType'];
 }
-
 
 const TextInput: React.FC<TextInputProps> = ({
   label,
@@ -24,6 +25,8 @@ const TextInput: React.FC<TextInputProps> = ({
   value,
   onChangeText,
   secure,
+  onSubmitEditing,
+  returnKeyType
 }) => {
   const stringValue = value !== undefined && value !== null ? String(value) : '';
 
@@ -35,6 +38,8 @@ const TextInput: React.FC<TextInputProps> = ({
         value={stringValue}
         onChangeText={(text) => onChangeText?.(text)}
         secureTextEntry =  {secure}
+        onSubmitEditing={onSubmitEditing}
+        returnKeyType={returnKeyType}
       />
       {errorMessage ? (
         <Text style={[styles.error, errorStyle]}>{errorMessage}</Text>

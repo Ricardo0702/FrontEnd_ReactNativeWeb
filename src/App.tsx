@@ -1,14 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import {BrowserRouter as Router,Route,Routes,Navigate,useNavigate,useParams,} from "react-router-dom";
 import { View, StyleSheet } from "react-native";
-
 import Navbar from "./pages/authenticated/navbar/Navbar";
 import MainDashboard from "./pages/authenticated/home/MainDashboard";
 import PeopleDashboard from "./pages/authenticated/people/PeopleDashboard";
@@ -18,9 +10,7 @@ import UsersDashboard from "./pages/authenticated/users/UsersDashboard";
 import RolesDashboard from "./pages/authenticated/roles/RolesDashboard";
 import LoginForm from "./pages/login/Login";
 import PersonModification from "./pages/authenticated/people/PersonModification";
-
 import "./types/I18n";
-
 import { UserContextProvider } from "./context/UserContextProvider";
 import { UserContext } from "./context/UserContext";
 import ProtectedRoutes from "./components/routes/ProtectedRoutes";
@@ -67,15 +57,8 @@ const AppContent: React.FC = () => {
     <View style={styles.container}>
       {userContext.username && <Navbar onLogout={handleLogout} />}
       <Routes>
-        <Route
-          path="/"
-          element={
-            userContext.username ? (
-              <Navigate to="/auth/dashboard" />
-            ) : (
-              <LoginForm onLoginSuccess={handleLoginSuccess} />
-            )
-          }
+        <Route path="/" element={userContext.username ? (<Navigate to="/auth/dashboard" />) : 
+        (<LoginForm onLoginSuccess={handleLoginSuccess} />)}
         />
         <Route element={<ProtectedRoutes />}>
           <Route element={<AdminRoutes />}>
@@ -86,12 +69,7 @@ const AppContent: React.FC = () => {
           <Route path="/auth/people" element={<PeopleDashboard />} />
           <Route path="/auth/projects" element={<ProjectsDashboard />} />
           <Route path="/auth/directions" element={<DirectionsDashboard />} />
-          {hasAuthority(Authority.ROLE_USER) ?? (
-            <Route
-              path="/auth/person/:personId"
-              element={<PersonModificationWrapper />}
-            />
-          )}
+          <Route path="/auth/person/:personId" element={<PersonModificationWrapper />}/>
         </Route>
         <Route path="*" element={<Navigate to="/auth/dashboard" />} />
       </Routes>

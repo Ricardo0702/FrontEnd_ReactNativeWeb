@@ -16,6 +16,7 @@
     "react-dom": "^19.1.0",
     "react-i18next": "^15.5.2",
     "react-native": "^0.79.2",
+    "react-native-country-flag": "^2.0.2",
     "react-native-web": "^0.20.0",
     "react-router-dom": "^7.6.0",
     "react-select": "^5.10.1"

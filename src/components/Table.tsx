@@ -13,6 +13,7 @@ export interface TableProps<T> {
   data: T[];
   style?: object;
   minRowHeight?: number;
+  widthFactor?: number;
 }
 
 const Table = <T,>({
@@ -20,6 +21,7 @@ const Table = <T,>({
   data,
   style,
   minRowHeight = 40,
+  widthFactor,
 }: TableProps<T>): React.ReactElement | null => {
   const { width: windowWidth } = useWindowDimensions();
 
@@ -55,7 +57,7 @@ const Table = <T,>({
   return (
     <View style={{ minHeight: minRowHeight * (data.length + 1) }}>
       <ScrollView horizontal style={[styles.container, style]}>
-        <View style={{ width: windowWidth * 0.8 }}>
+        <View style={{ width: windowWidth * (widthFactor ?? 0.8) }}>
           <View style={[styles.row, styles.headerRow, { minHeight: minRowHeight }]}>
             {columns.map((col, idx) => (
               <View
@@ -65,7 +67,7 @@ const Table = <T,>({
                   styles.headerCell,
                   col.width
                     ? { width: col.width }
-                    : { width: (windowWidth * 0.8) / flexibleColumnCount },
+                    : { width: (windowWidth * (widthFactor ?? 0.8)) / flexibleColumnCount },
                   { minHeight: minRowHeight },
                 ]}
               >
@@ -92,7 +94,7 @@ const Table = <T,>({
                       styles.cell,
                       col.width
                         ? { width: col.width }
-                        : { width: (windowWidth * 0.8) / flexibleColumnCount },
+                        : { width: (windowWidth * (widthFactor ?? 0.8)) / flexibleColumnCount },
                       { minHeight: minRowHeight },
                     ]}
                   >

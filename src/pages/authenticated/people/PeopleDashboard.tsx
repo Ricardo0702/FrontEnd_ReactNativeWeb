@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { use, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button'
 import Title from '../../../components/Title'
@@ -7,42 +7,37 @@ import { Skeleton } from '../../../components/Skeleton';
 import { fetchPeople, createPerson, deletePerson } from '../../../services/PersonService';
 import { saveRecentChange } from '../../../services/localStorage';
 import type { Person } from '../../../types/IPerson';
-import { View, StyleSheet,ScrollView } from 'react-native';
+import { View, StyleSheet,ScrollView, Alert } from 'react-native';
 import PeopleTable from './PeopleTable';
 import PersonModification from './PersonModification';
 import { useTranslation } from 'react-i18next';
+import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { UserContext } from '../../../context/UserContext';
 
 
 
 const PeopleDashboard: React.FC = () => {
-  
   const [people, setPeople] = useState<Person[]>([]);
-
   const {t} = useTranslation();
-
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
-
+  const form = useRef<Person>({} as Person);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [personName, setPersonName] = useState('');
   const [personAge, setPersonAge] = useState<number>(0);
-
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
-
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { authorities } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve));
-      const [peopleData] = await Promise.all([
-        fetchPeople(),
-      ]);
-      setPeople(peopleData);
-    } catch (error) {
+      setPeople(await fetchPeople());
+    } catch (error: any) {
+      setError(error.response.data);
       console.error(t('error.loading.people'), error);
-    }finally {
-      setIsLoading(false);
     }
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -56,30 +51,21 @@ const PeopleDashboard: React.FC = () => {
       setPeople((prevPeople) => prevPeople.filter((person) => person.id !== personId));
 
       if (deletedPerson) {
-        saveRecentChange({
-          type: t('type.person'),
-          action: t('action.deleted'),
-          name: deletedPerson.name,
-          timestamp: Date.now(),
-        });
+        saveRecentChange({type: t('type.person'),action: t('action.deleted'),name: deletedPerson.name,timestamp: Date.now(),});
       }
-    } catch (error) {
-      console.error(t("error.deleting.person"), error);
-    }
+    } catch (error) { console.error(t("error.deleting.person"), error); }
   }, [people]);
 
 
   const handleCreatePerson = async () => {
     try {
       const newPerson = await createPerson(personName, personAge);
-
       saveRecentChange({
         type: t('type.person'),
         action: t('action.added'),
         name: newPerson.name,
         timestamp: Date.now(),
       });
-
       fetchData();
       setShowModalForm(false);
       setPersonName('');
@@ -89,11 +75,22 @@ const PeopleDashboard: React.FC = () => {
     }
   };
 
-  const handleEditPerson = async(person: Person) => {
-    setSelectedPersonId(person.id);
-    setPersonAge(person.age);
-    setPersonName(person.name);
+  const handleEditPerson = useCallback(async (person: Person) => {
+    form.current = person;
+    setSelectedPersonId(person.id)
     setUpdateModal(true);
+  }, [])
+
+  const update = useCallback((updatedPerson: Person) => {
+    setPeople(prev => prev.map(p => (p.id === updatedPerson.id ? updatedPerson : p)));
+  }, []);
+
+  if (error) {
+    return "componente Alert con el error";
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />
   }
 
   const skeletonRows = Array.from({ length: 5 }, (_, i) => (
@@ -115,28 +112,29 @@ const PeopleDashboard: React.FC = () => {
           {isLoading ? skeletonRows : (
             <PeopleTable people={people} onDelete={handleDeletePerson} onEdit={handleEditPerson} />
           )}
+          {hasAuthority(authorities, Authority.ROLE_PEOPLE) || hasAuthority(authorities, Authority.ROLE_ADMIN) && (<>
           <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
             <Button title={t("button.add.person")} onPress={() => setShowModalForm(true)} type = 'add'/>
           </View>
+          </>)}
         </View>
 
       </ScrollView>
-
+      
       <Modal title={t("modal.add.person")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
           <TextInput label= {t('label.name')} value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
 
           <TextInput label= {t('label.age')} value={personAge.toString()} onChangeText={
             (value) => setPersonAge(Number(value))} style={styles.input} keyboardType="numeric" />
-
           <Button title={t("button.save")} onPress={handleCreatePerson} type = 'save'/>
         </View>
       </Modal>
       
-      <Modal title={t("modal.edit.person")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
-        <PersonModification personId={selectedPersonId} />
+      <Modal title={t("modal.edit.person")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false); fetchData()}} size = "xl">
+        <PersonModification personId={selectedPersonId} personForm={form.current} onUpdatePerson={update}/>
+        {/* <PersonModification personId={selectedPersonId}/> */}
       </Modal>
-
     </View>
   );
 };

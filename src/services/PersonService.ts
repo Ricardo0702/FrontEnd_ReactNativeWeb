@@ -3,17 +3,6 @@ import { Person } from '../types/IPerson';
 
 const API_URL = '/auth/person';
 
-export const createEmptyPerson = (): Person => ({
-  id: 0,
-  name: '',
-  age: 0,
-  directionIds: [],
-  streets: [],
-  cities: [],
-  projectIds: [],
-  projectNames: []
-});
-
 export const fetchPeople = async () => {
   const response = await axios.get(API_URL);
   return response.data;

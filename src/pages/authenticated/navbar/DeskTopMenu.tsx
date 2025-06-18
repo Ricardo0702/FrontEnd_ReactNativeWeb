@@ -1,48 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import LanguageDropdown from "./LanguageDropdown";
 import { useTranslation } from "react-i18next";
 import { Authority, hasAuthority } from "../../../hooks/UseAuthority";
+import AdminDropdown from "./AdminDropdown";
+import PagesDropdown from "./PgesDropdown";
+import { UserContext } from "../../../context/UserContext";
 
 interface DesktopMenuProps {
   onLogout: () => void;
   onChangeLanguage: (lng: string) => void;
 }
 
-const DesktopMenu: React.FC<DesktopMenuProps> = ({
-  onLogout,
-  onChangeLanguage,
-}) => {
+const DesktopMenu: React.FC<DesktopMenuProps> = ({onLogout, onChangeLanguage,}) => {
   const { t } = useTranslation();
-  const navigateTo = (path: string) => {
-    window.location.pathname = path;
-  };
+  const navigate = useNavigate();
+  const { authorities } = useContext(UserContext);
 
   return (
     <View style={styles.navLinks}>
-      <TouchableOpacity onPress={() => navigateTo("/auth/people")}>
-        <Text style={styles.navLink}>{t("navbar.people")}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigateTo("/auth/projects")}>
-        <Text style={styles.navLink}>{t("navbar.projects")}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigateTo("/auth/directions")}>
-        <Text style={styles.navLink}>{t("navbar.addresses")}</Text>
-      </TouchableOpacity>
-      {hasAuthority(Authority.ROLE_ADMIN) ?? (
-        <View>
-          <TouchableOpacity onPress={() => navigateTo("/auth/users")}>
-            <Text style={styles.navLink}>{t("navbar.users")}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigateTo("/auth/roles")}>
-            <Text style={styles.navLink}>{t("navbar.roles")}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <PagesDropdown/>
+      {hasAuthority(authorities, Authority.ROLE_ADMIN) && (<><AdminDropdown/></>)}
+      <LanguageDropdown onChangeLanguage={onChangeLanguage} />
       <TouchableOpacity onPress={onLogout}>
         <Text style={styles.navLink}>{t("navbar.logout")}</Text>
       </TouchableOpacity>
-      <LanguageDropdown onChangeLanguage={onChangeLanguage} />
     </View>
   );
 };

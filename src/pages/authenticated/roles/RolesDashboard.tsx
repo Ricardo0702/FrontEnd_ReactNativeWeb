@@ -16,6 +16,7 @@ const RolesDashboard: React.FC = () => {
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
   const [roleName, setRoleName] = useState('');
+  const [roleDescritpion, setRoleDescription] = useState('');
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
   const {t} = useTranslation();
@@ -37,12 +38,19 @@ const RolesDashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleCreateRole = async () => {
+  const formatRoleName = (name: string) => {
+    const upperName = name.trim().toUpperCase();
+    return upperName.startsWith('ROLE_') ? upperName : `ROLE_${upperName}`;
+  };
+
+
+  const handleCreateRole = async (roleName: string, roleDescritpion: string) => {
     try {
-      const newRole = await createRole(roleName);
+      const newRole = await createRole(formatRoleName(roleName), roleDescritpion);
       fetchData();
       setShowModalForm(false);
       setRoleName('');
+      setRoleDescription('');
     } catch (error) {
       console.error(t('error.creating.role'), error);
     }
@@ -50,7 +58,6 @@ const RolesDashboard: React.FC = () => {
 
   const handleDeleteRole = async (roleId: number) => {
     try {
-      const deletedRole = roles.find(r => r.id === roleId);
       await deleteRole(roleId);
       setRoles(prev => prev.filter(r => r.id !== roleId));
     } catch (error) {
@@ -61,15 +68,18 @@ const RolesDashboard: React.FC = () => {
   const handleEditRole = (role: Role) => {
       setSelectedRoleId(role.id);
       setRoleName(role.name);
+      setRoleDescription(role.description);
       setUpdateModal(true);
     };
 
-  const handleUpdateRole = async (roleId: number, roleName: string) => {
+  const handleUpdateRole = async (roleId: number, roleName: string, roleDescritpion: string) => {
     try {
-      await updateRole(roleId, roleName);
+      await updateRole(roleId, formatRoleName(roleName), roleDescritpion);
       fetchData();
       setUpdateModal(false);
       setRoleName('');
+      setRoleDescription('');
+      setSelectedRoleId(null);
     } catch (error) {
       console.error(t("error.editing.role"), error);
     }
@@ -100,25 +110,36 @@ const RolesDashboard: React.FC = () => {
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.edit.role")} visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">
+      <Modal title={t("modal.edit.role")} visible={showUpdateModal} onClose={() => {setUpdateModal(false), fetchData()}} size="xs">
         <View>
           <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} style={styles.input} autoFocus />
+          <TextInput label={t('label.role.name')} value={roleDescritpion} onChangeText={setRoleDescription} style={styles.input} autoFocus />
           <Button
-            title={t("button.save")}
-            onPress={() => {
+            title={t("button.save")} 
+            onPress={async () => { 
               if (selectedRoleId !== null) {
-                handleUpdateRole(selectedRoleId, roleName);
-              }
+                await handleUpdateRole(selectedRoleId, roleName, roleDescritpion);
+                setUpdateModal(false);
+                fetchData();
+              };
             }}
             type='save'
           />
         </View>
       </Modal>
 
-      <Modal title={t("modal.add.role")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t("modal.add.role")} visible={showModalForm} onClose={() => {setShowModalForm(false), fetchData()}} size="xs">
         <View>
           <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} style={styles.input} autoFocus />
-          <Button title={t("button.saver")} onPress={handleCreateRole} type='save' />
+          <TextInput label={t('label.role.description')} value={roleDescritpion} onChangeText={setRoleDescription} style={styles.input} autoFocus />
+          <Button 
+            title={t("button.saver")} 
+            onPress={async () =>{
+              await handleCreateRole(roleName, roleDescritpion);
+              setShowModalForm(false);
+              fetchData();
+            }} 
+            type='save' />
         </View>
       </Modal>
     </View>

@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Colors from '../../../components/Colors';
 import { useTranslation } from 'react-i18next';
 import LanguageDropdown from './LanguageDropdown';
+import { hasAuthority, Authority} from '../../../hooks/UseAuthority';
+import AdminDropdown from './AdminDropdown';
+import { useNavigate } from 'react-router-dom';
+import PagesDropdown from './PgesDropdown';
+import { UserContext } from '../../../context/UserContext';
 
 interface MobileMenuProps {
   onLogout: () => void;
@@ -12,32 +17,17 @@ interface MobileMenuProps {
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, closeMenu }) => {
   const { t } = useTranslation();
-  const navigateTo = (path: string) => {
-    closeMenu();
-    window.location.pathname = path;
-  };
+  const navigate = useNavigate();
+  const { authorities } = useContext(UserContext);
 
   return (
     <View style={styles.dropdown}>
-      <TouchableOpacity onPress={() => navigateTo('/auth/people')}>
-        <Text style={styles.navLink}>{t('navbar.people')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigateTo('/auth/projects')}>
-        <Text style={styles.navLink}>{t('navbar.projects')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigateTo('/auth/directions')}>
-        <Text style={styles.navLink}>{t('navbar.addresses')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigateTo('/auth/users')}>
-        <Text style={styles.navLink}>{t('navbar.users')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigateTo('/auth/roles')}>
-        <Text style={styles.navLink}>{t('navbar.roles')}</Text>
-      </TouchableOpacity>
+      <PagesDropdown dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}} />
+      {hasAuthority(authorities, Authority.ROLE_ADMIN) && (<><AdminDropdown dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}}/></>)}
+      <LanguageDropdown onChangeLanguage={onChangeLanguage} dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}} />
       <TouchableOpacity onPress={() => { onLogout(); closeMenu(); }}>
         <Text style={styles.navLink}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
-      <LanguageDropdown onChangeLanguage={onChangeLanguage} />
     </View>
   );
 };

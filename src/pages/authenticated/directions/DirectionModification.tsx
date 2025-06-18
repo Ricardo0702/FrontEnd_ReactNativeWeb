@@ -18,10 +18,8 @@ type Props = {
 export default function directionModification({directionId}: Props){
 
     const {t} = useTranslation();
-
-    const [direction, setDirection] = useState<Direction>(createEmptyDirection());
+    const [direction, setDirection] = useState<Direction>({} as Direction);
     const [people, setPeople] = useState<Person[]>([]);
-
     const [directionStreet, setDirectionStreet] = useState('');
     const [directionCity, setDirectionCity] = useState('');
     const [newPersonId, setNewPersonId] = useState<number | undefined>(undefined);

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import type { Person } from '../../../types/IPerson';
 import { View, Text, useWindowDimensions } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
+import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
+import { UserContext } from '../../../context/UserContext';
 
 interface PeopleTableProps {
   people: Person[];
@@ -15,6 +17,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) =
  
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions()
+  const { authorities } = useContext(UserContext);
 
   const columns: { header: string; accessor?: keyof Person; width?: number; minRowWidth?: number;
       render?: (value: any, row: Person) => React.ReactNode }[] = [
@@ -26,7 +29,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) =
           const streets = row.streets ?? [];
           const cities = row.cities ?? [];
           if (streets.length === 0 && cities.length === 0) {
-            return <Text>null</Text>; 
+            return <Text></Text>; 
           }
 
           const directions = streets.map((street, index) => ({
@@ -45,38 +48,39 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) =
           );
         },
       },
-      {
-        header: t('columns.projects'), accessor:'projectNames',
-      },
-      {
-        header: t('columns.actions'), minRowWidth: 180,
-        render: (_: any, row: Person, rowIndex?: number) => {
-        const isEven = (rowIndex ?? 0) % 2 === 0;
-        const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
-        if (windowWidth < 600){
-            return (
+      {header: t('columns.projects'), accessor:'projectNames'},
+
+      ...(hasAuthority(authorities, Authority.ROLE_PEOPLE) || hasAuthority(authorities, Authority.ROLE_ADMIN) ? [
+        {
+          header: t('columns.actions'), minRowWidth: 180,
+          render: (_: any, row: Person, rowIndex?: number) => {
+            const isEven = (rowIndex ?? 0) % 2 === 0;
+            const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
+            if (windowWidth < 600){
+              return (
                 <View style={{ flexDirection: 'row', gap: 10 }}>
-                    <View style = {{backgroundColor}}>
-                        <Button title= {t("button.edit")} onPress={() => onEdit(row)} type='associate' />
-                    </View>
-                    <View>
-                        <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type='delete' />
-                    </View>
+                  <View style={{ backgroundColor }}>
+                    <Button title={t("button.edit")} onPress={() => onEdit(row)} type='associate' />
+                  </View>
+                  <View>
+                    <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type='delete' />
+                  </View>
                 </View>
-            )
+              );
+            }
+            return (
+              <View style={{ flexDirection: 'column', gap: 10 }}>
+                <View style={{ backgroundColor }}>
+                  <Button title={t("button.edit")} onPress={() => onEdit(row)} type='associate' />
+                </View>
+                <View>
+                  <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type='delete' />
+                </View>
+              </View>
+            );
+          }
         }
-        return (
-          <View style={{ flexDirection: 'column', gap: 10 }}>
-            <View style = {{backgroundColor}}>
-              <Button title= {t("button.edit")} onPress={() => onEdit(row)} type='associate' />
-            </View>
-            <View>
-              <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type='delete' />
-            </View>
-          </View>
-        );
-      }
-    }
+    ] : [])
   ];
 
   return (

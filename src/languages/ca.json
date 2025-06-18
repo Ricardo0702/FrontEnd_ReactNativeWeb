@@ -173,13 +173,15 @@
   "Recent changes:": "Canvis recents:",
   "There are no recent changes": "No hi ha canvis recents.",
   "navbar": {
-    "people": "Persones",
-    "projects": "Projectes",
-    "addresses": "Adreces",
+    "admin": "Admin.",
     "users": "Usuaris",
     "roles": "Rols",
     "logout": "Tancar sessió",
-    "language": "Idioma"
+    "language": "Idioma",
+    "people": "Persones",
+    "projects": "Projectes",
+    "addresses": "Adreces",
+    "pages": "Pàgines"
   },
   "language": {
     "spanish": "Castellà",

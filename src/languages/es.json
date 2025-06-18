@@ -93,7 +93,7 @@
     "name": "Nombre",
     "age": "Edad",
     "Name": "Nombre",
-    "sreet": "Calle", 
+    "sreet": "Calle",
     "project": {
       "name": "Nombre del Proyecto"
     },
@@ -173,13 +173,15 @@
   "Recent changes:": "Cambios recientes:",
   "There are no recent changes": "No hay cambios recientes.",
   "navbar": {
-    "people": "Personas",
-    "projects": "Proyectos",
-    "addresses": "Direcciones",
+    "admin": "Admin.",
     "users": "Usuarios",
     "roles": "Roles",
     "logout": "Cerrar sesión",
-    "language": "Idioma"
+    "language": "Idioma",
+    "people": "Personas",
+    "projects": "Proyectos",
+    "addresses": "Direcciones",
+    "pages": "Páginas"
   },
   "language": {
     "spanish": "Español",

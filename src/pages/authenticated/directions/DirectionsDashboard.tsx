@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { fetchDirections, createDirection, deleteDirection } from '../../../services/DirectionService';
 import { fetchPeople } from '../../../services/PersonService';
 import type { Direction } from '../../../types/IDirection';
@@ -12,21 +12,21 @@ import { saveRecentChange } from '../../../services/localStorage';
 import DirectionModification from './DirectionModification';
 import { useTranslation } from 'react-i18next';
 import DirectionsTable from './DirectionsTable';  // Importar tabla separada
+import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
+import { UserContext } from '../../../context/UserContext';
 
 const DirectionsDashboard: React.FC = () => {
   const { t } = useTranslation();
 
   const [directions, setDirections] = useState<Direction[]>([]);
   const [people, setPeople] = useState<Person[]>([]);
-
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
-
   const [selectedDirectionId, setSelectedDirectionId] = useState<number | null>(null);
-
   const [directionStreet, setDirectionStreet] = useState('');
   const [directionCity, setDirectionCity] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { authorities } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
@@ -106,9 +106,11 @@ const DirectionsDashboard: React.FC = () => {
           <DirectionsTable directions={directions} onDelete={handleDeleteDirection} onEdit={handleEditDirection} />
         </View>
 
+        {hasAuthority(authorities, Authority.ROLE_ADDRESSES) || hasAuthority(authorities, Authority.ROLE_ADMIN) && (<>
         <View style={{ alignItems: 'center' }}>
           <Button title={t("button.add.address")} onPress={() => setShowModalForm(true)} type='add' />
         </View>
+        </>)}
       </ScrollView>
 
       <Modal

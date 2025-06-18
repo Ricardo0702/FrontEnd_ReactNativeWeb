@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { fetchPerson, updatePerson, createEmptyPerson, associateProject, removeProject } from '../../../services/PersonService';
 import { fetchUser, updateUser, createEmptyUser, assignRole, removeRole } from '../../../services/UserService';
 import { fetchProjects, fetchProject } from '../../../services/ProjectService';
 import { fetchRoles, fetchRole } from '../../../services/RoleService';
@@ -18,7 +17,7 @@ type Props = {
   userId: number | null;
 };
 
-export default function PersonModification({ userId }: Props) {
+export default function UserModification({ userId }: Props) {
 
   const {t} = useTranslation();
   

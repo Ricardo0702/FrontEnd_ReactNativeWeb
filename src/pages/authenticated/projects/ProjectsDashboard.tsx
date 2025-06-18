@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { fetchProjects, createProject, deleteProject, updateProject } from '../../../services/ProjectService';
 import type { Project } from '../../../types/IProject';
 import Modal from '../../../components/Modal';
@@ -10,6 +10,8 @@ import { saveRecentChange } from '../../../services/localStorage';
 import { Skeleton } from '../../../components/Skeleton';
 import { useTranslation } from 'react-i18next';
 import ProjectsTable from './ProjectsTable';
+import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
+import { UserContext } from '../../../context/UserContext';
 
 const ProjectsDashboard: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -18,6 +20,7 @@ const ProjectsDashboard: React.FC = () => {
   const [showUpdateModal, setUpdateModal] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const { authorities } = useContext(UserContext);
 
   const {t} = useTranslation();
 
@@ -116,10 +119,12 @@ const ProjectsDashboard: React.FC = () => {
             <ProjectsTable projects = {projects} onDelete={handleDeleteProject} onEdit={handleEditProject} />
           )}
         </View>
-
-        <View style={{ alignItems: 'center' }}>
-          <Button title={t("button.add.project")} onPress={() => setShowModalForm(true)} type='add' />
-        </View>
+        
+        {hasAuthority(authorities, Authority.ROLE_PROJECTS) || hasAuthority(authorities, Authority.ROLE_ADMIN) && (<>
+          <View style={{ alignItems: 'center' }}>
+            <Button title={t("button.add.project")} onPress={() => setShowModalForm(true)} type='add' />
+          </View>
+        </>)}
       </ScrollView>
 
       <Modal title={t("modal.edit.project")} visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">

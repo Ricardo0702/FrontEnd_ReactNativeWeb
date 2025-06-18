@@ -58,7 +58,7 @@ const UsersDashboard: React.FC = () => {
 
   const handleCreateUser = async () => {
     try {
-      const newPerson = await userContext.signUp(username, password);
+      const newUser = await userContext.signUp(username, password);
 
       fetchData();
       setShowModalForm(false);

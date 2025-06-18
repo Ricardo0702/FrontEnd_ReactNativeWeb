@@ -13,8 +13,8 @@ export const fetchRole = async (roleId: number): Promise<Role> => {
   return response.data;
 };
 
-export const createRole = async (name: string) => {
-  const response = await axios.post(API_URL, { name });
+export const createRole = async (name: string, description: string) => {
+  const response = await axios.post(API_URL, { name, description });
   return response.data;
 };
 
@@ -22,6 +22,6 @@ export const deleteRole = async (roleId: number) => {
   await axios.delete(`${API_URL}/${roleId}`);
 };
 
-export const updateRole = async (roleId: number, name: string) => {
-  await axios.put(`${API_URL}/${roleId}`, { name });
+export const updateRole = async (roleId: number, name: string, description: string) => {
+  await axios.put(`${API_URL}/${roleId}`, { name, description });
 };

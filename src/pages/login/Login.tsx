@@ -51,6 +51,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
     try {
       setSignUpError('');
       await signUp(username, password);
+      await loginByUsername(username, password);
       setShowSignUpModal(false);
       onSignUpSuccess?.();
     } catch (error: any) {
@@ -89,11 +90,8 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             errorMessage={touchedSignUp && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
           />
           <TextInput
-            label={t("label.password")} value={password} onChangeText={setPassword} secure
-            inputStyle={[
-              styles.inputField,
-              touchedSignUp && password.trim() === '' && styles.inputError,
-            ]}  
+            label={t("label.password")} value={password} onChangeText={setPassword} secure onSubmitEditing={handleLogin} 
+            returnKeyType="done" inputStyle={[ styles.inputField, touchedSignUp && password.trim() === '' && styles.inputError,]}  
             errorMessage={touchedSignUp && password.trim() === '' ? t('error.password.cannot be empty') : ''}
           />
           {signUpError !== '' && <Text style={styles.errorText}>{signUpError}</Text>}
@@ -112,11 +110,8 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             errorMessage={touchedLogin && username.trim() === '' ? t('error.username.cannot be empty') : ''}
           />
           <TextInput 
-            label={t("label.password")} value={password} onChangeText={setPassword} secure
-            inputStyle={[
-              styles.inputField,
-              touchedLogin && password.trim() === '' && styles.inputError, 
-            ]} 
+            label={t("label.password")} value={password} onChangeText={setPassword} secure onSubmitEditing={handleLogin}
+            returnKeyType="done" inputStyle={[styles.inputField, touchedLogin && password.trim() === '' && styles.inputError,]} 
             errorMessage= {touchedLogin && password.trim() === '' ? t('error.password.cannot be empty') : ''} 
           />
           {loginError !== '' && <Text style={styles.errorText}>{loginError}</Text>}
