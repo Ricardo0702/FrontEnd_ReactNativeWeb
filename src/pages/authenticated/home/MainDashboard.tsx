@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { RecentChange } from '../../../types/IRecentChange';
@@ -11,9 +11,7 @@ import Colors from '../../../components/Colors';
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [recentChanges, setRecentChanges] = useState<RecentChange[] | null>(null); 
-
-  const {t} = useTranslation();
-  const { width: windowWidth } = useWindowDimensions();
+  const { t } = useTranslation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -27,185 +25,39 @@ const MainDashboard: React.FC = () => {
   }, []);
 
   return (
-  <ScrollView>
-    <View style={styles.container}>
+    <ScrollView>
+      <View style={styles.container}>
+        <Title style={styles.title} text={t("title.select.page")} size="xl" align="center" />
 
-      {windowWidth >= 465 && (
-        <>
-          <View style={styles.leftColumn}>
-            <Text style={styles.subtitle}>{t('Recent changes:')}</Text>
-            <RecentChanges />
-          </View>
+        <View style={styles.button}>
+          <Button title={t("button.people")} color="white" size="m" fontSize={20} onPress={() => navigate('/auth/people')} />
+        </View>
 
-          {windowWidth >= 650 && (
-            <View style={styles.rightColumn}>
-              <Title
-                style={styles.title}
-                text={t("title.select.page")}
-                size="xl"
-                align="center"
-              />
+        <View style={styles.button}>
+          <Button title={t("button.projects")} color="white" size="m" fontSize={20} onPress={() => navigate('/auth/projects')} />
+        </View>
 
-              <View style={styles.peopleButton}>
-                <Button
-                  title={t("button.people")}
-                  color="white"
-                  size="m"
-                  fontSize={20}
-                  onPress={() => navigate('/auth/people')}
-                />
-              </View>
+        <View style={styles.button}>
+          <Button title={t("button.addresses")} color="white" size="m" fontSize={20} onPress={() => navigate('/auth/directions')} />
+        </View>
 
-              <View style={styles.projectsButton}>
-                <Button
-                  title={t("button.projects")}
-                  color="white"
-                  size="m"
-                  fontSize={20}
-                  onPress={() => navigate('/auth/projects')}
-                />
-              </View>
-
-              <View style={styles.directionsButton}>
-                <Button
-                  title={t("button.addresses")}
-                  color="white"
-                  size="m"
-                  fontSize={20}
-                  onPress={() => navigate('/auth/directions')}
-                />
-              </View>
-            </View>
-          )}
-
-          {windowWidth < 650 && (
-            <View style={styles.rightColumnReduced}>
-
-              <View style={styles.peopleButton}>
-                <Button
-                  title={t("button.people")}
-                  color="white"
-                  size="m"
-                  fontSize={20}
-                  onPress={() => navigate('/auth/people')}
-                />
-              </View>
-
-              <View style={styles.projectsButton}>
-                <Button
-                  title={t("button.projects")}
-                  color="white"
-                  size="m"
-                  fontSize={20}
-                  onPress={() => navigate('/auth/projects')}
-                />
-              </View>
-
-              <View style={styles.directionsButton}>
-                <Button
-                  title={t("button.addresses")}
-                  color="white"
-                  size="m"
-                  fontSize={20}
-                  onPress={() => navigate('/auth/directions')}
-                />
-              </View>
-            </View>
-          )}
-        </>
-      )}
-
-    </View>
-
-    <View style={styles.containerReduced}>
-
-      {windowWidth < 465 && (
-        <>
-
-          <View style={styles.peopleButton}>
-            <Button
-              title={t("button.people")}
-              color="white"
-              size="m"
-              fontSize={20}
-              onPress={() => navigate('/auth/people')}
-            />
-          </View>
-
-          <View style={styles.projectsButton}>
-            <Button
-              title={t("button.projects")}
-              color="white"
-              size="m"
-              fontSize={20}
-              onPress={() => navigate('/auth/projects')}
-            />
-          </View>
-
-          <View style={styles.directionsButton}>
-            <Button
-              title={t("button.addresses")}
-              color="white"
-              size="m"
-              fontSize={20}
-              onPress={() => navigate('/auth/directions')}
-            />
-          </View>
-          
-          <Text style={styles.subtitle}>{t('Recent changes:')}</Text>
-          <RecentChanges />
-
-        </>
-      )}
-
-    </View>
-  </ScrollView>
-)};
-
+        <Text style={styles.subtitle}>{t('Recent changes:')}</Text>
+        <RecentChanges />
+      </View>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: 60,
-    paddingBottom: 40,
-    flexWrap: 'nowrap',  
-    alignItems: 'flex-start',
-  },
-
-  containerReduced: {
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    paddingTop: 10,
-    flexWrap: 'nowrap',  
-    alignItems: 'center'
-  },
-   rightColumn: {
-    position: 'absolute',
-    top: 60,
-    left: '50%',
-    transform: [{ translateX: -0.5 * 300 }], // si el ancho es 300
-    width: 600,
     alignItems: 'center',
-  },
-  rightColumnReduced: {
-    position: 'absolute',
-    paddingTop: 40,
-    top: 60,
-    left: '50%',
-    transform: [{ translateX: -0.5 * 300 }], // si el ancho es 300
-    width: 600,
-    alignItems: 'center',
-  },
-
-  leftColumn: {
-    flex: 1,
-    alignItems: 'flex-start', 
-    paddingLeft: 20,
+    justifyContent: 'flex-start',
+    paddingTop: 70,
+    paddingBottom: 40,
   },
   title: {
-    paddingTop: 20,
-    paddingBottom: 20,
+    marginBottom: 30,
   },
   subtitle: {
     fontSize: 18,
@@ -214,17 +66,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 15,
   },
-  peopleButton: {
-    backgroundColor: Colors.lightsteel,
-    marginBottom: 15,
-    borderRadius: 5,
-  },
-  projectsButton: {
-    backgroundColor: Colors.lightsteel,
-    marginBottom: 15,
-    borderRadius: 5,
-  },
-  directionsButton: {
+  button: {
     backgroundColor: Colors.lightsteel,
     marginBottom: 15,
     borderRadius: 5,

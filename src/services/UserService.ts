@@ -3,14 +3,6 @@ import { User } from '../types/IUser';
 
 const API_URL = '/auth/user';
 
-export const createEmptyUser = (): User => ({
-  id: 0,
-  username: '',
-  password: '',
-  roleIds: [],
-  roles: []
-});
-
 export const fetchUsers = async () => {
   const response = await axios.get(API_URL);
   return response.data;

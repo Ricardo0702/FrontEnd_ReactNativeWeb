@@ -15,7 +15,7 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({dropdownStyle}) => {
   const navigate = useNavigate();
 
   return (
-    <View style={styles.container}> {/* Aquí el contenedor relativo */}
+    <View style={styles.container}> 
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)}>
         <Text style={styles.navLink}>{t('navbar.pages')}▼</Text>
       </TouchableOpacity>

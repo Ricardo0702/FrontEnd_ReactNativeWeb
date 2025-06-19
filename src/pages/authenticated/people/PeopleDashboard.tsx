@@ -133,7 +133,6 @@ const PeopleDashboard: React.FC = () => {
       
       <Modal title={t("modal.edit.person")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false); fetchData()}} size = "xl">
         <PersonModification personId={selectedPersonId} personForm={form.current} onUpdatePerson={update}/>
-        {/* <PersonModification personId={selectedPersonId}/> */}
       </Modal>
     </View>
   );

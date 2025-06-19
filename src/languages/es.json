@@ -1,18 +1,14 @@
 {
   "error": {
     "loading": {
-      "address": "Error al cargar direcciones.",
       "people": "Error al cargar personas.",
-      "data": "Error al cargar datos.",
-      "person": "Error al cargar persona.",
-      "projects": "Error al cargar proyectos.",
       "associated": {
         "projects": "Error al cargar proyectos asociados.",
         "roles": "Error al cargar roles asociados."
       },
-      "roles": "Error al cargar roles.",
-      "user": "Error al cargar usuario.",
-      "users": "Error al cargar usuarios."
+      "data": "Error al cargar datos.",
+      "projects": "Error al cargar proyectos.",
+      "roles": "Error al cargar roles."
     },
     "creating": {
       "address": "Error al crear dirección.",
@@ -98,7 +94,8 @@
       "name": "Nombre del Proyecto"
     },
     "role": {
-      "name": "Nombre del Rol"
+      "name": "Nombre del Rol",
+      "description": "Role description"
     },
     "Username": "Nombre de Usuario",
     "username": "nombre de usuario",
@@ -166,8 +163,8 @@
     "age": "Edad",
     "addresses": "Direcciones",
     "projects": "Proyectos",
+    "description": "Description",
     "username": "Usuario",
-    "password": "Contraseña",
     "roles": "Roles"
   },
   "Recent changes:": "Cambios recientes:",
@@ -178,10 +175,13 @@
     "roles": "Roles",
     "logout": "Cerrar sesión",
     "language": "Idioma",
+    "pages": "Páginas",
     "people": "Personas",
     "projects": "Proyectos",
-    "addresses": "Direcciones",
-    "pages": "Páginas"
+    "addresses": "Direcciones"
+  },
+  "confirm": {
+    "logout": "Seguro que quieres cerrar la sesión?"
   },
   "language": {
     "spanish": "Español",
@@ -189,6 +189,7 @@
     "english": "Inglés"
   },
   "unknown": {
+    "street": "Calle desconocida",
     "city": "Ciudad desconocida"
   }
 }

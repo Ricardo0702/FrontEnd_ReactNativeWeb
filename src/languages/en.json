@@ -1,18 +1,14 @@
 {
   "error": {
     "loading": {
-      "address": "Error loading addresses.",
       "people": "Error loading people.",
-      "data": "Error loading data.",
-      "person": "Error loading person.",
-      "projects": "Error loading projects.",
       "associated": {
         "projects": "Error loading associated projects.",
         "roles": "Error loading associated roles."
       },
-      "roles": "Error loading roles.",
-      "user": "Error loading user.",
-      "users": "Error loading users."
+      "data": "Error loading data.",
+      "projects": "Error loading projects.",
+      "roles": "Error loading roles."
     },
     "creating": {
       "address": "Error creating address.",
@@ -98,7 +94,8 @@
       "name": "Project Name"
     },
     "role": {
-      "name": "Role Name"
+      "name": "Role Name",
+      "description": "Role description"
     },
     "Username": "Username",
     "username": "Username",
@@ -166,8 +163,8 @@
     "age": "Age",
     "addresses": "Addresses",
     "projects": "Projects",
+    "description": "Description",
     "username": "Username",
-    "password": "Password",
     "roles": "Roles"
   },
   "Recent changes:": "Recent changes:",
@@ -178,10 +175,13 @@
     "roles": "Roles",
     "logout": "Logout",
     "language": "Language",
+    "pages": "Pages",
     "people": "People",
     "projects": "Projects",
-    "addresses": "Addresses",
-    "pages": "Pages"
+    "addresses": "Addresses"
+  },
+  "confirm": {
+    "logout": "Are you sure you want to logout?"
   },
   "language": {
     "spanish": "Spanish",
@@ -189,6 +189,7 @@
     "english": "English"
   },
   "unknown": {
+    "street": "Unknown street",
     "city": "Unknown city"
   }
 }

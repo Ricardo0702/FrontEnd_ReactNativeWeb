@@ -3,14 +3,6 @@ import type { Direction } from '../types/IDirection';
 
 const API_URL = '/auth/directions';
 
-export const createEmptyDirection = (): Direction => ({
-  id: 0,
-  street: "",
-  city: "",
-  personId: 0,
-  personName: ""
-});
-
 export const fetchDirections = async (): Promise<Direction[]> => {
   const response = await axios.get(API_URL);
   return response.data;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { fetchPeople } from '../../../services/PersonService';
-import { fetchDirection, createEmptyDirection, associatePerson, removePerson, updateDirection } from '../../../services/DirectionService';
+import { fetchDirection, associatePerson, removePerson, updateDirection } from '../../../services/DirectionService';
 import { Direction } from '../../../types/IDirection';
 import { Person } from '../../../types/IPerson';
 import TextInput from '../../../components/TextInput';
@@ -13,28 +13,16 @@ import { useTranslation } from 'react-i18next';
 
 type Props = {
   directionId: number | null;
+  directionForm: Direction;
+  onUpdateDirection: (updatedDirection: Direction) => void;
 };
 
-export default function directionModification({directionId}: Props){
+export default function directionModification({directionId, directionForm, onUpdateDirection}: Props){
 
     const {t} = useTranslation();
-    const [direction, setDirection] = useState<Direction>({} as Direction);
+    const [localDirection, setLocalDirection] = useState<Direction>(directionForm);
     const [people, setPeople] = useState<Person[]>([]);
-    const [directionStreet, setDirectionStreet] = useState('');
-    const [directionCity, setDirectionCity] = useState('');
     const [newPersonId, setNewPersonId] = useState<number | undefined>(undefined);
-
-    const loadDirection = async () => {
-        try {
-            if (directionId === null) return;
-            const data = await fetchDirection(directionId);
-            setDirection(data);
-            setDirectionStreet(data.street);
-            setDirectionCity(data.city);
-        } catch (error) {
-            console.error(t('error.loading.address'), error);
-        }
-    };
 
     const loadPeople = async () => {
         try{
@@ -46,42 +34,50 @@ export default function directionModification({directionId}: Props){
     };
 
     useEffect(() => {
-        loadDirection();
         loadPeople();
       }, []);
 
     const handleUpdate = async () => {
         if (directionId === null) return;
-        await updateDirection(directionId, directionStreet, directionCity);
-        await loadDirection();
-        saveRecentChange({type: t('type.address'),action: t('action.edited'),name: direction.street,timestamp: Date.now()});
+        await updateDirection(directionId, localDirection.street, localDirection.city);
+        saveRecentChange({type: t('type.address'),action: t('action.edited'),name: localDirection.street,timestamp: Date.now()});
+        onUpdateDirection(localDirection);
     };
 
     const handleChangePerson = async () => {
-        if (directionId === null) return;
+        if (directionId === null || newPersonId === undefined) return;
+        const selectedPerson = people.find(p => p.id === newPersonId);
+        const personName = selectedPerson?.name || '';
+        setLocalDirection({...localDirection, personId: newPersonId, personName: personName})
         await associatePerson(directionId, newPersonId);
         await loadPeople();
-        await loadDirection();
+        onUpdateDirection(localDirection);
     }
 
     const handleRemovePerson = async () =>  {
-        if (directionId === null) return;
-        await removePerson(directionId, direction.personId);
+        if (directionId === null || localDirection.personId === null) return;
+        setLocalDirection({...localDirection, personId: null, personName: ""})
+        await removePerson(directionId, localDirection.personId);
         await loadPeople();
-        await loadDirection();
+        onUpdateDirection(localDirection);
     }
 
     return (
     <View style={styles.container}>
-      <Title text= {t("title.edit.address")} type= 'Subtitle' style= {{marginBottom: 20}}/>
-      <TextInput label = {t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} />
-      <TextInput label = {t('label.city')} value={directionCity} onChangeText={setDirectionCity} style = {styles.input} />
+      <Title text= {t("title.edit.address")} type= 'Subtitle' style= {{marginBottom: 20}} />
+      <TextInput 
+        label = {t('label.street')} value={localDirection.street} style={styles.input}
+        onChangeText={(value:string) => setLocalDirection({...localDirection, street: value})} />
+      <TextInput 
+        label = {t('label.city')} value={localDirection.city} style = {styles.input} 
+        onChangeText={(value:string) => setLocalDirection({...localDirection, city: value})} />
+
       <Button title= {t("button.save")} onPress={handleUpdate} type= "save"/>
       
       
       <Title text={t("title.associated.person")} type = 'Subtitle' style= {{marginTop: 2, marginBottom: 20}}/>
       <View style = {{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <Text>{direction.personName}</Text>
+          <Text>{localDirection.personName}</Text>
           <Button title={t("button.delete")} onPress={() => handleRemovePerson()} type= "delete" />
       </View>
 

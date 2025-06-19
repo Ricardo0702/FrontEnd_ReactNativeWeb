@@ -53,7 +53,7 @@ const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit }) => {
   ];
 
   return (
-    <Table columns={columns} data={roles} minRowHeight={50} />
+    <Table columns={columns} data={roles} minRowHeight={50} widthFactor={0.6} />
   );
 };
 

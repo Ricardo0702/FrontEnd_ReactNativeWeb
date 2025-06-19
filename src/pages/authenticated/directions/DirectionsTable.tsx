@@ -22,7 +22,7 @@ const DirectionsTable: React.FC<DirectionsTableProps> = ({ directions, onDelete,
   const columns = [
     { header: t('columns.street'), accessor: 'street' as keyof Direction },
     { header: t('columns.city'), accessor: 'city' as keyof Direction },
-    { header: t('columns.person'), accessor: 'personName' as keyof Direction },
+    { header: t('columns.person'), accessor: 'personName' as keyof Direction, render: (value: string | null) => value ?? '', },
     ...(hasAuthority(authorities, Authority.ROLE_ADDRESSES) || hasAuthority(authorities, Authority.ROLE_ADMIN) ? [
       {
         header: t('columns.actions'),

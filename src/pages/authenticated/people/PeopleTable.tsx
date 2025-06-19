@@ -24,24 +24,24 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) =
       { header: t('columns.name'), accessor: 'name' },
       { header: t('columns.age'), accessor: 'age' },
       {
-        header: t('columns.addresses'), accessor: 'streets',
+        header: t('columns.addresses'),
+        accessor: 'streets',
         render: (_: any, row: Person) => {
           const streets = row.streets ?? [];
           const cities = row.cities ?? [];
-          if (streets.length === 0 && cities.length === 0) {
-            return <Text></Text>; 
-          }
+          const ids = row.directionIds ?? [];
 
-          const directions = streets.map((street, index) => ({
-            street,
+          const directions = streets.map((_, index) => ({
+            id: ids[index],
+            street: streets[index] ?? t("unknown.street"),
             city: cities[index] ?? t("unknown.city"),
           }));
 
           return (
             <View style={{ flexDirection: 'column' }}>
-              {directions.map((direction, index) => (
-                <Text key={index}>
-                  {direction.street} ({direction.city})
+              {directions.map((d, index) => (
+                <Text key={d.id ?? index}>
+                  {d.street} ({d.city})
                 </Text>
               ))}
             </View>

@@ -19,7 +19,6 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit }) => {
   const columns: { header: string; accessor?: keyof User; width?: number; minRowWidth?: number;
       render?: (value: any, row: User) => React.ReactNode }[] = [
       { header: t('columns.username'), accessor: 'username' },
-      { header: t('columns.password'), accessor: 'password' },
       { header: t('columns.roles'), accessor:'roles' },
       {
         header: t('columns.actions'), minRowWidth: 180,
@@ -53,7 +52,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit }) => {
   ];
 
   return (
-    <Table columns={columns} data={users} minRowHeight={50} />
+    <Table columns={columns} data={users} minRowHeight={50} widthFactor={0.6} />
   );
 };
 

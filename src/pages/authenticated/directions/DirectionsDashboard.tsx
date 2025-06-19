@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { fetchDirections, createDirection, deleteDirection } from '../../../services/DirectionService';
 import { fetchPeople } from '../../../services/PersonService';
 import type { Direction } from '../../../types/IDirection';
@@ -17,8 +17,8 @@ import { UserContext } from '../../../context/UserContext';
 
 const DirectionsDashboard: React.FC = () => {
   const { t } = useTranslation();
-
   const [directions, setDirections] = useState<Direction[]>([]);
+  const form = useRef<Direction>({} as Direction);
   const [people, setPeople] = useState<Person[]>([]);
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
@@ -27,23 +27,18 @@ const DirectionsDashboard: React.FC = () => {
   const [directionCity, setDirectionCity] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { authorities } = useContext(UserContext);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve));
-      const [peopleData, directionsData] = await Promise.all([
-        fetchPeople(),
-        fetchDirections(),
-      ]);
-      setPeople(peopleData);
-      setDirections(directionsData);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(t("error.loading.data"), error);
-      setIsLoading(false);
-    }
-  };
+      try {
+        setDirections(await fetchDirections());
+        setPeople(await fetchPeople());
+      } catch (error: any) {
+        setError(error.response.data);
+        console.error(t('error.loading.people'), error);
+      }
+      setIsLoading(false)
+    };
 
   useEffect(() => {
     fetchData();
@@ -88,12 +83,15 @@ const DirectionsDashboard: React.FC = () => {
     }
   };
 
-  const handleEditDirection = (direction: Direction) => {
+  const handleEditDirection = useCallback(async(direction: Direction) => {
     setSelectedDirectionId(direction.id);
-    setDirectionStreet(direction.street);
-    setDirectionCity(direction.city);
+    form.current = direction;
     setUpdateModal(true);
-  };
+  }, []);
+
+  const update = useCallback((updatedDirection: Direction) => {
+      setDirections(prev => prev.map(d => (d.id === updatedDirection.id ? updatedDirection : d)));
+    }, []);
 
   return (
     <View style={styles.container}>
@@ -113,13 +111,8 @@ const DirectionsDashboard: React.FC = () => {
         </>)}
       </ScrollView>
 
-      <Modal
-        title={t("modal.edit.address")}
-        visible={showUpdateModal}
-        onClose={() => { setUpdateModal(false); fetchData(); }}
-        size="xs"
-      >
-        <DirectionModification directionId={selectedDirectionId} />
+      <Modal title={t("modal.edit.address")} visible={showUpdateModal} onClose={() => { setUpdateModal(false); fetchData(); }} size="m" >
+        <DirectionModification directionId={selectedDirectionId} directionForm={form.current} onUpdateDirection={update} />
       </Modal>
 
       <Modal

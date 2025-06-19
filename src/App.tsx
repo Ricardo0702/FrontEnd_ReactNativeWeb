@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {BrowserRouter as Router,Route,Routes,Navigate,useNavigate,useParams,} from "react-router-dom";
 import { View, StyleSheet } from "react-native";
 import Navbar from "./pages/authenticated/navbar/Navbar";
@@ -16,13 +16,8 @@ import { UserContext } from "./context/UserContext";
 import ProtectedRoutes from "./components/routes/ProtectedRoutes";
 import AdminRoutes from "./components/routes/AdminRoutes";
 import { Authority, hasAuthority } from "./hooks/UseAuthority";
-
-const PersonModificationWrapper: React.FC = () => {
-  const { personId } = useParams<{ personId: string }>();
-  if (!personId) return null;
-
-  return <PersonModification personId={Number(personId)} />;
-};
+import { Person } from "./types/IPerson";
+import { fetchPerson } from "./services/PersonService";
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
@@ -69,7 +64,6 @@ const AppContent: React.FC = () => {
           <Route path="/auth/people" element={<PeopleDashboard />} />
           <Route path="/auth/projects" element={<ProjectsDashboard />} />
           <Route path="/auth/directions" element={<DirectionsDashboard />} />
-          <Route path="/auth/person/:personId" element={<PersonModificationWrapper />}/>
         </Route>
         <Route path="*" element={<Navigate to="/auth/dashboard" />} />
       </Routes>

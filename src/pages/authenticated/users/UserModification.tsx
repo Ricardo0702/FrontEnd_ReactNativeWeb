@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { fetchUser, updateUser, createEmptyUser, assignRole, removeRole } from '../../../services/UserService';
-import { fetchProjects, fetchProject } from '../../../services/ProjectService';
+import { updateUser, assignRole, removeRole } from '../../../services/UserService';
 import { fetchRoles, fetchRole } from '../../../services/RoleService';
-import { Project } from '../../../types/IProject';
 import { Role } from '../../../types/IRole';
-import { Person } from '../../../types/IPerson';
 import { User } from '../../../types/IUser';
 import TextInput from '../../../components/TextInput';
 import Button from '../../../components/Button';
@@ -15,50 +12,26 @@ import { useTranslation } from 'react-i18next';
 
 type Props = {
   userId: number | null;
+  userForm: User;
+  onUpdateUser: (updatedUser: User) => void;
 };
 
-export default function UserModification({ userId }: Props) {
+export default function UserModification({ userId, userForm, onUpdateUser }: Props) {
 
   const {t} = useTranslation();
-  
-  const [user, setUser] = useState<User>(createEmptyUser());
-  const [users, setUsers] = useState<User[]>([]);
+  const [localUser, setLocalUser] = useState<User>(userForm);
   const [roles, setRoles] = useState<Role[]>([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [newRoleId, setNewRoleId] = useState<number | undefined>(undefined);
-
   const [associatedRoles, setAssociatedRoles] = useState<Role[]>([]);
 
-  const loadUser = async () => {
-    try {
-      if (userId === null) return;
-      const data = await fetchUser(userId);
-      setUser(data);
-      setUsername(data.username);
-      setPassword(data.password);
-    } catch (error) {
-      console.error(t('error.loading.user'), error);
-    }
-  };
-
-  const loadRoles = async () => {
-    try {
-      const data = await fetchRoles();
-      setRoles(data);
-    } catch (error) {
-      console.error(t('error.loading.roles'), error);
-    }
-  };
-
   const loadAssociatedRoles = async () => {
-    if (!user.roleIds || user.roleIds.length === 0) {
+    if (!localUser.roleIds || localUser.roleIds.length === 0) {
       setAssociatedRoles([]);
       return;
     }
     try {
       const rolesData = await Promise.all(
-        user.roleIds.map((id) => fetchRole(id))
+        localUser.roleIds.map((id) => fetchRole(id))
       );
       setAssociatedRoles(rolesData);
     } catch (error) {
@@ -67,42 +40,54 @@ export default function UserModification({ userId }: Props) {
   };
 
   useEffect(() => {
-    loadUser();
-    loadRoles();
+    const loadInitialData = async () => {
+      try {
+        setRoles(await( fetchRoles() ));
+      } catch (error) {
+        console.error(t('error.loading.data'), error);
+      }
+    };
+    loadInitialData();
   }, []);
-
-  useEffect(() => {
-    loadAssociatedRoles();
-  }, [user.roleIds]);
+  
+    useEffect(() => {
+      loadAssociatedRoles();
+    }, [localUser.roleIds]);
 
   const handleUpdate = async () => {
     if (userId === null) return;
-    await updateUser(userId, username);
-    await loadUser();
+    await updateUser(userId, localUser.username);
+    onUpdateUser(localUser)
   };
 
   const handleAddRole = async () => {
     if (userId === null || !newRoleId) return;
+    const updateRoleIds = localUser.roleIds? [...localUser.roleIds, newRoleId]: [newRoleId];
+    setLocalUser({...localUser, roleIds: updateRoleIds})
     await assignRole(userId, newRoleId);
-    await loadUser();
     await loadAssociatedRoles();
+    onUpdateUser(localUser);
   };
 
   const handleRemoveRole = async (roleId: number) => {
     if (userId === null) return;
+    const updatedRoleIds = localUser.roleIds?.filter(id => id != roleId) || [];
+    setLocalUser({...localUser, roleIds: updatedRoleIds});
     await removeRole(userId, roleId);
-    await loadUser();
     await loadAssociatedRoles();
+    onUpdateUser(localUser);
   };
 
   return (
     <View style={styles.container}>
       <Title text={t('title.edit.user')} type='Subtitle' style={{ marginBottom: 20 }} />
-      <TextInput label={t('label.Username')} value={username} onChangeText={setUsername} style={styles.input} />
+      <TextInput 
+        label={t('label.Username')} value={localUser.username} style={styles.input}
+        onChangeText={(value: string) => setLocalUser({...localUser, username: value})}  />
       <Button title={t("button.save")} onPress={handleUpdate} type="save" />
 
       <Title text={t('title.assigned.roles')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
-      {(user.roleIds || []).map((id) => {
+      {(localUser.roleIds || []).map((id) => {
         const role = roles.find(r => r.id === id);
         if (!role) return null;
         return (

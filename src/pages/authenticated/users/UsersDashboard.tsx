@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button'
 import Title from '../../../components/Title'
@@ -18,8 +18,10 @@ const UsersDashboard: React.FC = () => {
   
   const [users, setUsers] = useState<User[]>([]);
   const {t} = useTranslation();
+  const form = useRef<User>({} as User)
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
@@ -27,19 +29,14 @@ const UsersDashboard: React.FC = () => {
   const userContext = useContext(UserContext); 
 
   const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve));
-      const [usersData] = await Promise.all([
-        fetchUsers(),
-      ]);
-      setUsers(usersData);
-    } catch (error) {
-      console.error(t('error.loading.users'), error);
-    }finally {
-      setIsLoading(false);
-    }
-  };
+      try {
+        setUsers(await fetchUsers());
+      } catch (error: any) {
+        setError(error.response.data);
+        console.error(t('error.loading.people'), error);
+      }
+      setIsLoading(false)
+    };
 
   useEffect(() => {
     fetchData();
@@ -69,12 +66,15 @@ const UsersDashboard: React.FC = () => {
     }
   };
 
-  const handleEditUser = async(user: User) => {
+  const handleEditUser = useCallback(async(user: User) => {
+    form.current = user;
     setSelectedUserId(user.id);
-    setUsername(user.username);
-    setPassword(user.password);
     setUpdateModal(true);
-  }
+  }, [])
+
+  const update = useCallback((updatedUser: User) => {
+      setUsers(prev => prev.map(p => (p.id === updatedUser.id ? updatedUser : p)));
+    }, []);
 
   const skeletonRows = Array.from({ length: 5 }, (_, i) => (
       <View key={i} style={{ flexDirection: 'row', gap: 20, marginBottom: 12 }}>
@@ -113,7 +113,7 @@ const UsersDashboard: React.FC = () => {
       </Modal>
       
       <Modal title={t("modal.edit.user")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
-        <UserModification userId={selectedUserId} />
+        <UserModification userId={selectedUserId} userForm={form.current} onUpdateUser={update}/>
       </Modal>
 
     </View>

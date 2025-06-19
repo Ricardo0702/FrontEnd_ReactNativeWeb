@@ -57,7 +57,7 @@ const ProjectsTable: React.FC<ProjectTableProps> = ({ projects, onDelete, onEdit
   ];
 
   return (
-    <Table columns={columns} data={projects} minRowHeight={50} widthFactor={0.3} />
+    <Table columns={columns} data={projects} minRowHeight={50} widthFactor={0.4} />
   );
 };
 

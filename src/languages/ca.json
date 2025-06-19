@@ -1,18 +1,14 @@
 {
   "error": {
     "loading": {
-      "address": "Error en carregar les adreces.",
       "people": "Error en carregar les persones.",
-      "data": "Error en carregar les dades.",
-      "person": "Error en carregar la persona.",
-      "projects": "Error en carregar els projectes.",
       "associated": {
         "projects": "Error en carregar els projectes associats.",
         "roles": "Error en carregar els rols associats"
       },
-      "roles": "Error en carregar els rols",
-      "user": "Error en carregar l'usuari",
-      "users": "Error en carregar els usuaris"
+      "data": "Error en carregar les dades.",
+      "projects": "Error en carregar els projectes.",
+      "roles": "Error en carregar els rols"
     },
     "creating": {
       "address": "Error en crear l'adreça.",
@@ -98,7 +94,8 @@
       "name": "Nom del projecte"
     },
     "role": {
-      "name": "Nom del rol"
+      "name": "Nom del rol",
+      "description": "Descripció del rol"
     },
     "Username": "Usuari",
     "username": "Usuari",
@@ -166,8 +163,8 @@
     "age": "Edat",
     "addresses": "Adreces",
     "projects": "Projectes",
+    "description": "Descripció",
     "username": "Nom d'usuari",
-    "password": "Contrasenya",
     "roles": "Rols"
   },
   "Recent changes:": "Canvis recents:",
@@ -178,10 +175,13 @@
     "roles": "Rols",
     "logout": "Tancar sessió",
     "language": "Idioma",
+    "pages": "Pàgines",
     "people": "Persones",
     "projects": "Projectes",
-    "addresses": "Adreces",
-    "pages": "Pàgines"
+    "addresses": "Adreces"
+  },
+  "confirm": {
+    "logout": "Segur que vols tancar la sessió?"
   },
   "language": {
     "spanish": "Castellà",
@@ -189,6 +189,7 @@
     "english": "Anglès"
   },
   "unknown": {
+    "street": "Carrer desconegut",
     "city": "Ciutat desconeguda"
   }
 }
