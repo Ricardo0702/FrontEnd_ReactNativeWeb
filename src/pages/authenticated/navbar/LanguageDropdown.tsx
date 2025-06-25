@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Colors from '../../../components/Colors';
@@ -8,33 +8,42 @@ interface LanguageDropdownProps {
   dropdownStyle?: object;
 }
 
-const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, dropdownStyle }) => {
+const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, dropdownStyle, }) => {
   const { t } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
-  const changeLanguage = (lng: string) => {
-    onChangeLanguage(lng);
-    setLangOpen(false);
-  };
+  const changeLanguage = (lng: string) => { onChangeLanguage(lng); setLangOpen(false); };
   const flagCa = require('../../../../public/assets/cat.png');
   const flagEs = require('../../../../public/assets/es.png');
   const flagEn = require('../../../../public/assets/en.png');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const isMobile = window.innerWidth <= 700;
+      if (!isMobile) { 
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) { setLangOpen(false);}
+      };
+    };
+    if (langOpen) { document.addEventListener('mousedown', handleClickOutside); }
+    return () => { document.removeEventListener('mousedown', handleClickOutside); };
+  }, [langOpen]);
 
   return (
-    <View style={styles.container}> {/* Aquí el contenedor relativo */}
+    <View style={styles.container} ref={dropdownRef as any}>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)}>
         <Text style={styles.navLink}>{t('navbar.language')}▼</Text>
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? styles.languageDropdown}>
-          <TouchableOpacity style={styles.option} onPress={() => changeLanguage('es')}>
+          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('es'); setLangOpen(false)}}>
             <Text style={styles.navLink}>{t('language.spanish')}</Text>
             <Image source={flagEs} style={styles.flag} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option} onPress={() => changeLanguage('ca')}>
+          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('ca'); setLangOpen(false)}}>
             <Text style={styles.navLink}>{t('language.catalan')}</Text>
             <Image source={flagCa} style={styles.flag} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option} onPress={() => changeLanguage('en')}>
+          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('en'); setLangOpen(false)}}>
             <Text style={styles.navLink}>{t('language.english')}</Text>
             <Image source={flagEn} style={styles.flag} />
           </TouchableOpacity>

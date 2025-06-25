@@ -16,7 +16,7 @@ interface DesktopMenuProps {
   onChangeLanguage: (lng: string) => void;
 }
 
-const DesktopMenu: React.FC<DesktopMenuProps> = ({onLogout, onChangeLanguage,}) => {
+const DesktopMenu: React.FC<DesktopMenuProps> = ({onLogout, onChangeLanguage}) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { authorities } = useContext(UserContext);
@@ -39,7 +39,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({onLogout, onChangeLanguage,}) 
     <View style={styles.navLinks}>
       <PagesDropdown/>
       {hasAuthority(authorities, Authority.ROLE_ADMIN) && (<><AdminDropdown/></>)}
-      <LanguageDropdown onChangeLanguage={onChangeLanguage} />
+      <LanguageDropdown onChangeLanguage={onChangeLanguage}/>
       <TouchableOpacity onPress={handleLogoutClick}>
         <Text style={styles.navLink}>{t("navbar.logout")}</Text>
       </TouchableOpacity>
@@ -58,6 +58,8 @@ const styles = StyleSheet.create({
   navLinks: {
     flexDirection: "row",
     gap: 15,
+    flex: 1,
+    justifyContent: "flex-end",
   },
   navLink: {
     color: "white",

@@ -34,9 +34,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
 
 const styles = StyleSheet.create({
   dropdown: {
-    marginTop: 10,
+    marginTop: 5,
     backgroundColor: Colors.lightsteel,
-    padding: 10,
+    padding: 5,
     borderRadius: 8,
   },
   navLink: {

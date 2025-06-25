@@ -9,15 +9,11 @@ import DirectionsDashboard from "./pages/authenticated/directions/DirectionsDash
 import UsersDashboard from "./pages/authenticated/users/UsersDashboard";
 import RolesDashboard from "./pages/authenticated/roles/RolesDashboard";
 import LoginForm from "./pages/login/Login";
-import PersonModification from "./pages/authenticated/people/PersonModification";
 import "./types/I18n";
 import { UserContextProvider } from "./context/UserContextProvider";
 import { UserContext } from "./context/UserContext";
 import ProtectedRoutes from "./components/routes/ProtectedRoutes";
 import AdminRoutes from "./components/routes/AdminRoutes";
-import { Authority, hasAuthority } from "./hooks/UseAuthority";
-import { Person } from "./types/IPerson";
-import { fetchPerson } from "./services/PersonService";
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
@@ -44,9 +40,7 @@ const AppContent: React.FC = () => {
     navigate("/");
   };
 
-  if (isLoading) {
-    return null;
-  }
+  if (isLoading) { return null;}
 
   return (
     <View style={styles.container}>

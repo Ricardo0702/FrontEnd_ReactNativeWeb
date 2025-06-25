@@ -99,7 +99,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
         </View>
       </Modal>
 
-      <Modal title={t("modal.login")} visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="xs" >
+      <Modal title={t("modal.login")} visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="m" >
         <View style={styles.formContainer}>
           <TextInput 
             label={t("label.user")} value={username} onChangeText={setUsername}

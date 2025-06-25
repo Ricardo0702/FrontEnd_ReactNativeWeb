@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { fetchPeople } from '../../../services/PersonService';
-import { fetchDirection, associatePerson, removePerson, updateDirection } from '../../../services/DirectionService';
+import { associatePerson, removePerson, updateDirection } from '../../../services/DirectionService';
 import { Direction } from '../../../types/IDirection';
 import { Person } from '../../../types/IPerson';
 import TextInput from '../../../components/TextInput';
@@ -44,22 +44,16 @@ export default function directionModification({directionId, directionForm, onUpd
         onUpdateDirection(localDirection);
     };
 
-    const handleChangePerson = async () => {
+    const handleChangePerson = async (updatedDirection: Direction) => {
         if (directionId === null || newPersonId === undefined) return;
-        const selectedPerson = people.find(p => p.id === newPersonId);
-        const personName = selectedPerson?.name || '';
-        setLocalDirection({...localDirection, personId: newPersonId, personName: personName})
         await associatePerson(directionId, newPersonId);
-        await loadPeople();
-        onUpdateDirection(localDirection);
+        onUpdateDirection(updatedDirection);
     }
 
-    const handleRemovePerson = async () =>  {
-        if (directionId === null || localDirection.personId === null) return;
-        setLocalDirection({...localDirection, personId: null, personName: ""})
+    const handleRemovePerson = async (updatedDirection: Direction) =>  {
+        if (directionId === null || localDirection.personId === undefined) return;
         await removePerson(directionId, localDirection.personId);
-        await loadPeople();
-        onUpdateDirection(localDirection);
+        onUpdateDirection(updatedDirection);
     }
 
     return (
@@ -78,7 +72,12 @@ export default function directionModification({directionId, directionForm, onUpd
       <Title text={t("title.associated.person")} type = 'Subtitle' style= {{marginTop: 2, marginBottom: 20}}/>
       <View style = {{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <Text>{localDirection.personName}</Text>
-          <Button title={t("button.delete")} onPress={() => handleRemovePerson()} type= "delete" />
+          <Button title={t("button.delete")} type= "delete" 
+            onPress={() => {
+              const updatedDirection = { ...localDirection, personId: undefined, personName: undefined };
+              setLocalDirection(updatedDirection);
+              handleRemovePerson(updatedDirection);
+            }} />
       </View>
 
       <Title text= {t('title.associate.person')} type= 'Subtitle' style= {{marginTop: 20, marginBottom: 20}}/>
@@ -98,7 +97,17 @@ export default function directionModification({directionId, directionForm, onUpd
         }))}
         placeholder={t("select.person")}
       />
-      <Button title={t("button.associate.person")} onPress={handleChangePerson} type= 'save'/>
+      <Button title={t("button.associate.person")} type= 'save'
+        onPress={ () => {
+          const selectedPerson = people.find(p => p.id === newPersonId);
+          if (selectedPerson == undefined) return;
+          const updatedDirection = { ...localDirection, 
+            personId: newPersonId, 
+            personName: selectedPerson.name
+          };
+          setLocalDirection(updatedDirection);
+          handleChangePerson(updatedDirection);
+        }} />
     </View>
   );
 }

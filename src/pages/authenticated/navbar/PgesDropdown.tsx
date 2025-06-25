@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Colors from '../../../components/Colors';
@@ -8,14 +8,26 @@ interface PagesDropdownProps{
     dropdownStyle?: object;
 }
 
-const PagesDropdown: React.FC<PagesDropdownProps> = ({dropdownStyle}) => {
+const PagesDropdown: React.FC<PagesDropdownProps> = ({dropdownStyle }) => {
 
   const { t } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const isMobile = window.innerWidth <= 700;
+      if (!isMobile) { 
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) { setLangOpen(false);}
+      };
+    };
+    if (langOpen) { document.addEventListener('mousedown', handleClickOutside); }
+    return () => { document.removeEventListener('mousedown', handleClickOutside); };
+  }, [langOpen]);
 
   return (
-    <View style={styles.container}> 
+    <View style={styles.container} ref={dropdownRef as any}> 
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)}>
         <Text style={styles.navLink}>{t('navbar.pages')}▼</Text>
       </TouchableOpacity>

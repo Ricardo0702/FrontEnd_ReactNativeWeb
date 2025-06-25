@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { updatePerson, associateProject, removeProject } from '../../../services/PersonService';
 import { fetchProjects, fetchProject } from '../../../services/ProjectService';
@@ -29,12 +29,6 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
   const [newCity, setNewCity] = useState('');
   const [associatedProjects, setAssociatedProjects] = useState<Project[]>([]);
 
-
-  const loadDirections = async () => {
-    const data = await fetchDirections();
-    setDirections(data);
-  };
-
   const loadAssociatedProjects = async () => {
     if (!localPerson.projectIds || localPerson.projectIds.length === 0) {
       setAssociatedProjects([]);
@@ -64,11 +58,8 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
       }
     };
     loadInitialData();
-  }, []);
-
-  useEffect(() => {
     loadAssociatedProjects();
-  }, [localPerson.projectIds]);
+  }, []);
 
   const handleUpdate = async () => {
     if (personId === null) return;
@@ -77,13 +68,11 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
     onUpdatePerson(localPerson);
   };
 
-  const handleAddProject = async () => {
+  const handleAddProject = async (project: Project, updatedPerson: Person) => {
     if (personId === null || !newProjectId) return;
-    const updatedProjectIds = localPerson.projectIds ? [...localPerson.projectIds, newProjectId] : [newProjectId];
-    setLocalPerson({ ...localPerson, projectIds: updatedProjectIds });
+    onUpdatePerson(updatedPerson);
     await associateProject(personId, newProjectId);
-    await loadAssociatedProjects();
-    onUpdatePerson(localPerson);
+    setAssociatedProjects(prev => [...prev, project])
 
     const projectFound = projects.find(p => p.id === newProjectId);
     if (localPerson && projectFound) {
@@ -96,13 +85,11 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
     }
   };
 
-  const handleRemoveProject = async (projectId: number) => {
+  const handleRemoveProject = async (projectId: number, updatedPerson: Person) => {
     if (personId === null) return;
-    const updatedProjectIds = localPerson.projectIds?.filter(id => id !== projectId) || [];
-    setLocalPerson({ ...localPerson, projectIds: updatedProjectIds });
-    await loadAssociatedProjects();
-    await removeProject(localPerson.id, projectId);
-    onUpdatePerson(localPerson);
+    onUpdatePerson(updatedPerson);
+    await removeProject(personId, projectId);
+    setAssociatedProjects(prev => prev.filter(pr => pr.id !== projectId))
 
     const projectFound = projects.find(p => p.id === projectId);
     if (localPerson && projectFound) {
@@ -115,15 +102,11 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
     }
   };
 
-  const handleAddDirection = async () => {
+  const handleAddDirection = async (direction: Direction, updatedPerson: Person) => {
     if (personId === null) return;
-    const direction = await createDirection(newStreet, newCity);
-    const updatedDirectionIds = localPerson.directionIds ? [...localPerson.directionIds, direction.id, ] : [direction.id];
-    setLocalPerson({ ...localPerson, directionIds: updatedDirectionIds});
-    await associatePerson(direction.id, localPerson.id);
-    await loadDirections();
-    onUpdatePerson(localPerson);
-
+    onUpdatePerson(updatedPerson);
+    await associatePerson(direction.id, personId);
+    setDirections(prev => [...prev, direction]);
     if (localPerson && direction) {
       saveRecentChange({
         type: t('type.person'),
@@ -134,14 +117,12 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
     }
   };
 
-  const handleRemoveDirection = async (directionId: number) => {
+  const handleRemoveDirection = useCallback(async (directionId: number, updatedPerson: Person) => {
     if (personId === null) return;
-    const updatedDirectionIds = localPerson.directionIds?.filter(id => id !== directionId) || [];
-    setLocalPerson({ ...localPerson, directionIds: updatedDirectionIds });
-    onUpdatePerson(localPerson);
-    await removePerson(directionId, localPerson.id);
+    onUpdatePerson(updatedPerson);
+    await removePerson(directionId, personId);
     await deleteDirection(directionId);
-    await loadDirections();
+    setDirections(prev => prev.filter(d => d.id !== directionId));
     
     const directionFound = directions.find(d => d.id === directionId);
     if (localPerson && directionFound) {
@@ -158,7 +139,7 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         timestamp: Date.now()
       });
     }
-  };
+  }, [localPerson,directions]);
 
   return (
     <View style={styles.container}>
@@ -179,7 +160,15 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         return (
           <View key={id} style={styles.listItem}>
             <Text>{project.name}</Text>
-            <Button title={t("button.delete")} onPress={() => handleRemoveProject(id)} type="delete" />
+            <Button title={t("button.delete")} type="delete" 
+              onPress={() => { 
+                const updatedPerson = { ...localPerson, 
+                  projectIds: localPerson.projectIds?.filter(prId => prId !== id) ?? null, 
+                  projectNames: localPerson.projectNames?.filter(n => n !== project.name) ?? null
+                };
+                setLocalPerson(updatedPerson);
+                handleRemoveProject(id, updatedPerson);
+              }} />
           </View>
         );
       })}
@@ -201,7 +190,17 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         }))}
         placeholder={t("select.project")}
       />
-      <Button title={t("button.associate.project")} onPress={handleAddProject} type='save' />
+      <Button title={t("button.associate.project")} type='save' 
+        onPress={ () => {
+          const project = projects.find(p => p.id === newProjectId);
+          if (project === undefined || newProjectId === undefined) return;
+          const updatedPerson = { ...localPerson, 
+            projectIds: [...(localPerson.projectIds ?? []), newProjectId], 
+            projectNames: [...(localPerson.projectNames ?? []), project.name]
+          };
+          setLocalPerson(updatedPerson);
+          handleAddProject(project, updatedPerson);
+        }} />
 
       <Title text={t('title.associated.directions')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
       {(localPerson.directionIds || []).map((id) => {
@@ -210,14 +209,32 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         return (
           <View key={id} style={styles.listItem}>
             <Text>{direction.street} - {direction.city}</Text>
-            <Button title={t("button.delete")} onPress={() => handleRemoveDirection(id)} type="delete" />
+            <Button title={t("button.delete")} type="delete"
+              onPress={() => {
+                const updatedPerson = { ...localPerson, 
+                  directionIds: localPerson.directionIds?.filter(dirId => dirId !== id) ?? null, 
+                  streets: localPerson.streets?.filter(s => s !== direction.street) ?? null
+                };
+                setLocalPerson(updatedPerson);
+                handleRemoveDirection(id, updatedPerson);
+              }}  />
           </View>
         );
       })}
 
       <TextInput label={t("label.sreet")} value={newStreet} onChangeText={setNewStreet} style={styles.input} />
       <TextInput label={t("label.city")} value={newCity} onChangeText={setNewCity} style={styles.input} />
-      <Button title={t("button.add.address")} onPress={handleAddDirection} type='save' />
+      <Button title={t("button.add.address")} type='save'
+        onPress={ async () => {
+          const direction = await createDirection(newStreet, newCity);
+          const updatedPerson = {...localPerson,
+            directionIds: [...(localPerson.directionIds ?? []), direction.id],
+            streets: [...(localPerson.streets ?? []), newStreet],
+            cities: [...(localPerson.cities ?? []), newCity],
+          };
+          setLocalPerson(updatedPerson);
+          handleAddDirection(direction, updatedPerson)}}  />
+        
     </View>
   );
 }

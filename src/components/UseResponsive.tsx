@@ -12,8 +12,8 @@ const useResponsive = ({ type, size }: IUseResponsive) => {
 
     if (size === 's') {
       return {
-        width: width * 0.2,
-        height: height * 0.3,
+        width: width * 0.5,
+        height: height * 0.5,
       };
     }
 

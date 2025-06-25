@@ -1,6 +1,6 @@
 import React from 'react';
 import type { User } from '../../../types/IUser';
-import { View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions, Text } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,15 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit }) => {
   const columns: { header: string; accessor?: keyof User; width?: number; minRowWidth?: number;
       render?: (value: any, row: User) => React.ReactNode }[] = [
       { header: t('columns.username'), accessor: 'username' },
-      { header: t('columns.roles'), accessor:'roles' },
+      { header: t('columns.roles'), accessor:'roles',
+        render: (_: any, row: User) => (
+          <View style={{ flexWrap: 'wrap' }}>
+            <Text style={{ flexShrink: 1 }}>
+              {row.roles.join(', ')}
+            </Text>
+          </View>
+        )
+      },
       {
         header: t('columns.actions'), minRowWidth: 180,
         render: (_: any, row: User, rowIndex?: number) => {

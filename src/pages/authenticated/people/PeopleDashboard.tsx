@@ -66,7 +66,7 @@ const PeopleDashboard: React.FC = () => {
         name: newPerson.name,
         timestamp: Date.now(),
       });
-      fetchData();
+      setPeople(prev => [...prev, newPerson])
       setShowModalForm(false);
       setPersonName('');
       setPersonAge(0);
@@ -82,7 +82,10 @@ const PeopleDashboard: React.FC = () => {
   }, [])
 
   const update = useCallback((updatedPerson: Person) => {
-    setPeople(prev => prev.map(p => (p.id === updatedPerson.id ? updatedPerson : p)));
+    setPeople(prev => {
+      const updated = prev.map(p => (p.id === updatedPerson.id ? updatedPerson : p));
+      return updated;
+    });
   }, []);
 
   if (error) {
@@ -131,7 +134,7 @@ const PeopleDashboard: React.FC = () => {
         </View>
       </Modal>
       
-      <Modal title={t("modal.edit.person")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false); fetchData()}} size = "xl">
+      <Modal title={t("modal.edit.person")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false)}} size = "xl">
         <PersonModification personId={selectedPersonId} personForm={form.current} onUpdatePerson={update}/>
       </Modal>
     </View>

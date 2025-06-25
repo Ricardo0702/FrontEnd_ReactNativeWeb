@@ -60,22 +60,18 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
     onUpdateUser(localUser)
   };
 
-  const handleAddRole = async () => {
+  const handleAddRole = async (role: Role, updatedUser: User) => {
     if (userId === null || !newRoleId) return;
-    const updateRoleIds = localUser.roleIds? [...localUser.roleIds, newRoleId]: [newRoleId];
-    setLocalUser({...localUser, roleIds: updateRoleIds})
     await assignRole(userId, newRoleId);
-    await loadAssociatedRoles();
-    onUpdateUser(localUser);
+    setAssociatedRoles(prev => [...prev, role])
+    onUpdateUser(updatedUser);
   };
 
-  const handleRemoveRole = async (roleId: number) => {
+  const handleRemoveRole = async (roleId: number, updatedUser: User) => {
     if (userId === null) return;
-    const updatedRoleIds = localUser.roleIds?.filter(id => id != roleId) || [];
-    setLocalUser({...localUser, roleIds: updatedRoleIds});
     await removeRole(userId, roleId);
-    await loadAssociatedRoles();
-    onUpdateUser(localUser);
+    setAssociatedRoles(prev => prev.filter(r => r.id !== roleId))
+    onUpdateUser(updatedUser);
   };
 
   return (
@@ -93,7 +89,15 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
         return (
           <View key={id} style={styles.listItem}>
             <Text>{role.name}</Text>
-            <Button title={t("button.delete")} onPress={() => handleRemoveRole(id)} type="delete" />
+            <Button title={t("button.delete")} type="delete" 
+              onPress={() => { 
+                const updatedUser = { ...localUser, 
+                  roleIds: localUser.roleIds?.filter(rId => rId !== id) ?? null, 
+                  roles: localUser.roles?.filter(r => r !== role.name) ?? null
+                };
+              setLocalUser(updatedUser);
+              handleRemoveRole(id, updatedUser);
+              }} />
           </View>
         );
       })}
@@ -115,7 +119,17 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
         }))}
         placeholder={t("select.role")}
       />
-      <Button title={t("button.assign.role")} onPress={handleAddRole} type='save' />
+      <Button title={t("button.assign.role")} type='save'
+        onPress={ () => {
+          const role = roles.find(r => r.id === newRoleId);
+          if (role === undefined || newRoleId === undefined) return;
+          const updatedUser = { ...localUser, 
+            roleIds: [...(localUser.roleIds ?? []), newRoleId], 
+            roles: [...(localUser.roles ?? []), role.name]
+          };
+          setLocalUser(updatedUser);
+          handleAddRole(role, updatedUser);
+        }} /> 
     </View>
   );
 }

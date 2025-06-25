@@ -50,7 +50,7 @@ const ProjectsDashboard: React.FC = () => {
         name: newProject.name,
         timestamp: Date.now(),
       });
-      fetchData();
+      setProjects(prev => [...prev, newProject])
       setShowModalForm(false);
       setProjectName('');
     } catch (error) {
@@ -92,7 +92,7 @@ const ProjectsDashboard: React.FC = () => {
         name: projectName,
         timestamp: Date.now()
       });
-      fetchData();
+      setProjects(prev => prev.map( proj => proj.id === projectId ? { ...proj, name: projectName } : proj ));
       setUpdateModal(false);
       setProjectName('');
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect } from "react";
 import { UserContext } from "./UserContext";
 import axios from '../services/AxiosConfig';
 
@@ -11,6 +11,13 @@ const API_URL = '/auth';
 export const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [username, setUsername] = useState<string>("");
   const [authorities, setAuthorities] = useState<string[]>([]);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      setter(token); 
+    }
+  }, []);
 
   const setter = (token: string) => {
     if (!token) {

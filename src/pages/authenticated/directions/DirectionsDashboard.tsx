@@ -55,7 +55,7 @@ const DirectionsDashboard: React.FC = () => {
         timestamp: Date.now(),
       });
 
-      fetchData();
+      setDirections(prev => [...prev, newDirection])
       setShowModalForm(false);
       setDirectionStreet('');
       setDirectionCity('');
@@ -90,7 +90,10 @@ const DirectionsDashboard: React.FC = () => {
   }, []);
 
   const update = useCallback((updatedDirection: Direction) => {
-      setDirections(prev => prev.map(d => (d.id === updatedDirection.id ? updatedDirection : d)));
+      setDirections(prev => {
+        const updated = prev.map(d => (d.id === updatedDirection.id ? updatedDirection : d));
+        return updated;
+      });
     }, []);
 
   return (
@@ -111,7 +114,7 @@ const DirectionsDashboard: React.FC = () => {
         </>)}
       </ScrollView>
 
-      <Modal title={t("modal.edit.address")} visible={showUpdateModal} onClose={() => { setUpdateModal(false); fetchData(); }} size="m" >
+      <Modal title={t("modal.edit.address")} visible={showUpdateModal} onClose={() => { setUpdateModal(false); }} size="m" >
         <DirectionModification directionId={selectedDirectionId} directionForm={form.current} onUpdateDirection={update} />
       </Modal>
 

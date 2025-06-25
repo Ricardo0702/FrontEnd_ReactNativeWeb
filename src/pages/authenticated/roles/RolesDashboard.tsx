@@ -47,7 +47,7 @@ const RolesDashboard: React.FC = () => {
   const handleCreateRole = async (roleName: string, roleDescritpion: string) => {
     try {
       const newRole = await createRole(formatRoleName(roleName), roleDescritpion);
-      fetchData();
+      setRoles(prev => [...prev, newRole])
       setShowModalForm(false);
       setRoleName('');
       setRoleDescription('');
@@ -75,7 +75,7 @@ const RolesDashboard: React.FC = () => {
   const handleUpdateRole = async (roleId: number, roleName: string, roleDescritpion: string) => {
     try {
       await updateRole(roleId, formatRoleName(roleName), roleDescritpion);
-      fetchData();
+      setRoles(prev => prev.map( r => r.id === roleId ? { ...r, name: roleName } : r ));
       setUpdateModal(false);
       setRoleName('');
       setRoleDescription('');

@@ -4,7 +4,7 @@ import Button from '../../../components/Button'
 import Title from '../../../components/Title'
 import TextInput from '../../../components/TextInput';
 import { Skeleton } from '../../../components/Skeleton';
-import { fetchUsers, deleteUser } from '../../../services/UserService';
+import { fetchUsers, deleteUser, fetchUserByUsername } from '../../../services/UserService';
 import type { User } from '../../../types/IUser';
 import { View, StyleSheet,ScrollView } from 'react-native';
 import UsersTable from './UsersTable';
@@ -44,7 +44,6 @@ const UsersDashboard: React.FC = () => {
 
   const handleDeleteUser = useCallback(async (userId: number) => {
     try {
-      const deletedUser = users.find(u => u.id === userId);
       await deleteUser(userId);
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
     } catch (error) {
@@ -55,9 +54,9 @@ const UsersDashboard: React.FC = () => {
 
   const handleCreateUser = async () => {
     try {
-      const newUser = await userContext.signUp(username, password);
-
-      fetchData();
+      await userContext.signUp(username, password);
+      const newUser = await fetchUserByUsername(username);
+      setUsers(prev => [...prev, newUser]);
       setShowModalForm(false);
       setUsername('');
       setPassword
@@ -73,7 +72,10 @@ const UsersDashboard: React.FC = () => {
   }, [])
 
   const update = useCallback((updatedUser: User) => {
-      setUsers(prev => prev.map(p => (p.id === updatedUser.id ? updatedUser : p)));
+      setUsers(prev => {
+        const updated = prev.map(p => (p.id === updatedUser.id ? updatedUser : p))
+        return updated;
+      });
     }, []);
 
   const skeletonRows = Array.from({ length: 5 }, (_, i) => (

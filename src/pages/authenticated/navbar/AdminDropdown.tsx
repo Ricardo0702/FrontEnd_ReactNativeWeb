@@ -1,30 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Colors from '../../../components/Colors';
 import { useNavigate } from 'react-router-dom';
 
-interface AdminDropdownProps{
-    dropdownStyle?: object;
+interface AdminDropdownProps {
+  dropdownStyle?: object;
 }
 
-const AdminDropdown: React.FC<AdminDropdownProps> = ({dropdownStyle}) => {
-
+const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle }) => {
   const { t } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const isMobile = window.innerWidth <= 700;
+      if (!isMobile) { 
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) { setLangOpen(false);}
+      };
+    };
+    if (langOpen) { document.addEventListener('mousedown', handleClickOutside); }
+    return () => { document.removeEventListener('mousedown', handleClickOutside); };
+  }, [langOpen]);
 
   return (
-    <View style={styles.container}> {/* Aquí el contenedor relativo */}
+    <View style={styles.container} ref={dropdownRef as any}>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)}>
         <Text style={styles.navLink}>{t('navbar.admin')}▼</Text>
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? styles.adminDropdown}>
-          <TouchableOpacity onPress={() => {navigate("/auth/users"); setLangOpen(false)}}>
+          <TouchableOpacity onPress={() => { navigate("/auth/users"); setLangOpen(false); }}>
             <Text style={styles.navLink}>{t("navbar.users")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {navigate("/auth/roles"); setLangOpen(false)}}>
+          <TouchableOpacity onPress={() => { navigate("/auth/roles"); setLangOpen(false); }}>
             <Text style={styles.navLink}>{t("navbar.roles")}</Text>
           </TouchableOpacity>
         </View>
@@ -48,7 +59,7 @@ const styles = StyleSheet.create({
     left: 10
   },
   container: {
-    position: 'relative', 
+    position: 'relative',
   },
 });
 
