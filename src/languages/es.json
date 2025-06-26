@@ -95,16 +95,18 @@
     },
     "role": {
       "name": "Nombre del Rol",
-      "description": "Role description"
+      "description": "Descripción del Rol"
     },
     "Username": "Nombre de Usuario",
-    "username": "nombre de usuario",
+    "username": "Nombre de usuario",
     "password": "Contraseña",
     "user": "Usuario"
   },
   "button": {
     "save": "Guardar",
     "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "logout": "Cerrar sesión",
     "associate": {
       "person": "Asociar Persona",
       "project": "Asociar Proyecto"
@@ -120,6 +122,7 @@
     "people": "Personas",
     "projects": "Proyectos",
     "addresses": "Direcciones",
+    
     "saver": "Guardar",
     "assign": {
       "role": "Asignar Rol"
@@ -181,7 +184,10 @@
     "addresses": "Direcciones"
   },
   "confirm": {
-    "logout": "Seguro que quieres cerrar la sesión?"
+    "logout": {
+      "title": "Confirmación de cierre de sesión",
+      "message": "¿Seguro que quieres cerrar sesión?"
+    }
   },
   "language": {
     "spanish": "Español",

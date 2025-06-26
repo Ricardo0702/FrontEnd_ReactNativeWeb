@@ -110,7 +110,7 @@ const RolesDashboard: React.FC = () => {
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.edit.role")} visible={showUpdateModal} onClose={() => {setUpdateModal(false), fetchData()}} size="xs">
+      <Modal title={t("modal.edit.role")} visible={showUpdateModal} onClose={() => {setUpdateModal(false), fetchData()}} size="s">
         <View>
           <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} style={styles.input} autoFocus />
           <TextInput label={t('label.role.name')} value={roleDescritpion} onChangeText={setRoleDescription} style={styles.input} autoFocus />
@@ -128,7 +128,7 @@ const RolesDashboard: React.FC = () => {
         </View>
       </Modal>
 
-      <Modal title={t("modal.add.role")} visible={showModalForm} onClose={() => {setShowModalForm(false), fetchData()}} size="xs">
+      <Modal title={t("modal.add.role")} visible={showModalForm} onClose={() => {setShowModalForm(false), fetchData()}} size="s">
         <View>
           <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} style={styles.input} autoFocus />
           <TextInput label={t('label.role.description')} value={roleDescritpion} onChangeText={setRoleDescription} style={styles.input} autoFocus />

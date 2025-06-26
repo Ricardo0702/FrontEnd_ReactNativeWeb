@@ -124,7 +124,7 @@ const PeopleDashboard: React.FC = () => {
 
       </ScrollView>
       
-      <Modal title={t("modal.add.person")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t("modal.add.person")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="s">
         <View>
           <TextInput label= {t('label.name')} value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
 

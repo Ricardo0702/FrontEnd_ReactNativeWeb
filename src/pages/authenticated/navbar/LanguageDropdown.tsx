@@ -6,9 +6,10 @@ import Colors from '../../../components/Colors';
 interface LanguageDropdownProps {
   onChangeLanguage: (lng: string) => void;
   dropdownStyle?: object;
+  closeMenu?: () => void
 }
 
-const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, dropdownStyle, }) => {
+const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, dropdownStyle, closeMenu}) => {
   const { t } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
   const changeLanguage = (lng: string) => { onChangeLanguage(lng); setLangOpen(false); };
@@ -35,15 +36,15 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, d
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? styles.languageDropdown}>
-          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('es'); setLangOpen(false)}}>
+          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('es'); setLangOpen(false); closeMenu?.()}}>
             <Text style={styles.navLink}>{t('language.spanish')}</Text>
             <Image source={flagEs} style={styles.flag} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('ca'); setLangOpen(false)}}>
+          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('ca'); setLangOpen(false); closeMenu?.()}}>
             <Text style={styles.navLink}>{t('language.catalan')}</Text>
             <Image source={flagCa} style={styles.flag} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('en'); setLangOpen(false)}}>
+          <TouchableOpacity style={styles.option} onPress={() => {changeLanguage('en'); setLangOpen(false); closeMenu?.()}}>
             <Text style={styles.navLink}>{t('language.english')}</Text>
             <Image source={flagEn} style={styles.flag} />
           </TouchableOpacity>

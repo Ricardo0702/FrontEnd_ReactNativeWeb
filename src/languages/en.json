@@ -105,6 +105,8 @@
   "button": {
     "save": "Save",
     "delete": "Delete",
+    "cancel": "Cancel",
+    "logout": "Logout",
     "associate": {
       "person": "Associate Person",
       "project": "Associate Project"
@@ -181,7 +183,10 @@
     "addresses": "Addresses"
   },
   "confirm": {
-    "logout": "Are you sure you want to logout?"
+    "logout": {
+      "title": "Logout confirmation",
+      "message": "Are you sure you want to logout?"
+    }
   },
   "language": {
     "spanish": "Spanish",

@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 interface AdminDropdownProps {
   dropdownStyle?: object;
+  closeMenu?: () => void;
 }
 
-const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle }) => {
+const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle, closeMenu }) => {
   const { t } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,10 +33,10 @@ const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle }) => {
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? styles.adminDropdown}>
-          <TouchableOpacity onPress={() => { navigate("/auth/users"); setLangOpen(false); }}>
+          <TouchableOpacity onPress={() => { navigate("/auth/users"); setLangOpen(false); closeMenu?.() }}>
             <Text style={styles.navLink}>{t("navbar.users")}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { navigate("/auth/roles"); setLangOpen(false); }}>
+          <TouchableOpacity onPress={() => { navigate("/auth/roles"); setLangOpen(false); closeMenu?.() }}>
             <Text style={styles.navLink}>{t("navbar.roles")}</Text>
           </TouchableOpacity>
         </View>

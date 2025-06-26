@@ -19,22 +19,23 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) =
   const { width: windowWidth } = useWindowDimensions()
   const { authorities } = useContext(UserContext);
 
-  const columns: { header: string; accessor?: keyof Person; width?: number; minRowWidth?: number;
+  const columns: { header: string; accessor?: keyof Person; sortable?: boolean; filterable?: boolean; width?: number; minRowWidth?: number;
       render?: (value: any, row: Person) => React.ReactNode }[] = [
-      { header: t('columns.name'), accessor: 'name' },
-      { header: t('columns.age'), accessor: 'age' },
+      { header: t('columns.name'), accessor: 'name', sortable: true, filterable: true },
+      { header: t('columns.age'), accessor: 'age', sortable: true },
       {
-        header: t('columns.addresses'),
-        accessor: 'streets',
+        header: t('columns.addresses'), accessor: 'streets', filterable: true,
         render: (_: any, row: Person) => {
           const streets = row.streets ?? [];
           const cities = row.cities ?? [];
           const ids = row.directionIds ?? [];
 
-          const directions = streets.map((_, index) => ({
+          const count = Math.min(streets.length, cities.length, ids.length);
+
+          const directions = Array.from({ length: count }).map((_, index) => ({
             id: ids[index],
-            street: streets[index] ?? t("unknown.street"),
-            city: cities[index] ?? t("unknown.city"),
+            street: streets[index] || t("unknown.street"),
+            city: cities[index] || t("unknown.city"),
           }));
 
           return (
@@ -48,8 +49,16 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) =
           );
         },
       },
-      {header: t('columns.projects'), accessor:'projectNames'},
-
+      {
+        header: t('columns.projects'), accessor: 'projectNames' as keyof Person, filterable: true, sortable: true,
+        render: (value: Person['projectNames']) => (
+          <View style={{ flexWrap: 'wrap' }}>
+            <Text style={{ flexShrink: 1 }}>
+              {Array.isArray(value) ? value.join(', ') : value ?? ' '}
+            </Text>
+          </View>
+        )
+      },
       ...(hasAuthority(authorities, Authority.ROLE_PEOPLE) || hasAuthority(authorities, Authority.ROLE_ADMIN) ? [
         {
           header: t('columns.actions'), minRowWidth: 180,

@@ -7,7 +7,7 @@ import { useTranslation, Trans } from 'react-i18next';
 export interface ButtonProps {
   title: string;
   onPress: () => void;
-  width?: number | string;    // Puede ser número o porcentaje (e.g. '100%')
+  width?: number | string;
   height?: number;
   type?: 'delete' | 'save' | 'link' | 'add' | 'associate';  
   size?: 'xxs' | 'xs' | 'm' | 'xl';

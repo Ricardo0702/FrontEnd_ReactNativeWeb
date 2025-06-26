@@ -17,7 +17,7 @@ export interface ModalProps {
   visible: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  size?: 'xs' | 'm' | 'xl';
+  size?: 'xs' | 's' | 'm' | 'xl';
   position?: 'center' | 'top' | 'bottom'; // Posición opcional
 }
 
@@ -53,6 +53,8 @@ const Modal: React.FC<ModalProps> = ({
   const getSizeStyle = () => {
     switch (size) {
       case 'xs':
+        return useResponsive({type: 'Modal', size: 'xs'});
+      case 's':
         return useResponsive({type: 'Modal', size: 's'});
       case 'm':
         return useResponsive({type: 'Modal', size: 'm'});
@@ -70,16 +72,8 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <RNModal transparent visible={visible} animationType="slide">
       {/* Capa overlay que captura clics fuera del modal */}
-      <View
-        style={[styles.overlay, getPositionStyle()]}
-        onStartShouldSetResponder={() => true}  // Para que capture toques
-        onResponderRelease={onClose}            // Cuando sueltas el toque fuera del modal, se cierra
-      >
-        <View
-          style={[styles.modalContainer, getSizeStyle()]}
-          onStartShouldSetResponder={() => true}  // Para que capture toques dentro del modal
-          onResponderRelease={handleModalContentPress} // Evita que el toque cierre el modal
-        >
+      <View style={[styles.overlay, getPositionStyle()]} onStartShouldSetResponder={() => true} onResponderRelease={onClose}>
+        <View style={[styles.modalContainer, getSizeStyle()]} onStartShouldSetResponder={() => true} onResponderRelease={handleModalContentPress}>
           <View style={styles.header}>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={onClose}>

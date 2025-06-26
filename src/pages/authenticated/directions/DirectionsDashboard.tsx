@@ -118,12 +118,7 @@ const DirectionsDashboard: React.FC = () => {
         <DirectionModification directionId={selectedDirectionId} directionForm={form.current} onUpdateDirection={update} />
       </Modal>
 
-      <Modal
-        title={t("modal.add.address")}
-        visible={showModalForm}
-        onClose={() => setShowModalForm(false)}
-        size="xs"
-      >
+      <Modal title={t("modal.add.address")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="s" >
         <View>
           <TextInput label={t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
           <TextInput label={t('label.city')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />

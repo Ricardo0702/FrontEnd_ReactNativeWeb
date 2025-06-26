@@ -9,6 +9,12 @@ const useResponsive = ({ type, size }: IUseResponsive) => {
   const { width, height } = useWindowDimensions();
 
   if (type === 'Modal'){ 
+    if(size === 'xs') {
+      return{
+        width: width * 0.3,
+        height: height * 0.3
+      };
+    }
 
     if (size === 's') {
       return {

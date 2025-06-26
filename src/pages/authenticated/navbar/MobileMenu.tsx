@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Colors from '../../../components/Colors';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,9 @@ import AdminDropdown from './AdminDropdown';
 import { useNavigate } from 'react-router-dom';
 import PagesDropdown from './PgesDropdown';
 import { UserContext } from '../../../context/UserContext';
+import Modal from '../../../components/Modal';
+import Button from '../../../components/Button';
+import colors from '../../../components/Colors';
 
 interface MobileMenuProps {
   onLogout: () => void;
@@ -19,15 +22,40 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { authorities } = useContext(UserContext);
+  const [logoutModal, setLogoutModal] = useState(false);
+
+  const handleLogoutClick = () => {
+    setLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
+    setLogoutModal(false);
+    onLogout();
+  };
+
+  const cancelLogout = () => {
+    setLogoutModal(false);
+  };
 
   return (
     <View style={styles.dropdown}>
-      <PagesDropdown dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}} />
-      {hasAuthority(authorities, Authority.ROLE_ADMIN) && (<><AdminDropdown dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}}/></>)}
-      <LanguageDropdown onChangeLanguage={onChangeLanguage} dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}} />
-      <TouchableOpacity onPress={() => { onLogout(); closeMenu(); }}>
+      <PagesDropdown dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}} closeMenu={closeMenu} />
+      {hasAuthority(authorities, Authority.ROLE_ADMIN) && (
+        <><AdminDropdown dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}} closeMenu={closeMenu} /></>
+      )}
+      <LanguageDropdown onChangeLanguage={onChangeLanguage} closeMenu={closeMenu} 
+        dropdownStyle={{backgroundColor: Colors.darksteel, padding: 5}} 
+      />
+      <TouchableOpacity onPress={handleLogoutClick}>
         <Text style={styles.navLink}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
+      <Modal title={t("confirm.logout.title")} visible={logoutModal} onClose={cancelLogout} size="xs" position="center" >
+        <Text style={{ marginBottom: 20 }}> {t("confirm.logout.message")} </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 30 }}>
+          <Button title={t("button.cancel")} onPress={() => setLogoutModal(false)} width={100} color= "white" style={styles.cancelButton}  />
+          <Button title={t("button.logout")} onPress={confirmLogout} width={130} color= "white" style = {styles.confirmButton} />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -44,6 +72,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginVertical: 5,
   },
+  cancelButton:{
+    backgroundColor: colors.lightsteel,
+    color: "white"
+  },
+  confirmButton: {
+    backgroundColor: colors.lightsteel,
+    color: "white"
+  }
 });
 
 export default MobileMenu;

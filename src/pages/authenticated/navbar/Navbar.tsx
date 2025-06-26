@@ -51,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
           <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end' }} onPress={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen);}}>
             <Text style={styles.burger}>☰</Text>
           </TouchableOpacity>
-        ) : ( <DesktopMenu onLogout={onLogout} onChangeLanguage={changeLanguage}/> )
+        ) : ( <DesktopMenu onLogout={onLogout} onChangeLanguage={changeLanguage} /> )
         };
       </View>
       {isMobile && menuOpen && (
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   menuContainer: {
     position: 'absolute',
-    top: 60, // Altura del navbar
+    top: 60,
     right: 10,
     flex: 1, 
     alignItems:'flex-end',

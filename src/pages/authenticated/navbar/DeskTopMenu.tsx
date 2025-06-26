@@ -46,8 +46,8 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({onLogout, onChangeLanguage}) =
       <Modal title={t("confirm.logout.title")} visible={logoutModal} onClose={cancelLogout} size="xs" position="center" >
         <Text style={{ marginBottom: 20 }}> {t("confirm.logout.message")} </Text>
         <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 30 }}>
-          <Button title="Cancelar" onPress={() => setLogoutModal(false)} width={100} color= "white" style={styles.cancelButton}  />
-          <Button title="Cerrar sesión" onPress={confirmLogout} width={130} color= "white" style = {styles.confirmButton} />
+          <Button title={t("button.cancel")} onPress={() => setLogoutModal(false)} width={100} size='xxs' color= "white" style={styles.cancelButton}  />
+          <Button title={t("button.logout")} onPress={confirmLogout} width={130} size='xxs' color= "white" style = {styles.confirmButton} />
         </View>
       </Modal>
     </View>

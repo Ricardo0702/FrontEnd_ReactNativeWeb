@@ -5,10 +5,11 @@ import Colors from '../../../components/Colors';
 import { useNavigate } from 'react-router-dom';
 
 interface PagesDropdownProps{
-    dropdownStyle?: object;
+  dropdownStyle?: object;
+  closeMenu?: () => void
 }
 
-const PagesDropdown: React.FC<PagesDropdownProps> = ({dropdownStyle }) => {
+const PagesDropdown: React.FC<PagesDropdownProps> = ({dropdownStyle, closeMenu}) => {
 
   const { t } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
@@ -33,13 +34,13 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({dropdownStyle }) => {
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? styles.pagesDropdown}>
-            <TouchableOpacity onPress={() => {navigate("/auth/people"); setLangOpen(false)}}>
+            <TouchableOpacity onPress={() => {navigate("/auth/people"); setLangOpen(false); closeMenu?.()}}>
                 <Text style={styles.navLink}>{t("navbar.people")}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {navigate("/auth/projects"); setLangOpen(false)}}>
+            <TouchableOpacity onPress={() => {navigate("/auth/projects"); setLangOpen(false); closeMenu?.()}}>
                 <Text style={styles.navLink}>{t("navbar.projects")}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {navigate("/auth/directions"); setLangOpen(false)}}>
+            <TouchableOpacity onPress={() => {navigate("/auth/directions"); setLangOpen(false); closeMenu?.()}}>
                 <Text style={styles.navLink}>{t("navbar.addresses")}</Text>
             </TouchableOpacity>
         </View>

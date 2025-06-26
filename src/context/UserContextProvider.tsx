@@ -6,8 +6,6 @@ interface Props {
   children: ReactNode;
 }
 
-const API_URL = '/auth';
-
 export const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [username, setUsername] = useState<string>("");
   const [authorities, setAuthorities] = useState<string[]>([]);
@@ -42,14 +40,14 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   };
 
   const loginByUsername = async (username: string, password: string) => {
-    const response = await axios.post(`${API_URL}/login`, { username, password });
+    const response = await axios.post(`/login`, { username, password });
     const token = response.data.token;
     setter(token);
   };
 
   const loginByStorage = async () => {
     try {
-      const response = await axios.post(`${API_URL}/refresh`);
+      const response = await axios.post(`/refresh`);
       const token = response.data.token;
       setter(token);
       return token;
@@ -60,14 +58,10 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   };
 
   const signUp = async (username: string, password: string) => {
-    await axios.post(`${API_URL}/register`, { username, password });
+    await axios.post(`/register`, { username, password });
   };
 
-  const logout = () => {
-    setUsername('');
-    setAuthorities([]);
-    sessionStorage.removeItem('token');
-  };
+  const logout = () => { setUsername(''); setAuthorities([]); sessionStorage.removeItem('token'); };
 
   return (
     <UserContext.Provider value={{ username, authorities, loginByUsername, loginByStorage, logout, signUp }}>

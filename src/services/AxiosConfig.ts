@@ -10,6 +10,7 @@ axiosInstance.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  console.log(i18n.language)
   config.headers['Accept-Language'] = i18n.language || 'en';
   return config;
 });

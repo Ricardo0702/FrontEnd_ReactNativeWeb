@@ -104,7 +104,7 @@ const UsersDashboard: React.FC = () => {
 
       </ScrollView>
 
-      <Modal title={t("modal.add.user")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t("modal.add.user")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="s">
         <View>
           <TextInput label= {t('label.username')} value={username} onChangeText={setUsername} style={styles.input} autoFocus/>
 

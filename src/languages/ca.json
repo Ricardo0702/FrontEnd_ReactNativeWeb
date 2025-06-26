@@ -105,6 +105,8 @@
   "button": {
     "save": "Desar",
     "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "logout": "Tancar sessió",
     "associate": {
       "person": "Associar persona",
       "project": "Associar projecte"
@@ -181,7 +183,10 @@
     "addresses": "Adreces"
   },
   "confirm": {
-    "logout": "Segur que vols tancar la sessió?"
+    "logout": {
+      "title": "Confirmació de tancament de sessió",
+      "message": "Segur que vols tancar la sessió?"
+    }
   },
   "language": {
     "spanish": "Castellà",
