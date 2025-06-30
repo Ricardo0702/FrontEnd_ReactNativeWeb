@@ -10,15 +10,24 @@ interface RoleTableProps {
   roles: Role[];
   onDelete: (id: number) => void;
   onEdit: (role: Role) => void;
+  setShowModalForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit }) => {
+const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit, setShowModalForm }) => {
   const { t } = useTranslation();
   const {width: windowWidth} = useWindowDimensions();
 
-  const columns: { header: string; accessor?: keyof Role; width?: number; render?: (value: any, row: Role, rowIndex?: number) => React.ReactNode }[] = [
-    { header: t('columns.name'), accessor: 'name' }, 
-    { header: t('columns.description'), accessor: 'description' },
+  const renderHeaderButton =  (
+    <View style={{ alignItems: 'flex-start' }}>
+      <Button title={t("button.add.role")} onPress={() => setShowModalForm(true)} height={50} 
+        color='white' style ={{backgroundColor: colors.darksteel, borderRadius: 6}} width={windowWidth*0.1}/>
+    </View>
+  );
+
+  const columns: { header: string; accessor?: keyof Role; width?: number; filterable?: boolean; sortable?: boolean; 
+    render?: (value: any, row: Role, rowIndex?: number) => React.ReactNode }[] = [
+    { header: t('columns.name'), accessor: 'name', filterable: true, sortable: true }, 
+    { header: t('columns.description'), accessor: 'description', filterable: true, sortable: true },
     {
       header: t('columns.actions'),
       render: (_: any, row: Role, rowIndex?: number) => {
@@ -53,7 +62,7 @@ const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit }) => {
   ];
 
   return (
-    <Table columns={columns} data={roles} minRowHeight={50} widthFactor={0.6} />
+    <Table columns={columns} data={roles} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled/>
   );
 };
 

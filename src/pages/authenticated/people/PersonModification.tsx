@@ -145,10 +145,10 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
     <View style={styles.container}>
       <Title text={t('title.edit.person')} type='Subtitle' style={{ marginBottom: 20 }} />
       <TextInput 
-        label={t('label.Name')} value={localPerson.name} style={styles.input} 
+        label={t('label.Name')} value={localPerson.name} inputStyle={styles.input} 
         onChangeText={(value: string) => setLocalPerson({ ...localPerson, name: value })} />
       <TextInput
-        label={t('label.age')} value={localPerson.age} keyboardType="numeric" style={styles.input}
+        label={t('label.age')} value={localPerson.age} keyboardType="numeric" inputStyle={styles.input}
         onChangeText={(value: string) => setLocalPerson({...localPerson, age: parseInt(value)})} />
         
       <Button title={t("button.save")} onPress={handleUpdate} type="save" />
@@ -222,8 +222,8 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         );
       })}
 
-      <TextInput label={t("label.sreet")} value={newStreet} onChangeText={setNewStreet} style={styles.input} />
-      <TextInput label={t("label.city")} value={newCity} onChangeText={setNewCity} style={styles.input} />
+      <TextInput label={t("label.sreet")} value={newStreet} onChangeText={setNewStreet} inputStyle={styles.input} />
+      <TextInput label={t("label.city")} value={newCity} onChangeText={setNewCity} inputStyle={styles.input} />
       <Button title={t("button.add.address")} type='save'
         onPress={ async () => {
           const direction = await createDirection(newStreet, newCity);

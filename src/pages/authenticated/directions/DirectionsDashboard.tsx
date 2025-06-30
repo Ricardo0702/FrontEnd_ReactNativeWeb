@@ -7,17 +7,19 @@ import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import TextInput from '../../../components/TextInput';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { saveRecentChange } from '../../../services/localStorage';
 import DirectionModification from './DirectionModification';
 import { useTranslation } from 'react-i18next';
-import DirectionsTable from './DirectionsTable';  // Importar tabla separada
+import DirectionsTable from './DirectionsTable'; 
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import { Skeleton } from '../../../components/Skeleton';
 
 const DirectionsDashboard: React.FC = () => {
-  const { t } = useTranslation();
   const [directions, setDirections] = useState<Direction[]>([]);
+  const { t } = useTranslation();
   const form = useRef<Direction>({} as Direction);
   const [people, setPeople] = useState<Person[]>([]);
   const [showModalForm, setShowModalForm] = useState(false);
@@ -96,22 +98,33 @@ const DirectionsDashboard: React.FC = () => {
       });
     }, []);
 
+  if (error) {
+    return "componente Alert con el error";
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
+  
+  const skeletonRows = Array.from({ length: 5 }, (_, i) => (
+        <View key={i} style={{ flexDirection: 'row', gap: 20, marginBottom: 12 }}>
+          <Skeleton width={300} height={20} />
+          <Skeleton width={150} height={35} />
+        </View>
+      ));
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={{ paddingBottom: 10 }}>
+        <View style={{ paddingBottom: 30 }}>
           <Title text={t('title.registered.addresses')} size='xl' align='center' underline />
         </View>
 
         <View style={styles.tableContainer}>
-          <DirectionsTable directions={directions} onDelete={handleDeleteDirection} onEdit={handleEditDirection} />
+          {isLoading ? skeletonRows : (
+          <DirectionsTable directions={directions} onDelete={handleDeleteDirection} onEdit={handleEditDirection} setShowModalForm={setShowModalForm} />
+          )}
         </View>
-
-        {hasAuthority(authorities, Authority.ROLE_ADDRESSES) || hasAuthority(authorities, Authority.ROLE_ADMIN) && (<>
-        <View style={{ alignItems: 'center' }}>
-          <Button title={t("button.add.address")} onPress={() => setShowModalForm(true)} type='add' />
-        </View>
-        </>)}
       </ScrollView>
 
       <Modal title={t("modal.edit.address")} visible={showUpdateModal} onClose={() => { setUpdateModal(false); }} size="m" >

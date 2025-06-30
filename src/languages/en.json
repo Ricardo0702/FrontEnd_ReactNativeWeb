@@ -1,4 +1,15 @@
 {
+  "text": {
+    "show": {
+      "rows": "Shown rows"
+    },
+    "select": {
+      "rows": ""
+    }
+  },
+  "textinput": {
+    "filter": "Filter..."
+  },
   "error": {
     "loading": {
       "people": "Error loading people.",
@@ -105,8 +116,6 @@
   "button": {
     "save": "Save",
     "delete": "Delete",
-    "cancel": "Cancel",
-    "logout": "Logout",
     "associate": {
       "person": "Associate Person",
       "project": "Associate Project"
@@ -122,6 +131,8 @@
     "people": "People",
     "projects": "Projects",
     "addresses": "Addresses",
+    "cancel": "Cancel",
+    "logout": "Logout",
     "saver": "Save",
     "assign": {
       "role": "Assign Role"
@@ -172,7 +183,7 @@
   "Recent changes:": "Recent changes:",
   "There are no recent changes": "There are no recent changes.",
   "navbar": {
-    "admin": "Admin.",
+    "admin": "Admin",
     "users": "Users",
     "roles": "Roles",
     "logout": "Logout",

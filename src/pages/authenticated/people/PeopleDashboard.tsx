@@ -11,7 +11,6 @@ import { View, StyleSheet,ScrollView, Alert } from 'react-native';
 import PeopleTable from './PeopleTable';
 import PersonModification from './PersonModification';
 import { useTranslation } from 'react-i18next';
-import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { UserContext } from '../../../context/UserContext';
 
@@ -107,30 +106,27 @@ const PeopleDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
 
-        <View style={{paddingBottom: 10}}>
+        <View style={{paddingBottom: 30}}>
           <Title text = {t('title.registered.people')} size = 'xl' align = 'center' underline/>
         </View>
 
         <View style={styles.tableContainer}>
           {isLoading ? skeletonRows : (
-            <PeopleTable people={people} onDelete={handleDeletePerson} onEdit={handleEditPerson} />
+            <PeopleTable people={people} onDelete={handleDeletePerson} onEdit={handleEditPerson} setShowModalForm={setShowModalForm}/>
           )}
-          {hasAuthority(authorities, Authority.ROLE_PEOPLE) || hasAuthority(authorities, Authority.ROLE_ADMIN) && (<>
-          <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
-            <Button title={t("button.add.person")} onPress={() => setShowModalForm(true)} type = 'add'/>
-          </View>
-          </>)}
         </View>
 
       </ScrollView>
       
       <Modal title={t("modal.add.person")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="s">
         <View>
-          <TextInput label= {t('label.name')} value={personName} onChangeText={setPersonName} style={styles.input} autoFocus/>
+          <TextInput label= {t('label.name')} value={personName} onChangeText={setPersonName} inputStyle={styles.input} autoFocus/>
 
           <TextInput label= {t('label.age')} value={personAge.toString()} onChangeText={
-            (value) => setPersonAge(Number(value))} style={styles.input} keyboardType="numeric" />
-          <Button title={t("button.save")} onPress={handleCreatePerson} type = 'save'/>
+            (value) => setPersonAge(Number(value))} inputStyle={styles.input} keyboardType="numeric" />
+          <View style = {{marginTop: 20}}>
+            <Button title={t("button.save")} onPress={handleCreatePerson} type = 'save'/>
+          </View>
         </View>
       </Modal>
       
@@ -197,7 +193,8 @@ const styles = StyleSheet.create({
     padding: 8, 
     borderWidth: 1, 
     borderColor: '#ccc', 
-    borderRadius: 5 
+    borderRadius: 5,
+    height: 40
   },
 
   selectContainer: 

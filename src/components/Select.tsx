@@ -20,7 +20,7 @@ const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, 
 
   if (Platform.OS === 'web') {
     return (
-      <View style={[styles.webContainer, style]}>
+      <View style={[style]}>
         <select
           value={selectedValue === null || selectedValue === undefined ? '' : selectedValue}
           onChange={(e) => onValueChange(e.target.value)}
@@ -42,27 +42,22 @@ const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, 
   }
 
   return (
-    <View style={style}>
-      <Picker
-        selectedValue={selectedValue ?? undefined}
-        onValueChange={onValueChange}
-        style={{ height: 50, width: '100%' }}
-      >
-        {placeholder && (
-          <Picker.Item label={placeholder} value={undefined} enabled={false} color="#999" />
-        )}
-        {options.map((option) => (
-          <Picker.Item key={option.value} label={option.label} value={option.value} />
-        ))}
-      </Picker>
-    </View>
+    <Picker
+      selectedValue={selectedValue ?? undefined}
+      onValueChange={onValueChange}
+      style={{ height: 50, width: '100%' }}
+    >
+      {placeholder && (
+        <Picker.Item label={placeholder} value={undefined} enabled={false} color="#999" style={style}/>
+      )}
+      {options.map((option) => (
+        <Picker.Item key={option.value} label={option.label} value={option.value}  />
+      ))}
+    </Picker>
   );
 };
 
 const styles = StyleSheet.create({
-  webContainer: {
-    marginBottom: 20,
-  },
   webSelect: {
     width: '100%',
     padding: 10,

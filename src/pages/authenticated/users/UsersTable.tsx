@@ -4,22 +4,31 @@ import { View, useWindowDimensions, Text } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
+import colors from '../../../components/Colors';
 
 interface UsersTableProps {
   users: User[];
   onDelete: (id: number) => void;
   onEdit: (user: User) => void;
+  setShowModalForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit }) => {
+const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit, setShowModalForm }) => {
  
   const { t } = useTranslation();
-  const { width: windowWidth } = useWindowDimensions()
+  const { width: windowWidth } = useWindowDimensions();
+  
+  const renderHeaderButton =  (
+    <View style={{ alignItems: 'flex-start' }}>
+      <Button title={t("button.add.user")} onPress={() => setShowModalForm(true)} height={50} 
+        color='white' style ={{backgroundColor: colors.darksteel, borderRadius: 6}} width={windowWidth*0.1}/>
+    </View>
+  );
 
-  const columns: { header: string; accessor?: keyof User; width?: number; minRowWidth?: number;
+  const columns: { header: string; accessor?: keyof User; width?: number; minRowWidth?: number; filterable?: boolean; sortable?: boolean;
       render?: (value: any, row: User) => React.ReactNode }[] = [
-      { header: t('columns.username'), accessor: 'username' },
-      { header: t('columns.roles'), accessor:'roles',
+      { header: t('columns.username'), accessor: 'username', filterable: true, sortable: true },
+      { header: t('columns.roles'), accessor:'roles', filterable: true, sortable: true,
         render: (_: any, row: User) => (
           <View style={{ flexWrap: 'wrap' }}>
             <Text style={{ flexShrink: 1 }}>
@@ -60,7 +69,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit }) => {
   ];
 
   return (
-    <Table columns={columns} data={users} minRowHeight={50} widthFactor={0.6} />
+    <Table columns={columns} data={users} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled />
   );
 };
 

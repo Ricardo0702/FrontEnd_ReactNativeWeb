@@ -89,17 +89,14 @@ const UsersDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
 
-        <View style={{paddingBottom: 10}}>
+        <View style={{paddingBottom: 30}}>
           <Title text = {t('title.registered.users')} size = 'xl' align = 'center' underline/>
         </View>
 
         <View style={styles.tableContainer}>
           {isLoading ? skeletonRows : (
-            <UsersTable users={users} onDelete={handleDeleteUser} onEdit={handleEditUser} />
+            <UsersTable users={users} onDelete={handleDeleteUser} onEdit={handleEditUser} setShowModalForm={setShowModalForm}/>
           )}
-          <View style = {{alignItems: 'flex-start', paddingTop: 20}}>
-            <Button title={t("button.add.user")} onPress={() => setShowModalForm(true)} type = 'add'/>
-          </View>
         </View>
 
       </ScrollView>

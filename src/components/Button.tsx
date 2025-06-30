@@ -91,7 +91,6 @@ const Button: React.FC<ButtonProps> = ({
   const { buttonStyle, textStyle } = getType();
 
   return (
-    <View style= {style}>
       <TouchableOpacity
         onPress={onPress}
         disabled={disabled}
@@ -99,13 +98,12 @@ const Button: React.FC<ButtonProps> = ({
           styles.button, getSizeStyle(),
           { width: widthValue, height: heightValue, minWidth: minWidthValue },
           buttonStyle,
-          disabled && { backgroundColor: '#f5f5f5' },
+          disabled && { backgroundColor: '#f5f5f5' }, style
         ]}
         activeOpacity={0.7}
       >
         <Text style={[styles.text, { fontSize: fontSizeValue}, textStyle, ]}>{title}</Text>
       </TouchableOpacity>
-    </View>
   );
 };
 

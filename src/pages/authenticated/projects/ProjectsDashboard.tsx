@@ -110,21 +110,15 @@ const ProjectsDashboard: React.FC = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={{ paddingBottom: 10 }}>
+        <View style={{ paddingBottom: 30 }}>
           <Title text={t('title.registered.projects')} size='xl' align='center' underline />
         </View>
 
         <View style={styles.tableContainer}>
           {isLoading ? skeletonRows : (
-            <ProjectsTable projects = {projects} onDelete={handleDeleteProject} onEdit={handleEditProject} />
+            <ProjectsTable projects = {projects} onDelete={handleDeleteProject} onEdit={handleEditProject} setShowModalForm={setShowModalForm} />
           )}
         </View>
-        
-        {hasAuthority(authorities, Authority.ROLE_PROJECTS) || hasAuthority(authorities, Authority.ROLE_ADMIN) && (<>
-          <View style={{ alignItems: 'center' }}>
-            <Button title={t("button.add.project")} onPress={() => setShowModalForm(true)} type='add' />
-          </View>
-        </>)}
       </ScrollView>
 
       <Modal title={t("modal.edit.project")} visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">

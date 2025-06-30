@@ -1,4 +1,15 @@
 {
+  "text": {
+    "show": {
+      "rows": "Files mostrades"
+    },
+    "select": {
+      "rows": ""
+    }
+  },
+  "textinput": {
+    "filter": "Filtrar..."
+  },
   "error": {
     "loading": {
       "people": "Error en carregar les persones.",
@@ -105,8 +116,6 @@
   "button": {
     "save": "Desar",
     "delete": "Eliminar",
-    "cancel": "Cancelar",
-    "logout": "Tancar sessió",
     "associate": {
       "person": "Associar persona",
       "project": "Associar projecte"
@@ -122,6 +131,8 @@
     "people": "Persones",
     "projects": "Projectes",
     "addresses": "Adreces",
+    "cancel": "Cancelar",
+    "logout": "Tancar sessió",
     "saver": "Desar",
     "assign": {
       "role": "Assignar rol"
@@ -172,7 +183,7 @@
   "Recent changes:": "Canvis recents:",
   "There are no recent changes": "No hi ha canvis recents.",
   "navbar": {
-    "admin": "Admin.",
+    "admin": "Admin",
     "users": "Usuaris",
     "roles": "Rols",
     "logout": "Tancar sessió",

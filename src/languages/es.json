@@ -1,4 +1,15 @@
 {
+  "text": {
+    "show": {
+      "rows": "Filas mostradas"
+    },
+    "select": {
+      "rows": ""
+    }
+  },
+  "textinput": {
+    "filter": "Filtrar..."
+  },
   "error": {
     "loading": {
       "people": "Error al cargar personas.",
@@ -105,8 +116,6 @@
   "button": {
     "save": "Guardar",
     "delete": "Eliminar",
-    "cancel": "Cancelar",
-    "logout": "Cerrar sesión",
     "associate": {
       "person": "Asociar Persona",
       "project": "Asociar Proyecto"
@@ -122,7 +131,8 @@
     "people": "Personas",
     "projects": "Proyectos",
     "addresses": "Direcciones",
-    
+    "cancel": "Cancelar",
+    "logout": "Cerrar sesión",
     "saver": "Guardar",
     "assign": {
       "role": "Asignar Rol"
@@ -173,7 +183,7 @@
   "Recent changes:": "Cambios recientes:",
   "There are no recent changes": "No hay cambios recientes.",
   "navbar": {
-    "admin": "Admin.",
+    "admin": "Admin",
     "users": "Usuarios",
     "roles": "Roles",
     "logout": "Cerrar sesión",

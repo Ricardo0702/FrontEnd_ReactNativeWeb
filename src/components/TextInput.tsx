@@ -13,6 +13,7 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'value'> {
   secure?: boolean;
   onSubmitEditing?: () => void;
   returnKeyType?: RNTextInputProps['returnKeyType'];
+  placeholder?: string;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -26,12 +27,13 @@ const TextInput: React.FC<TextInputProps> = ({
   onChangeText,
   secure,
   onSubmitEditing,
-  returnKeyType
+  returnKeyType,
+  placeholder
 }) => {
   const stringValue = value !== undefined && value !== null ? String(value) : '';
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[containerStyle]}>
       {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
       <RNTextInput
         style={[styles.input, inputStyle]}
@@ -40,6 +42,8 @@ const TextInput: React.FC<TextInputProps> = ({
         secureTextEntry =  {secure}
         onSubmitEditing={onSubmitEditing}
         returnKeyType={returnKeyType}
+        placeholder={placeholder}  
+        placeholderTextColor="#999"
       />
       {errorMessage ? (
         <Text style={[styles.error, errorStyle]}>{errorMessage}</Text>
@@ -49,9 +53,6 @@ const TextInput: React.FC<TextInputProps> = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginVertical: 8,
-  },
   label: {
     fontWeight: '600',
     marginBottom: 4,
@@ -62,7 +63,6 @@ const styles = StyleSheet.create({
     borderColor: '#999',
     borderRadius: 6,
     paddingHorizontal: 12,
-    paddingVertical: 8,
     fontSize: 16,
     color: '#000',
   },

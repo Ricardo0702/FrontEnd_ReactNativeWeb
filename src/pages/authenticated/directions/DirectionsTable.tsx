@@ -12,18 +12,28 @@ interface DirectionsTableProps {
   directions: Direction[];
   onDelete: (id: number) => void;
   onEdit: (direction: Direction) => void;
+  setShowModalForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DirectionsTable: React.FC<DirectionsTableProps> = ({ directions, onDelete, onEdit }) => {
+const DirectionsTable: React.FC<DirectionsTableProps> = ({ directions, onDelete, onEdit, setShowModalForm }) => {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions() 
   const { authorities } = useContext(UserContext);
 
-  const columns = [
-    { header: t('columns.street'), accessor: 'street' as keyof Direction },
-    { header: t('columns.city'), accessor: 'city' as keyof Direction },
+  const renderHeaderButton = (hasAuthority(authorities, Authority.ROLE_ADDRESSES) || hasAuthority(authorities, Authority.ROLE_ADMIN)) && 
+  (
+    <View style={{ alignItems: 'flex-start' }}>
+      <Button title={t("button.add.address")} onPress={() => setShowModalForm(true)} height={50} 
+        color='white' style ={{backgroundColor: colors.darksteel, borderRadius: 6}} width={windowWidth*0.1}/>
+    </View>
+  );
+
+  const columns: { header: string; accessor?: keyof Direction; sortable?: boolean; filterable?: boolean; width?: number; minRowWidth?: number;
+        render?: (value: any, row: Direction) => React.ReactNode }[] = [
+    { header: t('columns.street'), accessor: 'street', filterable: true, sortable: true },
+    { header: t('columns.city'), accessor: 'city', filterable: true, sortable: true },
     { 
-      header: t('columns.person'), accessor: 'personName' as keyof Direction, 
+      header: t('columns.person'), accessor: 'personName', filterable: true, sortable: true, 
       render: (value: string | null) => <Text>{value ?? ''}</Text>, 
     },
     ...(hasAuthority(authorities, Authority.ROLE_ADDRESSES) || hasAuthority(authorities, Authority.ROLE_ADMIN) ? [
@@ -63,7 +73,7 @@ const DirectionsTable: React.FC<DirectionsTableProps> = ({ directions, onDelete,
   ];
 
   return (
-    <Table columns={columns} data={directions} minRowHeight={50} />
+    <Table columns={columns} data={directions} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled />
   );
 };
 

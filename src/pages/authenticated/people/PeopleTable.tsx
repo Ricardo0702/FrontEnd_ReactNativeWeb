@@ -6,25 +6,36 @@ import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
+import colors from '../../../components/Colors';
 
 interface PeopleTableProps {
   people: Person[];
   onDelete: (id: number) => void;
   onEdit: (person: Person) => void;
+  setShowModalForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) => {
+const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, setShowModalForm }) => {
  
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions()
   const { authorities } = useContext(UserContext);
+
+  const renderHeaderButton = (hasAuthority(authorities, Authority.ROLE_PEOPLE) || hasAuthority(authorities, Authority.ROLE_ADMIN)) && 
+  (
+    <View style={{ alignItems: 'flex-start' }}>
+      <Button title={t("button.add.person")} onPress={() => setShowModalForm(true)} height={50} 
+        color='white' style ={{backgroundColor: colors.darksteel, borderRadius: 6}} width={windowWidth*0.1}/>
+    </View>
+  );
+
 
   const columns: { header: string; accessor?: keyof Person; sortable?: boolean; filterable?: boolean; width?: number; minRowWidth?: number;
       render?: (value: any, row: Person) => React.ReactNode }[] = [
       { header: t('columns.name'), accessor: 'name', sortable: true, filterable: true },
       { header: t('columns.age'), accessor: 'age', sortable: true },
       {
-        header: t('columns.addresses'), accessor: 'streets', filterable: true,
+        header: t('columns.addresses'), accessor: 'streets', filterable: true, sortable: true,
         render: (_: any, row: Person) => {
           const streets = row.streets ?? [];
           const cities = row.cities ?? [];
@@ -93,7 +104,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit }) =
   ];
 
   return (
-    <Table columns={columns} data={people} minRowHeight={50} />
+    <Table columns={columns} data={people} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled/>
   );
 };
 

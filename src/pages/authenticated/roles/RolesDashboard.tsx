@@ -95,18 +95,14 @@ const RolesDashboard: React.FC = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={{ paddingBottom: 10 }}>
+        <View style={{ paddingBottom: 30 }}>
           <Title text={t('title.registered.roles')} size='xl' align='center' underline />
         </View>
 
         <View style={styles.tableContainer}>
           {isLoading ? skeletonRows : (
-            <RolesTable roles = {roles} onDelete={handleDeleteRole} onEdit={handleEditRole} />
+            <RolesTable roles = {roles} onDelete={handleDeleteRole} onEdit={handleEditRole} setShowModalForm={setShowModalForm} />
           )}
-        </View>
-
-        <View style={{ alignItems: 'center' }}>
-          <Button title={t("button.add.role")} onPress={() => setShowModalForm(true)} type='add' />
         </View>
       </ScrollView>
 
