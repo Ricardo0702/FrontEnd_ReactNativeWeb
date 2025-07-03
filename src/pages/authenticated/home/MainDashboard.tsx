@@ -42,7 +42,9 @@ const MainDashboard: React.FC = () => {
         </View>
 
         <Text style={styles.subtitle}>{t('Recent changes:')}</Text>
-        <RecentChanges />
+        <View style = {{marginHorizontal: 30}}>
+          <RecentChanges />
+        </View>
       </View>
     </ScrollView>
   );

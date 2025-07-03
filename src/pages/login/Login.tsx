@@ -79,7 +79,9 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.create.user")} visible= {showSignUpModal} onClose={() => setShowSignUpModal(false)} position="center" size="s" >
+      <Modal title={t("modal.create.user")} visible= {showSignUpModal}  position="center" size='s' onClose={() => {
+        setUsername(''), setPassword(''), setShowSignUpModal(false)}}
+      >
         <View style={styles.formContainer}>
           <TextInput
             label={t("label.user")} value={username} onChangeText={setUsername}
@@ -90,16 +92,20 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             errorMessage={touchedSignUp && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
           />
           <TextInput
-            label={t("label.password")} value={password} onChangeText={setPassword} secure onSubmitEditing={handleLogin} 
+            label={t("label.password")} value={password} onChangeText={setPassword} secure onSubmitEditing={handleSignUp} 
             returnKeyType="done" inputStyle={[ styles.inputField, touchedSignUp && password.trim() === '' && styles.inputError,]}  
             errorMessage={touchedSignUp && password.trim() === '' ? t('error.password.cannot be empty') : ''}
           />
-          {signUpError !== '' && <Text style={styles.errorText}>{signUpError}</Text>}
+          {signUpError !== '' && 
+            <Text style={styles.errorText}>{typeof signUpError === 'string' ? signUpError : JSON.stringify(signUpError, null, 2)}</Text>
+          }
           <Button title={t("button.create.user")} onPress={handleSignUp} type = 'save' />
         </View>
       </Modal>
 
-      <Modal title={t("modal.login")} visible= {showLoginModal} onClose={() => setShowLoginModal(false)} position="center" size="s" >
+      <Modal title={t("modal.login")} visible= {showLoginModal} position="center" size='s' onClose={() => {
+        setUsername(''), setPassword(''), setShowLoginModal(false)}}
+      >
         <View style={styles.formContainer}>
           <TextInput 
             label={t("label.user")} value={username} onChangeText={setUsername}
@@ -114,7 +120,9 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             returnKeyType="done" inputStyle={[styles.inputField, touchedLogin && password.trim() === '' && styles.inputError,]} 
             errorMessage= {touchedLogin && password.trim() === '' ? t('error.password.cannot be empty') : ''} 
           />
-          {loginError !== '' && <Text style={styles.errorText}>{loginError}</Text>}
+          {loginError !== '' && 
+            <Text style={styles.errorText}>{typeof loginError === 'string' ? loginError : JSON.stringify(loginError, null, 2)}</Text>
+          }
           <Button title={t("button.login")} onPress={handleLogin} type = 'save' />
         </View>
       </Modal>

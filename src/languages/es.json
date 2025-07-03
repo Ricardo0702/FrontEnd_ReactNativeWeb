@@ -200,9 +200,9 @@
     }
   },
   "language": {
-    "spanish": "Español",
-    "catalan": "Catalán",
-    "english": "Inglés"
+    "spanish": "Es",
+    "catalan": "Cat",
+    "english": "En"
   },
   "unknown": {
     "street": "Calle desconocida",

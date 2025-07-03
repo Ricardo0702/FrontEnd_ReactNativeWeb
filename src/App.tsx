@@ -9,6 +9,7 @@ import DirectionsDashboard from "./pages/authenticated/directions/DirectionsDash
 import UsersDashboard from "./pages/authenticated/users/UsersDashboard";
 import RolesDashboard from "./pages/authenticated/roles/RolesDashboard";
 import LoginForm from "./pages/login/Login";
+import LoginNavbar from "./pages/login/LoginNavbar";
 import "./types/I18n";
 import { UserContextProvider } from "./context/UserContextProvider";
 import { UserContext } from "./context/UserContext";
@@ -46,8 +47,12 @@ const AppContent: React.FC = () => {
     <View style={styles.container}>
       {userContext.username && <Navbar onLogout={handleLogout} />}
       <Routes>
-        <Route path="/" element={userContext.username ? (<Navigate to="/auth/dashboard" />) : 
-        (<LoginForm onLoginSuccess={handleLoginSuccess} />)}
+        <Route path="/" element={userContext.username ? (<Navigate to="/auth/dashboard" />) : (
+          <>
+            <LoginNavbar/>
+            <LoginForm onLoginSuccess={handleLoginSuccess} />  
+          </>
+        )}
         />
         <Route element={<ProtectedRoutes />}>
           <Route element={<AdminRoutes />}>

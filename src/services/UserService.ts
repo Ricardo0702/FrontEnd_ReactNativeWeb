@@ -14,7 +14,7 @@ export const fetchUser = async (userId: number) => {
 };
 
 export const fetchUserByUsername = async (username: string) => {
-  const response = await axios.get<User>(`${API_URL}/${username}`);
+  const response = await axios.get<User>(`${API_URL}/username/${username}`);
   return response.data;
 };
 
@@ -33,5 +33,6 @@ export const removeRole = async (userId: number, roleId: number) => {
 };
 
 export const updateUser = async (userId: number, username: string) => {
-  await axios.put(`${API_URL}/${userId}`, { username });
+  const response = await axios.put<User>(`${API_URL}/${userId}`, { username });
+  return response.data;
 };

@@ -33,7 +33,7 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [filterText, setFilterText] = useState<string>('');
   const isSmallScreen = windowWidth < 600;
-  const [rowsPerPage, setRowsPerPage] = useState(10);;
+  const [rowsPerPage, setRowsPerPage] = useState(5);;
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
 
@@ -71,10 +71,6 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
         : String(bVal).localeCompare(String(aVal));
     });
   }, [filteredData, sortColumn, sortDirection]);
-
-  useEffect(() => {
-    setRowsPerPage(sortedData.length);
-  }, [sortedData.length]);
 
   const paginatedData = useMemo(() => {
     if (!paginationEnabled) return sortedData;
@@ -235,11 +231,9 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
 
  return (
     <View style={{ minHeight: minRowHeight * (sortedData.length + 2) }}>
-      {/* Filtro global */}
       <View style= {{flexDirection: 'row', justifyContent: 'space-between'}}>
         {paginationEnabled && (
           <View style={{ flexDirection: 'row', alignItems: 'flex-end'}}>
-            <Text style={{ marginRight: 10, alignSelf: 'flex-end'}}>{t('text.show.rows')}:</Text>
             <Select
               style={{ width: 80, alignSelf: 'flex-end'}}
               selectedValue={rowsPerPage}
@@ -249,8 +243,17 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
               }}
               placeholder={t('text.select.rows')}
               options={
-                Array.from({ length: sortedData.length }, (_, i) => i + 1)
-                  .map(num => ({ label: num.toString(), value: num })) as SelectOption[]
+                (() => {
+                  const max = sortedData.length;
+                  const multiples = [];
+                  for (let i = 5; i <= max; i += 5) {
+                    multiples.push({ label: i.toString(), value: i });
+                  }
+                  if (max % 5 !== 0) {
+                    multiples.push({ label: max.toString(), value: max });
+                  }
+                  return multiples;
+                })() as SelectOption[]
               }
             />
 
@@ -259,11 +262,11 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
           </View>
         )}
         <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', height: minRowHeight}}>
-          <View style={{ justifyContent: 'center', marginRight: 10 }}>
-            {renderHeaderButton}
-          </View>
-          <View style={{ width: windowWidth * 0.2 }}>
+          <View style={{ width: windowWidth * 0.2, marginRight: 10 }}>
             <TextInput placeholder={t("textinput.filter")} value={filterText} onChangeText={setFilterText} inputStyle={{ height: minRowHeight, paddingVertical: 0 }}/>
+          </View>
+          <View style={{ justifyContent: 'center'}}>
+            {renderHeaderButton}
           </View>
         </View>
       </View>
@@ -345,7 +348,7 @@ const styles = StyleSheet.create({
   },
   headerCell: {},
   headerText: {
-    fontSize: 15,
+    fontSize: 17,
     color: 'white',
   },
   evenRow: {

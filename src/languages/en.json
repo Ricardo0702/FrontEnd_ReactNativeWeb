@@ -200,9 +200,9 @@
     }
   },
   "language": {
-    "spanish": "Spanish",
-    "catalan": "Catalan",
-    "english": "English"
+    "spanish": "Es",
+    "catalan": "Cat",
+    "english": "En"
   },
   "unknown": {
     "street": "Unknown street",

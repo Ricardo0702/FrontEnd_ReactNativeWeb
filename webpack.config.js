@@ -13,13 +13,14 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
     alias: {
       'react-native$': 'react-native-web',
+      'react-native-svg$': 'react-native-svg-web',
     },
   },
   module: {
     rules: [
       {
         test: /\.(tsx|ts|jsx|js)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!(react-native|react-native-svg)\/).*/,
         use: 'babel-loader',
       },
       {

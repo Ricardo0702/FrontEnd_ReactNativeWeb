@@ -2,17 +2,24 @@ import { useWindowDimensions } from 'react-native';
 
 export interface IUseResponsive {
   type: 'Button' | 'Modal';
-  size: 'xs' | 's' | 'm' | 'l';
+  size: 'xxs' |'xs' | 's' | 'm' | 'l';
 }
 
 const useResponsive = ({ type, size }: IUseResponsive) => {
   const { width, height } = useWindowDimensions();
 
   if (type === 'Modal'){ 
-    if(size === 'xs') {
+    if(size === 'xxs') {
       return{
         width: width * 0.3,
         height: height * 0.3
+      };
+    }
+
+    if (size === 'xs'){
+      return{
+        width: width * 0.4,
+        height: height * 0.4,
       };
     }
 
@@ -44,8 +51,12 @@ const useResponsive = ({ type, size }: IUseResponsive) => {
 
   if (type === 'Button') {
     switch (size) {
+      case 'xxs':
+        responsiveWidth = width * 0.02;
+        responsiveHeight = height *0.04;
+        break;
       case 'xs':
-        responsiveWidth = width * 0.04;
+        responsiveWidth = width * 0.03;
         responsiveHeight = height * 0.04;
         break;
       case 's':

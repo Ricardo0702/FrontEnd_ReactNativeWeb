@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Colors from '../../../components/Colors';
 import { useNavigate } from 'react-router-dom';
+import Icon from '../../../components/Icon';
+import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 interface PagesDropdownProps{
   dropdownStyle?: object;
@@ -29,9 +31,10 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({dropdownStyle, closeMenu})
 
   return (
     <View style={styles.container} ref={dropdownRef as any}> 
-      <TouchableOpacity onPress={() => setLangOpen(!langOpen)}>
-        <Text style={styles.navLink}>{t('navbar.pages')}▼</Text>
-      </TouchableOpacity>
+    <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{flexDirection: 'row', alignItems: 'center'}}>
+      <Text style={styles.navLink}>{t('navbar.pages')}</Text>
+      <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
+    </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? styles.pagesDropdown}>
             <TouchableOpacity onPress={() => {navigate("/auth/people"); setLangOpen(false); closeMenu?.()}}>

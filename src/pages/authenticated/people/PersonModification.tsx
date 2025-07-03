@@ -190,7 +190,7 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         }))}
         placeholder={t("select.project")}
       />
-      <Button title={t("button.associate.project")} type='save' 
+      <Button title={t("button.associate.project")} type='save' style={{marginTop: 10}}
         onPress={ () => {
           const project = projects.find(p => p.id === newProjectId);
           if (project === undefined || newProjectId === undefined) return;

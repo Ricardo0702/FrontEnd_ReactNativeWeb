@@ -60,10 +60,10 @@ export default function directionModification({directionId, directionForm, onUpd
     <View style={styles.container}>
       <Title text= {t("title.edit.address")} type= 'Subtitle' style= {{marginBottom: 20}} />
       <TextInput 
-        label = {t('label.street')} value={localDirection.street} style={styles.input}
+        label = {t('label.street')} value={localDirection.street} inputStyle={styles.input}
         onChangeText={(value:string) => setLocalDirection({...localDirection, street: value})} />
       <TextInput 
-        label = {t('label.city')} value={localDirection.city} style = {styles.input} 
+        label = {t('label.city')} value={localDirection.city} inputStyle = {styles.input} 
         onChangeText={(value:string) => setLocalDirection({...localDirection, city: value})} />
 
       <Button title= {t("button.save")} onPress={handleUpdate} type= "save"/>
@@ -97,7 +97,7 @@ export default function directionModification({directionId, directionForm, onUpd
         }))}
         placeholder={t("select.person")}
       />
-      <Button title={t("button.associate.person")} type= 'save'
+      <Button title={t("button.associate.person")} type= 'save' style={{marginTop: 10}}
         onPress={ () => {
           const selectedPerson = people.find(p => p.id === newPersonId);
           if (selectedPerson == undefined) return;

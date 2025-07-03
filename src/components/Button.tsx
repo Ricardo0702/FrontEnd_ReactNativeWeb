@@ -10,7 +10,7 @@ export interface ButtonProps {
   width?: number | string;
   height?: number;
   type?: 'delete' | 'save' | 'link' | 'add' | 'associate';  
-  size?: 'xxs' | 'xs' | 'm' | 'xl';
+  size?: 'xxs' | 'xs'| 's' | 'm' | 'xl';
   disabled?: boolean;
   fontSize?: number;
   style?: any;
@@ -47,8 +47,8 @@ const Button: React.FC<ButtonProps> = ({
         };
       case 'save':
         return {
-          buttonStyle: { backgroundColor: '#e6f4ea' },
-          textStyle: { color: '#27ae60' },
+          buttonStyle: { backgroundColor: colors.darksteel },
+          textStyle: { color: 'white' },
         };
       case 'link':
         return {
@@ -76,8 +76,10 @@ const Button: React.FC<ButtonProps> = ({
   const getSizeStyle = () => {
     switch (size) {
       case 'xxs':
-        return useResponsive({type: 'Button', size: 'xs'});
+        return useResponsive({type: 'Button', size: 'xxs'});
       case 'xs':
+        return useResponsive({type: 'Button', size: 'xs'});
+      case 's':
         return useResponsive({type: 'Button', size: 's'});
       case 'm':
         return useResponsive({type: 'Button', size: 'm'});

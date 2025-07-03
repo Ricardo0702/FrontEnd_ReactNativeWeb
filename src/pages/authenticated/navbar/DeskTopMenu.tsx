@@ -43,11 +43,11 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({onLogout, onChangeLanguage}) =
       <TouchableOpacity onPress={handleLogoutClick}>
         <Text style={styles.navLink}>{t("navbar.logout")}</Text>
       </TouchableOpacity>
-      <Modal title={t("confirm.logout.title")} visible={logoutModal} onClose={cancelLogout} size="xs" position="center" >
-        <Text style={{ marginBottom: 20 }}> {t("confirm.logout.message")} </Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 30 }}>
-          <Button title={t("button.cancel")} onPress={() => setLogoutModal(false)} width={100} size='xxs' color= "white" style={styles.cancelButton}  />
-          <Button title={t("button.logout")} onPress={confirmLogout} width={130} size='xxs' color= "white" style = {styles.confirmButton} />
+      <Modal title={t("confirm.logout.title")} visible={logoutModal} onClose={cancelLogout} size="xxs" position="top" >
+        <Text style={{ marginBottom: 20, alignSelf: 'center'}}> {t("confirm.logout.message")} </Text>
+        <View style={{ flexDirection: 'column', alignItems: 'center'}}>
+          <Button title={t("button.cancel")} onPress={() => setLogoutModal(false)} size='xxs' color= "white" style={styles.cancelButton}  />
+          <Button title={t("button.logout")} onPress={confirmLogout} size='xxs' color= "white" style = {styles.confirmButton} />
         </View>
       </Modal>
     </View>
@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
   },
   cancelButton:{
     backgroundColor: colors.lightsteel,
-    color: "white"
+    color: "white",
+    marginBottom: 20
   },
   confirmButton: {
     backgroundColor: colors.lightsteel,

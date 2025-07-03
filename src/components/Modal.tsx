@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { use } from 'react';
 import {
   Modal as RNModal,
   View,
@@ -11,13 +11,16 @@ import {
   GestureResponderEvent,
 } from 'react-native';
 import useResponsive from './UseResponsive';
+import Icon from './Icon';
+import { faRectangleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
+import colors from './Colors';
 
 export interface ModalProps {
   title: string;
   visible: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  size?: 'xs' | 's' | 'm' | 'xl';
+  size?: 'xxs' | 'xs' | 's' | 'm' | 'xl';
   position?: 'center' | 'top' | 'bottom'; // Posición opcional
 }
 
@@ -35,7 +38,8 @@ const Modal: React.FC<ModalProps> = ({
     if (position === 'top') {
       return {
         justifyContent: 'flex-start',
-        marginTop: 50,
+        alignItems: 'center',
+        paddingTop: 50,
       };
     } else if (position === 'bottom') {
       return {
@@ -52,6 +56,8 @@ const Modal: React.FC<ModalProps> = ({
 
   const getSizeStyle = () => {
     switch (size) {
+      case 'xxs':
+        return useResponsive({type: 'Modal', size: 'xxs'})
       case 'xs':
         return useResponsive({type: 'Modal', size: 'xs'});
       case 's':
@@ -77,7 +83,7 @@ const Modal: React.FC<ModalProps> = ({
           <View style={styles.header}>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={onClose}>
-              <Text style={styles.closeButton}>✕</Text>
+              <Icon icon={faXmark} size={24} color={colors.darksteel}/>
             </TouchableOpacity>
           </View>
           <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -113,10 +119,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-  },
-  closeButton: {
-    fontSize: 18,
-    color: '#ff5c5c',
+    alignSelf: 'center'
   },
   scrollContent: {
     flexGrow: 1,

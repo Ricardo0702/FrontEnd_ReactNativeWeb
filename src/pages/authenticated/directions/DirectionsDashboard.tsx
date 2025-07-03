@@ -12,7 +12,6 @@ import { saveRecentChange } from '../../../services/localStorage';
 import DirectionModification from './DirectionModification';
 import { useTranslation } from 'react-i18next';
 import DirectionsTable from './DirectionsTable'; 
-import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { Skeleton } from '../../../components/Skeleton';
@@ -127,14 +126,14 @@ const DirectionsDashboard: React.FC = () => {
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.edit.address")} visible={showUpdateModal} onClose={() => { setUpdateModal(false); }} size="m" >
+      <Modal title={t("modal.edit.address")} visible={showUpdateModal} onClose={() => { setUpdateModal(false); }} size="xl" >
         <DirectionModification directionId={selectedDirectionId} directionForm={form.current} onUpdateDirection={update} />
       </Modal>
 
       <Modal title={t("modal.add.address")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="s" >
         <View>
-          <TextInput label={t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} style={styles.input} autoFocus />
-          <TextInput label={t('label.city')} value={directionCity} onChangeText={setDirectionCity} style={styles.input} />
+          <TextInput label={t('label.street')} value={directionStreet} onChangeText={setDirectionStreet} inputStyle={styles.input} autoFocus />
+          <TextInput label={t('label.city')} value={directionCity} onChangeText={setDirectionCity} inputStyle={styles.input} />
           <Button title={t("button.save")} onPress={handleCreateDirection} type='save' />
         </View>
       </Modal>

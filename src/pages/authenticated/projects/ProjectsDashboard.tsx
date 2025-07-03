@@ -121,9 +121,9 @@ const ProjectsDashboard: React.FC = () => {
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.edit.project")} visible={showUpdateModal} onClose={() => setUpdateModal(false)} size="xs">
+      <Modal title={t("modal.edit.project")} visible={showUpdateModal} onClose={() => {setProjectName(''), setUpdateModal(false)}} size="xs">
         <View>
-          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
+          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} inputStyle={styles.input} autoFocus />
           <Button
             title={t("button.save")}
             onPress={() => {
@@ -138,7 +138,7 @@ const ProjectsDashboard: React.FC = () => {
 
       <Modal title={t("modal.add.project")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} style={styles.input} autoFocus />
+          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} inputStyle={styles.input} autoFocus />
           <Button title={t("button.saver")} onPress={handleCreateProject} type='save' />
         </View>
       </Modal>

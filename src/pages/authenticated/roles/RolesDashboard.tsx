@@ -106,10 +106,12 @@ const RolesDashboard: React.FC = () => {
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.edit.role")} visible={showUpdateModal} onClose={() => {setUpdateModal(false), fetchData()}} size="s">
+      <Modal title={t("modal.edit.role")} visible={showUpdateModal} size="s" onClose={() => {
+        setRoleName(''), setRoleDescription(''), setUpdateModal(false)}}
+      >
         <View>
-          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} style={styles.input} autoFocus />
-          <TextInput label={t('label.role.name')} value={roleDescritpion} onChangeText={setRoleDescription} style={styles.input} autoFocus />
+          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} inputStyle={styles.input} autoFocus />
+          <TextInput label={t('label.role.name')} value={roleDescritpion} onChangeText={setRoleDescription} inputStyle={styles.input} autoFocus />
           <Button
             title={t("button.save")} 
             onPress={async () => { 
@@ -124,10 +126,10 @@ const RolesDashboard: React.FC = () => {
         </View>
       </Modal>
 
-      <Modal title={t("modal.add.role")} visible={showModalForm} onClose={() => {setShowModalForm(false), fetchData()}} size="s">
+      <Modal title={t("modal.add.role")} visible={showModalForm} onClose={() => {setShowModalForm(false)}} size="s">
         <View>
-          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} style={styles.input} autoFocus />
-          <TextInput label={t('label.role.description')} value={roleDescritpion} onChangeText={setRoleDescription} style={styles.input} autoFocus />
+          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} inputStyle={styles.input} autoFocus />
+          <TextInput label={t('label.role.description')} value={roleDescritpion} onChangeText={setRoleDescription} inputStyle={styles.input} autoFocus />
           <Button 
             title={t("button.saver")} 
             onPress={async () =>{

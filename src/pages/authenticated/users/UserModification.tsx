@@ -55,10 +55,16 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
     }, [localUser.roleIds]);
 
   const handleUpdate = async () => {
-    if (userId === null) return;
-    await updateUser(userId, localUser.username);
-    onUpdateUser(localUser)
-  };
+  if (userId === null) return;
+  try {
+    const updatedUser = await updateUser(userId, localUser.username);
+    onUpdateUser(updatedUser); // Usa la data real que viene del backend
+    setLocalUser(updatedUser); // También actualiza localUser con la data oficial
+  } catch (error) {
+    console.error('Error updating user', error);
+  }
+};
+
 
   const handleAddRole = async (role: Role, updatedUser: User) => {
     if (userId === null || !newRoleId) return;
@@ -78,7 +84,7 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
     <View style={styles.container}>
       <Title text={t('title.edit.user')} type='Subtitle' style={{ marginBottom: 20 }} />
       <TextInput 
-        label={t('label.Username')} value={localUser.username} style={styles.input}
+        label={t('label.Username')} value={localUser.username} inputStyle={styles.input}
         onChangeText={(value: string) => setLocalUser({...localUser, username: value})}  />
       <Button title={t("button.save")} onPress={handleUpdate} type="save" />
 
@@ -119,7 +125,7 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
         }))}
         placeholder={t("select.role")}
       />
-      <Button title={t("button.assign.role")} type='save'
+      <Button title={t("button.assign.role")} type='save'style={{marginTop: 10}}
         onPress={ () => {
           const role = roles.find(r => r.id === newRoleId);
           if (role === undefined || newRoleId === undefined) return;

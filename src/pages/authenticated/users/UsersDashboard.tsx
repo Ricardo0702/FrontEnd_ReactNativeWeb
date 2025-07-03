@@ -6,7 +6,7 @@ import TextInput from '../../../components/TextInput';
 import { Skeleton } from '../../../components/Skeleton';
 import { fetchUsers, deleteUser, fetchUserByUsername } from '../../../services/UserService';
 import type { User } from '../../../types/IUser';
-import { View, StyleSheet,ScrollView } from 'react-native';
+import { View, StyleSheet,ScrollView, Text } from 'react-native';
 import UsersTable from './UsersTable';
 import UserModification from './UserModification';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +26,9 @@ const UsersDashboard: React.FC = () => {
   const [password, setPassword] = useState('');
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const userContext = useContext(UserContext); 
+  const userContext = useContext(UserContext);
+  const [signUpError, setSignUpError] = useState(''); 
+  const [touchedSignUp, setTouchedSignUp] = useState(false);
 
   const fetchData = async () => {
       try {
@@ -53,6 +55,7 @@ const UsersDashboard: React.FC = () => {
 
 
   const handleCreateUser = async () => {
+    setTouchedSignUp(true);
     try {
       await userContext.signUp(username, password);
       const newUser = await fetchUserByUsername(username);
@@ -60,8 +63,9 @@ const UsersDashboard: React.FC = () => {
       setShowModalForm(false);
       setUsername('');
       setPassword
-    } catch (error) {
-      console.error(t('error.creating.user'), error);
+    } catch (error: any) {
+      const backendMessage = error.response.data
+      setSignUpError(backendMessage || t('error.creating.user'));
     }
   };
 
@@ -101,17 +105,32 @@ const UsersDashboard: React.FC = () => {
 
       </ScrollView>
 
-      <Modal title={t("modal.add.user")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="s">
-        <View>
-          <TextInput label= {t('label.username')} value={username} onChangeText={setUsername} style={styles.input} autoFocus/>
+      <Modal title={t("modal.add.user")} visible={showModalForm} size="s" onClose={() => 
+          {setShowModalForm(false), setUsername(''), setPassword('')}}  
+      >
+        <View style={styles.formContainer}>
+          <TextInput
+            label={t("label.user")} value={username} onChangeText={setUsername}
+            inputStyle={[
+              styles.inputField,
+              touchedSignUp && username.trim() === '' && styles.inputError, 
+            ]}  
+            errorMessage={touchedSignUp && username.trim() === '' ? t('error.username.cannot be empty') : ''} 
+          />
 
-          <TextInput label= {t('label.password')} value={password} onChangeText={setPassword} style={styles.input} autoFocus />
-
+          <TextInput
+            label={t("label.password")} value={password} onChangeText={setPassword} secure onSubmitEditing={handleCreateUser} 
+            returnKeyType="done" inputStyle={[ styles.inputField, touchedSignUp && password.trim() === '' && styles.inputError,]}  
+            errorMessage={touchedSignUp && password.trim() === '' ? t('error.password.cannot be empty') : ''}
+          />
+          {signUpError !== '' && 
+            <Text style={styles.errorText}>{typeof signUpError === 'string' ? signUpError : JSON.stringify(signUpError, null, 2)}</Text>
+          }
           <Button title={t("button.save")} onPress={handleCreateUser} type = 'save'/>
         </View>
       </Modal>
       
-      <Modal title={t("modal.edit.user")} visible={showUpdateModal} onClose = {() => {setUpdateModal(false), fetchData()}} size = "xl">
+      <Modal title={t("modal.edit.user")} visible={showUpdateModal} size = "xl" onClose = {() => setUpdateModal(false)} >
         <UserModification userId={selectedUserId} userForm={form.current} onUpdateUser={update}/>
       </Modal>
 
@@ -181,6 +200,30 @@ const styles = StyleSheet.create({
   selectContainer: 
   { maxHeight: 200 
 
+  },
+  formContainer: {
+    flexDirection: 'column',
+    gap: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  inputField: {
+    width: 250,
+    height: 45,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });
 

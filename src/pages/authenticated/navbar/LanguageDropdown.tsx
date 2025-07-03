@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import Colors from '../../../components/Colors';
+import Icon from '../../../components/Icon';
+import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 interface LanguageDropdownProps {
   onChangeLanguage: (lng: string) => void;
@@ -31,8 +33,9 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, d
 
   return (
     <View style={styles.container} ref={dropdownRef as any}>
-      <TouchableOpacity onPress={() => setLangOpen(!langOpen)}>
-        <Text style={styles.navLink}>{t('navbar.language')}▼</Text>
+      <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text style={styles.navLink}>{t('navbar.language')}</Text>
+        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? styles.languageDropdown}>
@@ -70,7 +73,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.darksteel,
     padding: 10,
     borderRadius: 5,
-    zIndex: 100, // Para que esté por encima de otros elementos
+    zIndex: 100, 
+    alignItems: 'flex-end'
   },
   flag: {
     width: 20,
