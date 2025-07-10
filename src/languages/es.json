@@ -1,10 +1,7 @@
 {
   "text": {
-    "show": {
-      "rows": "Filas mostradas"
-    },
     "select": {
-      "rows": ""
+      "rows": "Selecconar filas"
     }
   },
   "textinput": {
@@ -39,13 +36,13 @@
       "project": "Error al editar proyecto.",
       "role": "Error al editar rol."
     },
-    "login": "Error al iniciar sesión.",
     "username": {
       "cannot be empty": "El nombre de usuario no puede estar vacío."
     },
     "password": {
       "cannot be empty": "La contraseña no puede estar vacía."
-    }
+    },
+    "login": "Error al iniciar sesión."
   },
   "type": {
     "address": "dirección",
@@ -54,13 +51,20 @@
     "project": "proyecto"
   },
   "action": {
-    "edited": "editado",
     "created": "creado",
     "deleted": "eliminado",
+    "edited": "editado",
     "added": "añadido",
     "editado/a": "editado/a"
   },
   "title": {
+    "registered": {
+      "addresses": "Direcciones Registradas",
+      "people": "Personas Registradas",
+      "projects": "Proyectos Registrados",
+      "roles": "Roles Registrados",
+      "users": "Usuarios Registrados"
+    },
     "edit": {
       "address": "Editar Dirección",
       "person": "Editar Persona",
@@ -69,17 +73,10 @@
     "associated": {
       "person": "Persona Asociada",
       "projects": "Proyectos Asociados",
-      "directions": "Direcciones Asociadas"
+      "Addresses": "Direcciones asociadas"
     },
     "associate": {
       "person": "Asociar Persona"
-    },
-    "registered": {
-      "addresses": "Direcciones Registradas",
-      "people": "Personas Registradas",
-      "projects": "Proyectos Registrados",
-      "roles": "Roles Registrados",
-      "users": "Usuarios Registrados"
     },
     "select": {
       "page": "Selecciona una Página"
@@ -93,59 +90,6 @@
       "roles": "Roles Asignados"
     },
     "web project": "Proyecto Web"
-  },
-  "label": {
-    "street": "Calle",
-    "city": "Ciudad",
-    "name": "Nombre",
-    "age": "Edad",
-    "Name": "Nombre",
-    "sreet": "Calle",
-    "project": {
-      "name": "Nombre del Proyecto"
-    },
-    "role": {
-      "name": "Nombre del Rol",
-      "description": "Descripción del Rol"
-    },
-    "Username": "Nombre de Usuario",
-    "username": "Nombre de usuario",
-    "password": "Contraseña",
-    "user": "Usuario"
-  },
-  "button": {
-    "save": "Guardar",
-    "delete": "Eliminar",
-    "associate": {
-      "person": "Asociar Persona",
-      "project": "Asociar Proyecto"
-    },
-    "add": {
-      "address": "Añadir Dirección",
-      "person": "Añadir Persona",
-      "project": "Añadir Proyecto",
-      "role": "Añadir Rol",
-      "user": "Añadir Usuario"
-    },
-    "edit": "Editar",
-    "people": "Personas",
-    "projects": "Proyectos",
-    "addresses": "Direcciones",
-    "cancel": "Cancelar",
-    "logout": "Cerrar sesión",
-    "saver": "Guardar",
-    "assign": {
-      "role": "Asignar Rol"
-    },
-    "create": {
-      "user": "Crear Usuario"
-    },
-    "login": "Iniciar Sesión"
-  },
-  "select": {
-    "person": "Selecciona una persona",
-    "project": "Selecciona un proyecto",
-    "role": "Selecciona un rol"
   },
   "modal": {
     "edit": {
@@ -167,6 +111,53 @@
     },
     "login": "Iniciar Sesión"
   },
+  "label": {
+    "street": "Calle",
+    "city": "Ciudad",
+    "name": "Nombre",
+    "age": "Edad",
+    "Name": "Nombre",
+    "sreet": "Calle",
+    "project": {
+      "name": "Nombre del Proyecto"
+    },
+    "role": {
+      "name": "Nombre del Rol",
+      "description": "Descripción del Rol"
+    },
+    "Username": "Nombre de Usuario",
+    "user": "Usuario",
+    "password": "Contraseña"
+  },
+  "button": {
+    "save": "Guardar",
+    "add": {
+      "address": "Añadir Dirección",
+      "person": "Añadir Persona",
+      "project": "Añadir Proyecto",
+      "role": "Añadir Rol",
+      "user": "Añadir Usuario"
+    },
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "associate": {
+      "person": "Asociar Persona",
+      "project": "Asociar Proyecto"
+    },
+    "people": "Personas",
+    "projects": "Proyectos",
+    "addresses": "Direcciones",
+    "cancel": "Cancelar",
+    "logout": "Cerrar sesión",
+    "saver": "Guardar",
+    "assign": {
+      "role": "Asignar Rol"
+    },
+    "create": {
+      "user": "Crear Usuario"
+    },
+    "login": "Iniciar Sesión"
+  },
   "columns": {
     "street": "Calle",
     "city": "Ciudad",
@@ -179,6 +170,11 @@
     "description": "Description",
     "username": "Usuario",
     "roles": "Roles"
+  },
+  "select": {
+    "person": "Selecciona una persona",
+    "project": "Selecciona un proyecto",
+    "role": "Selecciona un rol"
   },
   "Recent changes:": "Cambios recientes:",
   "There are no recent changes": "No hay cambios recientes.",

@@ -5,6 +5,7 @@ import TextInput from './TextInput';
 import { useTranslation } from 'react-i18next';
 import Select, { SelectOption } from './Select';
 import colors from './Colors';
+import { highlightText } from './HighlightText';
 
 export interface TableProps<T> {
   columns: Array<{
@@ -12,7 +13,13 @@ export interface TableProps<T> {
     accessor?: keyof T;
     width?: number;
     minRowWidth?: number;
-    render?: (value: any, row: T, rowIndex?: number) => React.ReactNode;
+    render?: (
+      value: any,
+      row: T,
+      rowIndex?: number,
+      highlightText?: (text: string, highlight: string) => React.ReactNode,
+      highlight?: string,
+    ) => React.ReactNode;
     sortable?: boolean;
     filterable?: boolean;
   }>;
@@ -26,37 +33,53 @@ export interface TableProps<T> {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, renderHeaderButton, paginationEnabled }: TableProps<T>): React.ReactElement | null => {
-
+const Table = <T,>({
+  columns,
+  data,
+  style,
+  minRowHeight = 40,
+  widthFactor,
+  renderHeaderButton,
+  paginationEnabled,
+}: TableProps<T>): React.ReactElement | null => {
   const { width: windowWidth } = useWindowDimensions();
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [filterText, setFilterText] = useState<string>('');
   const isSmallScreen = windowWidth < 600;
-  const [rowsPerPage, setRowsPerPage] = useState(5);;
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
 
   if (!data.length || !columns.length) return null;
-  
+
   const filteredData = useMemo(() => {
-    if (!filterText.trim()) return data;
+    if (!filterText.trim()) return data.map((item) => ({ item, matchingColumns: [] }));
+
     const lowerFilter = filterText.toLowerCase();
-    return data.filter(row =>
-      columns.some(col => {
-        if (!col.filterable) return false;
-        const cellValue = col.accessor ? row[col.accessor] : null;
-        if (cellValue === null || cellValue === undefined) return false;
-        return String(cellValue).toLowerCase().includes(lowerFilter);
+    return data
+      .map((row) => {
+        const matchingColumns: string[] = [];
+        columns.forEach((col) => {
+          if (!col.filterable || !col.accessor) return;
+          const cellValue = row[col.accessor];
+          if (cellValue == null) return;
+          if (String(cellValue).toLowerCase().includes(lowerFilter)) {
+            matchingColumns.push(String(col.accessor));
+          }
+        });
+
+        return { item: row, matchingColumns };
       })
-    );
+      .filter(({ matchingColumns }) => matchingColumns.length > 0);
   }, [filterText, data, columns]);
 
-  const sortedData = useMemo(() => { 
+  const sortedData = useMemo(() => {
     if (!sortColumn || !sortDirection) return filteredData;
+
     return [...filteredData].sort((a, b) => {
-      const aVal = a[sortColumn];
-      const bVal = b[sortColumn];
+      const aVal = a.item[sortColumn];
+      const bVal = b.item[sortColumn];
 
       if (aVal == null && bVal == null) return 0;
       if (aVal == null) return sortDirection === 'asc' ? -1 : 1;
@@ -66,9 +89,7 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
         return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
       }
 
-      return sortDirection === 'asc'
-        ? String(aVal).localeCompare(String(bVal))
-        : String(bVal).localeCompare(String(aVal));
+      return sortDirection === 'asc' ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
     });
   }, [filteredData, sortColumn, sortDirection]);
 
@@ -101,22 +122,30 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
     if (col.accessor !== sortColumn) return null;
     const isSorted = col.accessor === sortColumn;
     return (
-    <View style={{ flexDirection: 'column', marginLeft: 4 }}>
-      <Text style={{ fontSize: 11, lineHeight: 10, textAlign: 'center',
-        color: isSorted && sortDirection === 'asc' ? 'white' : colors.lightsteel,  
-      }}>
-      ▲
-      </Text>
-      <Text style={{ fontSize: 11, lineHeight: 10, textAlign: 'center',
-        color: isSorted && sortDirection === 'desc' ? 'white' : colors.lightsteel, 
-      }}>
-      ▼
-      </Text>
-    </View>
-  );
+      <View style={{ flexDirection: 'column', marginLeft: 4 }}>
+        <Text
+          style={{
+            fontSize: 11,
+            lineHeight: 10,
+            textAlign: 'center',
+            color: isSorted && sortDirection === 'asc' ? 'white' : colors.midsteel,
+          }}
+        >
+          ▲
+        </Text>
+        <Text
+          style={{
+            fontSize: 11,
+            lineHeight: 10,
+            textAlign: 'center',
+            color: isSorted && sortDirection === 'desc' ? 'white' : colors.midsteel,
+          }}
+        >
+          ▼
+        </Text>
+      </View>
+    );
   };
-
-
 
   if (isSmallScreen) {
     return (
@@ -129,7 +158,9 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
                 <View key={colIndex} style={styles.cardRow}>
                   <Text style={styles.cardHeader}>{col.header}:</Text>
                   <Text style={styles.cardValue}>
-                    {col.render ? col.render(cellValue ?? '', row, rowIndex) : <Text>{String(cellValue ?? '')}</Text>}
+                    {col.render
+                      ? col.render(cellValue ?? '', row, rowIndex, highlightText, filterText)
+                      : highlightText(String(cellValue ?? ''), filterText)}
                   </Text>
                 </View>
               );
@@ -143,99 +174,123 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
   const flexibleColumns = columns.filter((col) => !col.width);
   const flexibleColumnCount = flexibleColumns.length;
   const PaginationControls = () => {
-  const getPageNumbers = () => {
-    const pageCount = totalPages;
-    const current = currentPage + 1;
-    const maxVisible = 5; 
+    const getPageNumbers = () => {
+      const pageCount = totalPages;
+      const current = currentPage + 1;
+      const maxVisible = 5;
 
-    let startPage = Math.max(1, current - Math.floor(maxVisible / 2));
-    let endPage = startPage + maxVisible - 1;
+      let startPage = Math.max(1, current - Math.floor(maxVisible / 2));
+      let endPage = startPage + maxVisible - 1;
 
-    if (endPage > pageCount) {
-      endPage = pageCount;
-      startPage = Math.max(1, endPage - maxVisible + 1);
-    }
+      if (endPage > pageCount) {
+        endPage = pageCount;
+        startPage = Math.max(1, endPage - maxVisible + 1);
+      }
 
-    const pages = [];
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    return pages;
+      const pages = [];
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+      return pages;
+    };
+
+    const pageNumbers = getPageNumbers();
+
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
+        <TouchableOpacity
+          onPress={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+          disabled={currentPage === 0}
+          style={{ paddingHorizontal: 8, paddingVertical: 6 }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              color: currentPage === 0 ? '#ccc' : 'black',
+            }}
+          >
+            ◀
+          </Text>
+        </TouchableOpacity>
+        {pageNumbers[0] > 1 && (
+          <>
+            <TouchableOpacity onPress={() => setCurrentPage(0)} style={{ paddingHorizontal: 6 }}>
+              <Text
+                style={{
+                  color: currentPage === 0 ? 'white' : 'black',
+                  backgroundColor: currentPage === 0 ? Colors.darksteel : undefined,
+                  borderRadius: 4,
+                  paddingHorizontal: 6,
+                }}
+              >
+                1
+              </Text>
+            </TouchableOpacity>
+            <Text style={{ paddingHorizontal: 4 }}>...</Text>
+          </>
+        )}
+        {pageNumbers.map((page) => {
+          const pageIndex = page - 1;
+          const isCurrent = pageIndex === currentPage;
+          return (
+            <TouchableOpacity key={page} onPress={() => setCurrentPage(pageIndex)} style={{ marginHorizontal: 2 }}>
+              <Text
+                style={{
+                  padding: 6,
+                  backgroundColor: isCurrent ? Colors.darksteel : '#eee',
+                  color: isCurrent ? 'white' : 'black',
+                  borderRadius: 4,
+                  minWidth: 24,
+                  textAlign: 'center',
+                }}
+              >
+                {page}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+        {pageNumbers[pageNumbers.length - 1] < totalPages && (
+          <>
+            <Text style={{ paddingHorizontal: 4 }}>...</Text>
+            <TouchableOpacity onPress={() => setCurrentPage(totalPages - 1)} style={{ paddingHorizontal: 6 }}>
+              <Text
+                style={{
+                  color: currentPage === totalPages - 1 ? 'white' : 'black',
+                  backgroundColor: currentPage === totalPages - 1 ? Colors.darksteel : undefined,
+                  borderRadius: 4,
+                  paddingHorizontal: 6,
+                }}
+              >
+                {totalPages}
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
+        <TouchableOpacity
+          onPress={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+          disabled={currentPage === totalPages - 1}
+          style={{ paddingHorizontal: 8, paddingVertical: 6 }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              color: currentPage === totalPages - 1 ? '#ccc' : 'black',
+            }}
+          >
+            ▶
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
-  const pageNumbers = getPageNumbers();
-
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
-      <TouchableOpacity
-        onPress={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-        disabled={currentPage === 0}
-        style={{ paddingHorizontal: 8, paddingVertical: 6 }}
-      >
-        <Text style={{ fontSize: 18, color: currentPage === 0 ? '#ccc' : 'black' }}>◀</Text>
-      </TouchableOpacity>
-      {pageNumbers[0] > 1 && (
-        <>
-          <TouchableOpacity onPress={() => setCurrentPage(0)} style={{ paddingHorizontal: 6 }}>
-            <Text style={{ color: currentPage === 0 ? 'white' : 'black', backgroundColor: currentPage === 0 ? Colors.darksteel : undefined, borderRadius: 4, paddingHorizontal: 6 }}>
-              1
-            </Text>
-          </TouchableOpacity>
-          <Text style={{ paddingHorizontal: 4 }}>...</Text>
-        </>
-      )}
-      {pageNumbers.map((page) => {
-        const pageIndex = page - 1; 
-        const isCurrent = pageIndex === currentPage;
-        return (
-          <TouchableOpacity key={page} onPress={() => setCurrentPage(pageIndex)} style={{ marginHorizontal: 2 }}>
-            <Text style={{
-              padding: 6,
-              backgroundColor: isCurrent ? Colors.darksteel : '#eee',
-              color: isCurrent ? 'white' : 'black',
-              borderRadius: 4,
-              minWidth: 24,
-              textAlign: 'center',
-            }}>
-              {page}
-            </Text>
-          </TouchableOpacity>
-        );
-      })}
-      {pageNumbers[pageNumbers.length - 1] < totalPages && (
-        <>
-          <Text style={{ paddingHorizontal: 4 }}>...</Text>
-          <TouchableOpacity onPress={() => setCurrentPage(totalPages - 1)} style={{ paddingHorizontal: 6 }}>
-            <Text style={{
-              color: currentPage === totalPages - 1 ? 'white' : 'black',
-              backgroundColor: currentPage === totalPages - 1 ? Colors.darksteel : undefined,
-              borderRadius: 4,
-              paddingHorizontal: 6,
-            }}>
-              {totalPages}
-            </Text>
-          </TouchableOpacity>
-        </>
-      )}
-      <TouchableOpacity
-        onPress={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
-        disabled={currentPage === totalPages - 1}
-        style={{ paddingHorizontal: 8, paddingVertical: 6 }}
-      >
-        <Text style={{ fontSize: 18, color: currentPage === totalPages - 1 ? '#ccc' : 'black' }}>▶</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
-
- return (
     <View style={{ minHeight: minRowHeight * (sortedData.length + 2) }}>
-      <View style= {{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         {paginationEnabled && (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-end'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
             <Select
-              style={{ width: 80, alignSelf: 'flex-end'}}
+              style={{ width: 80, alignSelf: 'flex-end' }}
               selectedValue={rowsPerPage}
               onValueChange={(value) => {
                 setRowsPerPage(Number(value));
@@ -258,16 +313,25 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
             />
 
             {sortedData.length > 0 && <PaginationControls />}
-
           </View>
         )}
-        <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end', height: minRowHeight}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-end',
+            height: minRowHeight,
+          }}
+        >
           <View style={{ width: windowWidth * 0.2, marginRight: 10 }}>
-            <TextInput placeholder={t("textinput.filter")} value={filterText} onChangeText={setFilterText} inputStyle={{ height: minRowHeight, paddingVertical: 0 }}/>
+            <TextInput
+              placeholder={t('textinput.filter')}
+              value={filterText}
+              onChangeText={setFilterText}
+              inputStyle={{ height: minRowHeight, paddingVertical: 0 }}
+            />
           </View>
-          <View style={{ justifyContent: 'center'}}>
-            {renderHeaderButton}
-          </View>
+          <View style={{ justifyContent: 'center' }}>{renderHeaderButton}</View>
         </View>
       </View>
 
@@ -282,7 +346,9 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
                   styles.headerCell,
                   col.width
                     ? { width: col.width }
-                    : { width: (windowWidth * (widthFactor ?? 0.8)) / flexibleColumnCount },
+                    : {
+                        width: (windowWidth * (widthFactor ?? 0.8)) / flexibleColumnCount,
+                      },
                   { minHeight: minRowHeight },
                   col.sortable ? { cursor: 'pointer' } : {},
                 ]}
@@ -297,28 +363,40 @@ const Table = <T,>({ columns, data, style, minRowHeight = 40, widthFactor, rende
             ))}
           </View>
 
-          {paginatedData.map((row, rowIndex) => (
-            <View key={rowIndex} style={[ styles.row, rowIndex % 2 === 0 ? styles.evenRow : styles.oddRow, { minHeight: minRowHeight },]}>
+          {paginatedData.map(({ item: row, matchingColumns }, rowIndex) => (
+            <View key={rowIndex} style={[styles.row, rowIndex % 2 === 0 ? styles.evenRow : styles.oddRow, { minHeight: minRowHeight }]}>
               {columns.map((col, colIndex) => {
                 const cellValue = col.accessor ? row[col.accessor] : null;
+                const accessorKey = String(col.accessor);
+                const shouldHighlight = col.filterable && col.accessor && matchingColumns.includes(accessorKey);
+
                 return (
-                  <View key={colIndex}
+                  <View
+                    key={colIndex}
                     style={[
-                      styles.cell, col.width ? { width: col.width } : { width: (windowWidth * (widthFactor ?? 0.8)) / flexibleColumnCount },
+                      styles.cell,
+                      col.width
+                        ? { width: col.width }
+                        : {
+                            width: (windowWidth * (widthFactor ?? 0.8)) / flexibleColumnCount,
+                          },
                       { minHeight: minRowHeight },
                     ]}
                   >
-                    {col.render ? col.render(cellValue ?? '', row, rowIndex) : <Text>{String(cellValue ?? '')}</Text>}
-
+                    {col.render ? (
+                      col.render(cellValue ?? '', row, rowIndex, highlightText, filterText)
+                    ) : filterText.trim() && shouldHighlight ? (
+                      highlightText(String(cellValue ?? ''), filterText)
+                    ) : (
+                      <Text>{String(cellValue ?? '')}</Text>
+                    )}
                   </View>
                 );
               })}
             </View>
           ))}
           {paginationEnabled && (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              {sortedData.length > 0 && <PaginationControls />}
-            </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>{sortedData.length > 0 && <PaginationControls />}</View>
           )}
         </View>
       </ScrollView>

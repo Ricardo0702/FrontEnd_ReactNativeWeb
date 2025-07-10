@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 export interface SelectOption {
   label: string;
   value: number | string;
-};
+}
 
 export interface SelectProps {
   options: SelectOption[];
@@ -13,11 +13,9 @@ export interface SelectProps {
   onValueChange: (value: number | string) => void;
   placeholder?: string;
   style?: any;
-};
-
+}
 
 const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, placeholder, style }) => {
-
   if (Platform.OS === 'web') {
     return (
       <View style={[style]}>
@@ -42,16 +40,10 @@ const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, 
   }
 
   return (
-    <Picker
-      selectedValue={selectedValue ?? undefined}
-      onValueChange={onValueChange}
-      style={{ height: 50, width: '100%' }}
-    >
-      {placeholder && (
-        <Picker.Item label={placeholder} value={undefined} enabled={false} color="#999" style={style}/>
-      )}
+    <Picker selectedValue={selectedValue ?? undefined} onValueChange={onValueChange} style={{ height: 50, width: '100%' }}>
+      {placeholder && <Picker.Item label={placeholder} value={undefined} enabled={false} color="#999" style={style} />}
       {options.map((option) => (
-        <Picker.Item key={option.value} label={option.label} value={option.value}  />
+        <Picker.Item key={option.value} label={option.label} value={option.value} />
       ))}
     </Picker>
   );

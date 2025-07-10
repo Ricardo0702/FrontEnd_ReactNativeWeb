@@ -14,6 +14,7 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'value'> {
   onSubmitEditing?: () => void;
   returnKeyType?: RNTextInputProps['returnKeyType'];
   placeholder?: string;
+  rightIcon?: React.ReactNode;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -28,26 +29,28 @@ const TextInput: React.FC<TextInputProps> = ({
   secure,
   onSubmitEditing,
   returnKeyType,
-  placeholder
+  placeholder,
+  rightIcon,
 }) => {
   const stringValue = value !== undefined && value !== null ? String(value) : '';
 
   return (
     <View style={[containerStyle]}>
       {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
-      <RNTextInput
-        style={[styles.input, inputStyle]}
-        value={stringValue}
-        onChangeText={(text) => onChangeText?.(text)}
-        secureTextEntry =  {secure}
-        onSubmitEditing={onSubmitEditing}
-        returnKeyType={returnKeyType}
-        placeholder={placeholder}  
-        placeholderTextColor="#999"
-      />
-      {errorMessage ? (
-        <Text style={[styles.error, errorStyle]}>{errorMessage}</Text>
-      ) : null}
+      <View style={styles.inputWrapper}>
+        <RNTextInput
+          style={[styles.input, inputStyle, rightIcon ? { paddingRight: 40 } : {}]}
+          value={stringValue}
+          onChangeText={(text) => onChangeText?.(text)}
+          secureTextEntry={secure}
+          onSubmitEditing={onSubmitEditing}
+          returnKeyType={returnKeyType}
+          placeholder={placeholder}
+          placeholderTextColor="#999"
+        />
+        {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+      </View>
+      {errorMessage ? <Text style={[styles.error, errorStyle]}>{errorMessage}</Text> : null}
     </View>
   );
 };
@@ -58,6 +61,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     color: '#333',
   },
+  inputWrapper: {
+    position: 'relative',
+    justifyContent: 'center',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#999',
@@ -65,6 +72,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 16,
     color: '#000',
+    height: 45,
+  },
+  rightIcon: {
+    marginTop: -4,
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
   },
   error: {
     marginTop: 4,

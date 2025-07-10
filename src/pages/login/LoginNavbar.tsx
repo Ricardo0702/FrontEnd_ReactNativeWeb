@@ -40,9 +40,9 @@ const LoginNavbar: React.FC = () => {
       <Text style={styles.title}>{t('title.My Dashboard')}</Text>
 
       <View style={styles.languageSelector} ref={dropdownRef as any}>
-        <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.navLink}>{t('navbar.language')}</Text>
-            <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
+        <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.navLink}>{t('navbar.language')}</Text>
+          <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
         </TouchableOpacity>
         {langOpen && (
           <View style={styles.languageDropdown}>
@@ -66,6 +66,7 @@ const LoginNavbar: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+
   navbar: {
     backgroundColor: Colors.darksteel,
     paddingVertical: 10,
@@ -80,19 +81,13 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     maxWidth: '100%',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  navLink: {
-    color: 'white',
-    fontSize: 17,
-    marginVertical: 5,
-  },
-  languageSelector: {
-    position: 'relative',
-  },
+
+  title: { fontSize: 24, fontWeight: 'bold', color: 'white' },
+
+  navLink: { color: 'white', fontSize: 17, marginVertical: 5 },
+
+  languageSelector: { position: 'relative' },
+
   languageDropdown: {
     position: 'absolute',
     top: 30,
@@ -101,19 +96,17 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     zIndex: 100,
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
+
   flag: {
     width: 20,
     height: 12,
     marginLeft: 8,
     marginTop: 2,
   },
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 4,
-  },
+
+  option: { flexDirection: 'row', alignItems: 'center', marginVertical: 4 },
 });
 
 export default LoginNavbar;

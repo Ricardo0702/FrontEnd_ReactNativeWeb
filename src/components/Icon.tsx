@@ -8,12 +8,10 @@ export interface IconProps {
   size?: number;
   color?: string;
   style?: ViewStyle;
-};
+}
 
 const Icon: React.FC<IconProps> = ({ icon, size = 24, color = '#000', style }) => {
-  return (
-    <FontAwesomeIcon icon={icon} size={size} color={color} style={style} />
-  );
+  return <FontAwesomeIcon icon={icon} size={size} color={color} style={style} />;
 };
 
 export default Icon;

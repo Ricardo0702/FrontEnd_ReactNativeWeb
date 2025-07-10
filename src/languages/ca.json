@@ -1,10 +1,7 @@
 {
   "text": {
-    "show": {
-      "rows": "Files mostrades"
-    },
     "select": {
-      "rows": ""
+      "rows": "Seleccionar files"
     }
   },
   "textinput": {
@@ -39,13 +36,13 @@
       "project": "Error en editar el projecte.",
       "role": "Error en editar el rol"
     },
-    "login": "Error en iniciar sessió.",
     "username": {
       "cannot be empty": "El nom d'usuari no pot estar buit."
     },
     "password": {
       "cannot be empty": "La contrasenya no pot estar buida."
-    }
+    },
+    "login": "Error en iniciar sessió."
   },
   "type": {
     "address": "Adreça",
@@ -54,13 +51,20 @@
     "project": "Projecte"
   },
   "action": {
-    "edited": "Editat/da",
     "created": "Creat/da",
     "deleted": "Eliminat/da",
+    "edited": "Editat/da",
     "added": "Afegit/ida",
     "editado/a": "Editat/da"
   },
   "title": {
+    "registered": {
+      "addresses": "Adreces registrades",
+      "people": "Persones registrades",
+      "projects": "Projectes registrats",
+      "roles": "Rols registrats",
+      "users": "Usuaris registrats"
+    },
     "edit": {
       "address": "Editar adreça",
       "person": "Editar persona",
@@ -69,17 +73,10 @@
     "associated": {
       "person": "Persona associada",
       "projects": "Projectes associats",
-      "directions": "Adreces associades"
+      "Addresses": "Adreces associades"
     },
     "associate": {
       "person": "Associar persona"
-    },
-    "registered": {
-      "addresses": "Adreces registrades",
-      "people": "Persones registrades",
-      "projects": "Projectes registrats",
-      "roles": "Rols registrats",
-      "users": "Usuaris registrats"
     },
     "select": {
       "page": "Selecciona una pàgina"
@@ -93,59 +90,6 @@
       "roles": "Rols assignats"
     },
     "web project": "Projecte web"
-  },
-  "label": {
-    "street": "Carrer",
-    "city": "Ciutat",
-    "name": "Nom",
-    "age": "Edat",
-    "Name": "Nom",
-    "sreet": "Carrer",
-    "project": {
-      "name": "Nom del projecte"
-    },
-    "role": {
-      "name": "Nom del rol",
-      "description": "Descripció del rol"
-    },
-    "Username": "Usuari",
-    "username": "Usuari",
-    "password": "Contrasenya",
-    "user": "Usuari"
-  },
-  "button": {
-    "save": "Desar",
-    "delete": "Eliminar",
-    "associate": {
-      "person": "Associar persona",
-      "project": "Associar projecte"
-    },
-    "add": {
-      "address": "Afegir adreça",
-      "person": "Afegir persona",
-      "project": "Afegir projecte",
-      "role": "Afegir rol",
-      "user": "Afegir usuari"
-    },
-    "edit": "Editar",
-    "people": "Persones",
-    "projects": "Projectes",
-    "addresses": "Adreces",
-    "cancel": "Cancelar",
-    "logout": "Tancar sessió",
-    "saver": "Desar",
-    "assign": {
-      "role": "Assignar rol"
-    },
-    "create": {
-      "user": "Crear usuari"
-    },
-    "login": "Iniciar sessió"
-  },
-  "select": {
-    "person": "Selecciona una persona",
-    "project": "Selecciona un projecte",
-    "role": "Selecciona un rol"
   },
   "modal": {
     "edit": {
@@ -167,6 +111,53 @@
     },
     "login": "Inici de sessió"
   },
+  "label": {
+    "street": "Carrer",
+    "city": "Ciutat",
+    "name": "Nom",
+    "age": "Edat",
+    "Name": "Nom",
+    "sreet": "Carrer",
+    "project": {
+      "name": "Nom del projecte"
+    },
+    "role": {
+      "name": "Nom del rol",
+      "description": "Descripció del rol"
+    },
+    "Username": "Usuari",
+    "user": "Usuari",
+    "password": "Contrasenya"
+  },
+  "button": {
+    "save": "Desar",
+    "add": {
+      "address": "Afegir adreça",
+      "person": "Afegir persona",
+      "project": "Afegir projecte",
+      "role": "Afegir rol",
+      "user": "Afegir usuari"
+    },
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "associate": {
+      "person": "Associar persona",
+      "project": "Associar projecte"
+    },
+    "people": "Persones",
+    "projects": "Projectes",
+    "addresses": "Adreces",
+    "cancel": "Cancelar",
+    "logout": "Tancar sessió",
+    "saver": "Desar",
+    "assign": {
+      "role": "Assignar rol"
+    },
+    "create": {
+      "user": "Crear usuari"
+    },
+    "login": "Iniciar sessió"
+  },
   "columns": {
     "street": "Carrer",
     "city": "Ciutat",
@@ -179,6 +170,11 @@
     "description": "Descripció",
     "username": "Nom d'usuari",
     "roles": "Rols"
+  },
+  "select": {
+    "person": "Selecciona una persona",
+    "project": "Selecciona un projecte",
+    "role": "Selecciona un rol"
   },
   "Recent changes:": "Canvis recents:",
   "There are no recent changes": "No hi ha canvis recents.",

@@ -1,4 +1,4 @@
-import  axios  from './AxiosConfig';
+import axios from './AxiosConfig';
 import { Role } from '../types/IRole';
 
 const API_URL = '/auth/role';

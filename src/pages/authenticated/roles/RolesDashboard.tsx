@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchRoles, fetchRole, createRole, deleteRole, updateRole } from '../../../services/RoleService';
+import { fetchRoles, createRole, deleteRole, updateRole } from '../../../services/RoleService';
 import type { Role } from '../../../types/IRole';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
@@ -18,13 +18,12 @@ const RolesDashboard: React.FC = () => {
   const [roleName, setRoleName] = useState('');
   const [roleDescritpion, setRoleDescription] = useState('');
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve));
+      await new Promise((resolve) => setTimeout(resolve));
       const data = await fetchRoles();
       setRoles(data);
     } catch (error) {
@@ -43,11 +42,10 @@ const RolesDashboard: React.FC = () => {
     return upperName.startsWith('ROLE_') ? upperName : `ROLE_${upperName}`;
   };
 
-
   const handleCreateRole = async (roleName: string, roleDescritpion: string) => {
     try {
       const newRole = await createRole(formatRoleName(roleName), roleDescritpion);
-      setRoles(prev => [...prev, newRole])
+      setRoles((prev) => [...prev, newRole]);
       setShowModalForm(false);
       setRoleName('');
       setRoleDescription('');
@@ -59,29 +57,29 @@ const RolesDashboard: React.FC = () => {
   const handleDeleteRole = async (roleId: number) => {
     try {
       await deleteRole(roleId);
-      setRoles(prev => prev.filter(r => r.id !== roleId));
+      setRoles((prev) => prev.filter((r) => r.id !== roleId));
     } catch (error) {
-      console.error(t("error.deleting.role"), error);
+      console.error(t('error.deleting.role'), error);
     }
   };
 
   const handleEditRole = (role: Role) => {
-      setSelectedRoleId(role.id);
-      setRoleName(role.name);
-      setRoleDescription(role.description);
-      setUpdateModal(true);
-    };
+    setSelectedRoleId(role.id);
+    setRoleName(role.name);
+    setRoleDescription(role.description);
+    setUpdateModal(true);
+  };
 
   const handleUpdateRole = async (roleId: number, roleName: string, roleDescritpion: string) => {
     try {
       await updateRole(roleId, formatRoleName(roleName), roleDescritpion);
-      setRoles(prev => prev.map( r => r.id === roleId ? { ...r, name: roleName } : r ));
+      setRoles((prev) => prev.map((r) => (r.id === roleId ? { ...r, name: roleName } : r)));
       setUpdateModal(false);
       setRoleName('');
       setRoleDescription('');
       setSelectedRoleId(null);
     } catch (error) {
-      console.error(t("error.editing.role"), error);
+      console.error(t('error.editing.role'), error);
     }
   };
 
@@ -96,48 +94,69 @@ const RolesDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 30 }}>
-          <Title text={t('title.registered.roles')} size='xl' align='center' underline />
+          <Title text={t('title.registered.roles')} size="xl" align="center" underline />
         </View>
 
         <View style={styles.tableContainer}>
-          {isLoading ? skeletonRows : (
-            <RolesTable roles = {roles} onDelete={handleDeleteRole} onEdit={handleEditRole} setShowModalForm={setShowModalForm} />
+          {isLoading ? (
+            skeletonRows
+          ) : (
+            <RolesTable roles={roles} onDelete={handleDeleteRole} onEdit={handleEditRole} setShowModalForm={setShowModalForm} />
           )}
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.edit.role")} visible={showUpdateModal} size="s" onClose={() => {
-        setRoleName(''), setRoleDescription(''), setUpdateModal(false)}}
+      <Modal
+        title={t('modal.edit.role')}
+        visible={showUpdateModal}
+        size="s"
+        onClose={() => {
+          (setRoleName(''), setRoleDescription(''), setUpdateModal(false));
+        }}
       >
         <View>
           <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} inputStyle={styles.input} autoFocus />
           <TextInput label={t('label.role.name')} value={roleDescritpion} onChangeText={setRoleDescription} inputStyle={styles.input} autoFocus />
           <Button
-            title={t("button.save")} 
-            onPress={async () => { 
+            title={t('button.save')}
+            type="save"
+            onPress={async () => {
               if (selectedRoleId !== null) {
                 await handleUpdateRole(selectedRoleId, roleName, roleDescritpion);
                 setUpdateModal(false);
                 fetchData();
-              };
+              }
             }}
-            type='save'
           />
         </View>
       </Modal>
 
-      <Modal title={t("modal.add.role")} visible={showModalForm} onClose={() => {setShowModalForm(false)}} size="s">
+      <Modal
+        title={t('modal.add.role')}
+        visible={showModalForm}
+        onClose={() => {
+          setShowModalForm(false);
+        }}
+        size="s"
+      >
         <View>
           <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} inputStyle={styles.input} autoFocus />
-          <TextInput label={t('label.role.description')} value={roleDescritpion} onChangeText={setRoleDescription} inputStyle={styles.input} autoFocus />
-          <Button 
-            title={t("button.saver")} 
-            onPress={async () =>{
+          <TextInput
+            label={t('label.role.description')}
+            value={roleDescritpion}
+            onChangeText={setRoleDescription}
+            inputStyle={styles.input}
+            autoFocus
+          />
+          <Button
+            title={t('button.saver')}
+            type="save"
+            onPress={async () => {
               await handleCreateRole(roleName, roleDescritpion);
               setShowModalForm(false);
               fetchData();
-            }} 
-            type='save' />
+            }}
+          />
         </View>
       </Modal>
     </View>
@@ -145,6 +164,7 @@ const RolesDashboard: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -155,16 +175,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginHorizontal: 'auto',
   },
-  scrollContainer: {
-    flexGrow: 1,
-    paddingVertical: 20,
-    justifyContent: 'flex-start',
-  },
-  tableContainer: {
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
+  scrollContainer: { flexGrow: 1, paddingVertical: 20, justifyContent: 'flex-start' },
+  
+  tableContainer: { marginBottom: 20, justifyContent: 'center', alignItems: 'center' },
+  
   input: {
     marginBottom: 10,
     padding: 8,

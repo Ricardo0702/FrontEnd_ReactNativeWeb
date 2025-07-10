@@ -17,8 +17,7 @@ type Props = {
 };
 
 export default function UserModification({ userId, userForm, onUpdateUser }: Props) {
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [localUser, setLocalUser] = useState<User>(userForm);
   const [roles, setRoles] = useState<Role[]>([]);
   const [newRoleId, setNewRoleId] = useState<number | undefined>(undefined);
@@ -30,9 +29,7 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
       return;
     }
     try {
-      const rolesData = await Promise.all(
-        localUser.roleIds.map((id) => fetchRole(id))
-      );
+      const rolesData = await Promise.all(localUser.roleIds.map((id) => fetchRole(id)));
       setAssociatedRoles(rolesData);
     } catch (error) {
       console.error(t('error.loading.associated.roles'), error);
@@ -42,75 +39,83 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        setRoles(await( fetchRoles() ));
+        setRoles(await fetchRoles());
       } catch (error) {
         console.error(t('error.loading.data'), error);
       }
     };
     loadInitialData();
   }, []);
-  
-    useEffect(() => {
-      loadAssociatedRoles();
-    }, [localUser.roleIds]);
+
+  useEffect(() => {
+    loadAssociatedRoles();
+  }, [localUser.roleIds]);
 
   const handleUpdate = async () => {
-  if (userId === null) return;
-  try {
-    const updatedUser = await updateUser(userId, localUser.username);
-    onUpdateUser(updatedUser); // Usa la data real que viene del backend
-    setLocalUser(updatedUser); // También actualiza localUser con la data oficial
-  } catch (error) {
-    console.error('Error updating user', error);
-  }
-};
-
+    if (userId === null) return;
+    try {
+      const updatedUser = await updateUser(userId, localUser.username);
+      onUpdateUser(updatedUser);
+      setLocalUser(updatedUser);
+    } catch (error) {
+      console.error('Error updating user', error);
+    }
+  };
 
   const handleAddRole = async (role: Role, updatedUser: User) => {
     if (userId === null || !newRoleId) return;
     await assignRole(userId, newRoleId);
-    setAssociatedRoles(prev => [...prev, role])
+    setAssociatedRoles((prev) => [...prev, role]);
     onUpdateUser(updatedUser);
   };
 
   const handleRemoveRole = async (roleId: number, updatedUser: User) => {
     if (userId === null) return;
     await removeRole(userId, roleId);
-    setAssociatedRoles(prev => prev.filter(r => r.id !== roleId))
+    setAssociatedRoles((prev) => prev.filter((r) => r.id !== roleId));
     onUpdateUser(updatedUser);
   };
 
   return (
     <View style={styles.container}>
-      <Title text={t('title.edit.user')} type='Subtitle' style={{ marginBottom: 20 }} />
-      <TextInput 
-        label={t('label.Username')} value={localUser.username} inputStyle={styles.input}
-        onChangeText={(value: string) => setLocalUser({...localUser, username: value})}  />
-      <Button title={t("button.save")} onPress={handleUpdate} type="save" />
+      <Title text={t('title.edit.user')} type="Subtitle" style={{ marginBottom: 20 }} />
+      <TextInput
+        label={t('label.Username')}
+        value={localUser.username}
+        inputStyle={styles.input}
+        onChangeText={(value: string) => setLocalUser({ ...localUser, username: value })}
+      />
+      <Button title={t('button.save')} onPress={handleUpdate} type="save" />
 
-      <Title text={t('title.assigned.roles')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.assigned.roles')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
       {(localUser.roleIds || []).map((id) => {
-        const role = roles.find(r => r.id === id);
+        const role = roles.find((r) => r.id === id);
         if (!role) return null;
         return (
           <View key={id} style={styles.listItem}>
             <Text>{role.name}</Text>
-            <Button title={t("button.delete")} type="delete" 
-              onPress={() => { 
-                const updatedUser = { ...localUser, 
-                  roleIds: localUser.roleIds?.filter(rId => rId !== id) ?? null, 
-                  roles: localUser.roles?.filter(r => r !== role.name) ?? null
+            <Button
+              title={t('button.delete')}
+              type="delete"
+              onPress={() => {
+                const updatedUser = {
+                  ...localUser,
+                  roleIds: localUser.roleIds?.filter((rId) => rId !== id) ?? null,
+                  roles: localUser.roles?.filter((r) => r !== role.name) ?? null,
                 };
-              setLocalUser(updatedUser);
-              handleRemoveRole(id, updatedUser);
-              }} />
+                setLocalUser(updatedUser);
+                handleRemoveRole(id, updatedUser);
+              }}
+            />
           </View>
         );
       })}
 
-      <Title text={t('title.add.role')} type='Subtitle' style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.add.role')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
       <Select
         selectedValue={newRoleId}
+        options={roles.map((role) => ({ label: role.name, value: role.id }))}
+        placeholder={t('select.role')}
         onValueChange={(value) => {
           if (typeof value === 'string') {
             const parsed = parseInt(value, 10);
@@ -119,33 +124,31 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
             setNewRoleId(value);
           }
         }}
-        options={roles.map((role) => ({
-          label: role.name,
-          value: role.id,
-        }))}
-        placeholder={t("select.role")}
       />
-      <Button title={t("button.assign.role")} type='save'style={{marginTop: 10}}
-        onPress={ () => {
-          const role = roles.find(r => r.id === newRoleId);
+      <Button
+        title={t('button.assign.role')}
+        type="save"
+        style={{ marginTop: 10 }}
+        onPress={() => {
+          const role = roles.find((r) => r.id === newRoleId);
           if (role === undefined || newRoleId === undefined) return;
-          const updatedUser = { ...localUser, 
-            roleIds: [...(localUser.roleIds ?? []), newRoleId], 
-            roles: [...(localUser.roles ?? []), role.name]
+          const updatedUser = {
+            ...localUser,
+            roleIds: [...(localUser.roleIds ?? []), newRoleId],
+            roles: [...(localUser.roles ?? []), role.name],
           };
           setLocalUser(updatedUser);
           handleAddRole(role, updatedUser);
-        }} /> 
+        }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+
+  container: { padding: 20, flex: 1, backgroundColor: '#fff' },
+
   input: {
     borderColor: '#ccc',
     borderWidth: 1,
@@ -153,6 +156,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
   },
+  
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',

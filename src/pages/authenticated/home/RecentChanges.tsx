@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { RecentChange } from '../../../types/IRecentChange';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { useTranslation } from 'react-i18next';
+import colors from '../../../components/Colors';
 
 const RecentChanges: React.FC = () => {
   const [recentChanges, setRecentChanges] = useState<RecentChange[] | null>(null);
@@ -41,20 +42,18 @@ const RecentChanges: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  noChanges: {
-    fontSize: 16,
-    color: '#777'
-  },
+
+  noChanges: { fontSize: 16, color: '#777' },
+  
   changeItem: {
-    backgroundColor: '#f4f4f4',
+    backgroundColor: colors.lightsteel,
     padding: 10,
     marginVertical: 4,
     borderRadius: 6,
     width: '100%',
   },
-  changeText: {
-    fontSize: 14,
-  },
+  
+  changeText: { fontSize: 14 },
 });
 
 export default RecentChanges;

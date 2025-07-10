@@ -1,20 +1,20 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {BrowserRouter as Router,Route,Routes,Navigate,useNavigate,useParams,} from "react-router-dom";
-import { View, StyleSheet } from "react-native";
-import Navbar from "./pages/authenticated/navbar/Navbar";
-import MainDashboard from "./pages/authenticated/home/MainDashboard";
-import PeopleDashboard from "./pages/authenticated/people/PeopleDashboard";
-import ProjectsDashboard from "./pages/authenticated/projects/ProjectsDashboard";
-import DirectionsDashboard from "./pages/authenticated/directions/DirectionsDashboard";
-import UsersDashboard from "./pages/authenticated/users/UsersDashboard";
-import RolesDashboard from "./pages/authenticated/roles/RolesDashboard";
-import LoginForm from "./pages/login/Login";
-import LoginNavbar from "./pages/login/LoginNavbar";
-import "./types/I18n";
-import { UserContextProvider } from "./context/UserContextProvider";
-import { UserContext } from "./context/UserContext";
-import ProtectedRoutes from "./components/routes/ProtectedRoutes";
-import AdminRoutes from "./components/routes/AdminRoutes";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate, useParams } from 'react-router-dom';
+import { View, StyleSheet } from 'react-native';
+import Navbar from './pages/authenticated/navbar/Navbar';
+import MainDashboard from './pages/authenticated/home/MainDashboard';
+import PeopleDashboard from './pages/authenticated/people/PeopleDashboard';
+import ProjectsDashboard from './pages/authenticated/projects/ProjectsDashboard';
+import DirectionsDashboard from './pages/authenticated/addresses/AddressesDashboard';
+import UsersDashboard from './pages/authenticated/users/UsersDashboard';
+import RolesDashboard from './pages/authenticated/roles/RolesDashboard';
+import LoginForm from './pages/login/Login';
+import LoginNavbar from './pages/login/LoginNavbar';
+import './types/I18n';
+import { UserContextProvider } from './context/UserContextProvider';
+import { UserContext } from './context/UserContext';
+import ProtectedRoutes from './components/routes/ProtectedRoutes';
+import AdminRoutes from './components/routes/AdminRoutes';
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const AppContent: React.FC = () => {
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = sessionStorage.getItem("token");
+      const token = sessionStorage.getItem('token');
       if (token) {
         userContext.loginByStorage();
       }
@@ -33,26 +33,34 @@ const AppContent: React.FC = () => {
   }, []);
 
   const handleLoginSuccess = () => {
-    navigate("/auth/dashboard");
+    navigate('/auth/dashboard');
   };
 
   const handleLogout = () => {
     userContext.logout();
-    navigate("/");
+    navigate('/');
   };
 
-  if (isLoading) { return null;}
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
       {userContext.username && <Navbar onLogout={handleLogout} />}
       <Routes>
-        <Route path="/" element={userContext.username ? (<Navigate to="/auth/dashboard" />) : (
-          <>
-            <LoginNavbar/>
-            <LoginForm onLoginSuccess={handleLoginSuccess} />  
-          </>
-        )}
+        <Route
+          path="/"
+          element={
+            userContext.username ? (
+              <Navigate to="/auth/dashboard" />
+            ) : (
+              <>
+                <LoginNavbar />
+                <LoginForm onLoginSuccess={handleLoginSuccess} />
+              </>
+            )
+          }
         />
         <Route element={<ProtectedRoutes />}>
           <Route element={<AdminRoutes />}>
@@ -81,11 +89,7 @@ const App: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    minHeight: "100%",
-    backgroundColor: "#f9f9f9",
-  },
+  container: { flex: 1, minHeight: '100%', backgroundColor: '#f9f9f9' },
 });
 
 export default App;

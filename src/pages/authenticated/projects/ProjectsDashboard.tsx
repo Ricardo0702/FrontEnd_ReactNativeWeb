@@ -22,12 +22,12 @@ const ProjectsDashboard: React.FC = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const { authorities } = useContext(UserContext);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve));
+      await new Promise((resolve) => setTimeout(resolve));
       const data = await fetchProjects();
       setProjects(data);
     } catch (error) {
@@ -50,7 +50,7 @@ const ProjectsDashboard: React.FC = () => {
         name: newProject.name,
         timestamp: Date.now(),
       });
-      setProjects(prev => [...prev, newProject])
+      setProjects((prev) => [...prev, newProject]);
       setShowModalForm(false);
       setProjectName('');
     } catch (error) {
@@ -60,9 +60,9 @@ const ProjectsDashboard: React.FC = () => {
 
   const handleDeleteProject = async (projectId: number) => {
     try {
-      const deletedProject = projects.find(p => p.id === projectId);
+      const deletedProject = projects.find((p) => p.id === projectId);
       await deleteProject(projectId);
-      setProjects(prev => prev.filter(p => p.id !== projectId));
+      setProjects((prev) => prev.filter((p) => p.id !== projectId));
 
       if (deletedProject) {
         saveRecentChange({
@@ -73,15 +73,15 @@ const ProjectsDashboard: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error(t("error.deleting.project"), error);
+      console.error(t('error.deleting.project'), error);
     }
   };
 
   const handleEditProject = (project: Project) => {
-      setSelectedProjectId(project.id);
-      setProjectName(project.name);
-      setUpdateModal(true);
-    };
+    setSelectedProjectId(project.id);
+    setProjectName(project.name);
+    setUpdateModal(true);
+  };
 
   const handleUpdateProject = async (projectId: number, projectName: string) => {
     try {
@@ -90,13 +90,13 @@ const ProjectsDashboard: React.FC = () => {
         type: t('type.project'),
         action: t('action.edited'),
         name: projectName,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
-      setProjects(prev => prev.map( proj => proj.id === projectId ? { ...proj, name: projectName } : proj ));
+      setProjects((prev) => prev.map((proj) => (proj.id === projectId ? { ...proj, name: projectName } : proj)));
       setUpdateModal(false);
       setProjectName('');
     } catch (error) {
-      console.error(t("error.editing.project"), error);
+      console.error(t('error.editing.project'), error);
     }
   };
 
@@ -111,35 +111,44 @@ const ProjectsDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 30 }}>
-          <Title text={t('title.registered.projects')} size='xl' align='center' underline />
+          <Title text={t('title.registered.projects')} size="xl" align="center" underline />
         </View>
 
         <View style={styles.tableContainer}>
-          {isLoading ? skeletonRows : (
-            <ProjectsTable projects = {projects} onDelete={handleDeleteProject} onEdit={handleEditProject} setShowModalForm={setShowModalForm} />
+          {isLoading ? (
+            skeletonRows
+          ) : (
+            <ProjectsTable projects={projects} onDelete={handleDeleteProject} onEdit={handleEditProject} setShowModalForm={setShowModalForm} />
           )}
         </View>
       </ScrollView>
 
-      <Modal title={t("modal.edit.project")} visible={showUpdateModal} onClose={() => {setProjectName(''), setUpdateModal(false)}} size="xs">
+      <Modal
+        title={t('modal.edit.project')}
+        visible={showUpdateModal}
+        onClose={() => {
+          (setProjectName(''), setUpdateModal(false));
+        }}
+        size="xs"
+      >
         <View>
           <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} inputStyle={styles.input} autoFocus />
           <Button
-            title={t("button.save")}
+            title={t('button.save')}
+            type="save"
             onPress={() => {
               if (selectedProjectId !== null) {
                 handleUpdateProject(selectedProjectId, projectName);
               }
             }}
-            type='save'
           />
         </View>
       </Modal>
 
-      <Modal title={t("modal.add.project")} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
+      <Modal title={t('modal.add.project')} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
           <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} inputStyle={styles.input} autoFocus />
-          <Button title={t("button.saver")} onPress={handleCreateProject} type='save' />
+          <Button title={t('button.saver')} onPress={handleCreateProject} type="save" />
         </View>
       </Modal>
     </View>
@@ -157,16 +166,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginHorizontal: 'auto',
   },
-  scrollContainer: {
-    flexGrow: 1,
-    paddingVertical: 20,
-    justifyContent: 'flex-start',
-  },
-  tableContainer: {
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
+  scrollContainer: { flexGrow: 1, paddingVertical: 20, justifyContent: 'flex-start' },
+
+  tableContainer: { marginBottom: 20, justifyContent: 'center', alignItems: 'center' },
+  
   input: {
     marginBottom: 10,
     padding: 8,

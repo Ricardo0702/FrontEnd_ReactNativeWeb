@@ -15,55 +15,74 @@ interface RoleTableProps {
 
 const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit, setShowModalForm }) => {
   const { t } = useTranslation();
-  const {width: windowWidth} = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
 
-  const renderHeaderButton =  (
+  const renderHeaderButton = (
     <View style={{ alignItems: 'flex-start' }}>
-      <Button title={t("button.add.role")} onPress={() => setShowModalForm(true)} height={50} 
-        color='white' style ={{backgroundColor: colors.darksteel, borderRadius: 6}} width={windowWidth*0.1}/>
+      <Button
+        title={t('button.add.role')}
+        onPress={() => setShowModalForm(true)}
+        height={50}
+        color="white"
+        style={{ backgroundColor: colors.darksteel, borderRadius: 6 }}
+        width={windowWidth * 0.1}
+      />
     </View>
   );
 
-  const columns: { header: string; accessor?: keyof Role; width?: number; filterable?: boolean; sortable?: boolean; 
-    render?: (value: any, row: Role, rowIndex?: number) => React.ReactNode }[] = [
-    { header: t('columns.name'), accessor: 'name', filterable: true, sortable: true }, 
-    { header: t('columns.description'), accessor: 'description', filterable: true, sortable: true },
+  const columns: {
+    header: string;
+    accessor?: keyof Role;
+    width?: number;
+    filterable?: boolean;
+    sortable?: boolean;
+    render?: (value: any, row: Role, rowIndex?: number) => React.ReactNode;
+  }[] = [
+    {
+      header: t('columns.name'),
+      accessor: 'name',
+      filterable: true,
+      sortable: true,
+    },
+    {
+      header: t('columns.description'),
+      accessor: 'description',
+      filterable: true,
+      sortable: true,
+    },
     {
       header: t('columns.actions'),
-      render: (_: any, row: Role, rowIndex?: number) => {
-        const isEven = (rowIndex ?? 0) % 2 === 0;
-        const backgroundColor = isEven ? '#f0f0f0' : '#f9f9f9';
-        if ( windowWidth < 600 ){
-            return(
-                <View style={{ flexDirection: 'row', gap: 10 }}>
-                    <View style={{ backgroundColor }}>
-                        <Button title={t("button.edit")} type="associate" onPress={() => onEdit(row)}/>
-                    </View>
-                    
-                    <View style={{ backgroundColor: colors.lightRed }}>
-                        <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type="associate"   />
-                    </View>
-                </View>
-            )
+      render: (_: any, row: Role) => {
+        const backgroundColor = colors.lightsteel;
+        if (windowWidth < 600) {
+          return (
+            <View style={{ flexDirection: 'row', gap: 10 }}>
+              <View style={{ backgroundColor }}>
+                <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
+              </View>
+
+              <View style={{ backgroundColor: colors.lightRed }}>
+                <Button title={t('button.delete')} onPress={() => onDelete(row.id)} type="associate" />
+              </View>
+            </View>
+          );
         }
         return (
           <View style={{ flexDirection: 'column', gap: 10 }}>
             <View style={{ backgroundColor }}>
-              <Button title={t("button.edit")} type="associate" onPress={() => onEdit(row)}/>
+              <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
             </View>
 
             <View style={{ backgroundColor: colors.lightRed }}>
-              <Button title={t("button.delete")} onPress={() => onDelete(row.id)} type="associate"   />
+              <Button title={t('button.delete')} onPress={() => onDelete(row.id)} type="associate" />
             </View>
           </View>
         );
-      }
-    }
+      },
+    },
   ];
 
-  return (
-    <Table columns={columns} data={roles} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled/>
-  );
+  return <Table columns={columns} data={roles} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled />;
 };
 
 export default RolesTable;

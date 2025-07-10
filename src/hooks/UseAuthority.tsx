@@ -3,9 +3,9 @@ export const hasAuthority = (authorities: string[] | undefined, authority: Autho
 };
 
 export enum Authority {
-  ROLE_USER = "ROLE_USER",
-  ROLE_ADMIN = "ROLE_ADMIN",
-  ROLE_PEOPLE = "ROLE_PEOPLE",
-  ROLE_PROJECTS = "ROLE_PROJECTS",
-  ROLE_ADDRESSES = "ROLE_ADDRESSES"
+  ROLE_USER = 'ROLE_USER',
+  ROLE_ADMIN = 'ROLE_ADMIN',
+  ROLE_PEOPLE = 'ROLE_PEOPLE',
+  ROLE_PROJECTS = 'ROLE_PROJECTS',
+  ROLE_ADDRESSES = 'ROLE_ADDRESSES',
 }

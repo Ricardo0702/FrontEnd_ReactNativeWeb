@@ -1,4 +1,3 @@
-// LoadingSpinner.tsx
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, AccessibilityProps } from 'react-native';
 
@@ -6,7 +5,6 @@ export interface LoadingSpinnerProps {
   size?: number;
   color?: string;
 }
-
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps & AccessibilityProps> = ({
   size = 40,
@@ -31,7 +29,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps & AccessibilityProps> 
             duration: 1000,
             useNativeDriver: true,
           }),
-        ])
+        ]),
       );
 
     const anim1 = animate(scale1, 0);
@@ -47,11 +45,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps & AccessibilityProps> 
   }, [scale1, scale2]);
 
   return (
-    <View
-      style={[styles.container, { width: size, height: size }]}
-      accessibilityRole="progressbar"
-      accessibilityLabel={accessibilityLabel}
-    >
+    <View style={[styles.container, { width: size, height: size }]} accessibilityRole="progressbar" accessibilityLabel={accessibilityLabel}>
       <Animated.View
         style={[
           styles.circle,
@@ -96,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingSpinner
+export default LoadingSpinner;

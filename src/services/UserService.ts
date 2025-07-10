@@ -1,4 +1,4 @@
-import  axios  from './AxiosConfig';
+import axios from './AxiosConfig';
 import { User } from '../types/IUser';
 
 const API_URL = '/auth/user';

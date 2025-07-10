@@ -2,22 +2,22 @@ import { useWindowDimensions } from 'react-native';
 
 export interface IUseResponsive {
   type: 'Button' | 'Modal';
-  size: 'xxs' |'xs' | 's' | 'm' | 'l';
+  size: 'xxs' | 'xs' | 's' | 'm' | 'l';
 }
 
 const useResponsive = ({ type, size }: IUseResponsive) => {
   const { width, height } = useWindowDimensions();
 
-  if (type === 'Modal'){ 
-    if(size === 'xxs') {
-      return{
+  if (type === 'Modal') {
+    if (size === 'xxs') {
+      return {
         width: width * 0.3,
-        height: height * 0.3
+        height: height * 0.3,
       };
     }
 
-    if (size === 'xs'){
-      return{
+    if (size === 'xs') {
+      return {
         width: width * 0.4,
         height: height * 0.4,
       };
@@ -34,16 +34,16 @@ const useResponsive = ({ type, size }: IUseResponsive) => {
       return {
         width: width * 0.7,
         height: height * 0.7,
-      }
-    } 
+      };
+    }
 
     if (size === 'l') {
       return {
-      width: width * 0.9,
-      height: height * 0.9
-      }
+        width: width * 0.9,
+        height: height * 0.9,
+      };
     }
-  };
+  }
 
   const minButtonWidth = 150;
   let responsiveWidth = 0;
@@ -53,7 +53,7 @@ const useResponsive = ({ type, size }: IUseResponsive) => {
     switch (size) {
       case 'xxs':
         responsiveWidth = width * 0.02;
-        responsiveHeight = height *0.04;
+        responsiveHeight = height * 0.04;
         break;
       case 'xs':
         responsiveWidth = width * 0.03;
@@ -79,7 +79,7 @@ const useResponsive = ({ type, size }: IUseResponsive) => {
 
     return {
       width: responsiveWidth,
-      height: responsiveHeight
+      height: responsiveHeight,
     };
   }
 };

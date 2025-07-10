@@ -8,15 +8,8 @@ export interface SkeletonProps {
   style?: ViewStyle;
 }
 
-export const Skeleton: React.FC<SkeletonProps> = ({
-  width,
-  height = 20,
-  circle = false,
-  style = {},
-}) => {
+export const Skeleton: React.FC<SkeletonProps> = ({ width, height = 20, circle = false, style = {} }) => {
   const shimmerAnim = useRef(new Animated.Value(-1)).current;
-
-  // Valor numérico para animación (por defecto 100 si no hay width numérico)
   const numericWidth = typeof width === 'number' ? width : 100;
 
   useEffect(() => {
@@ -25,7 +18,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
         toValue: 1,
         duration: 1500,
         useNativeDriver: true,
-      })
+      }),
     );
     loop.start();
 
@@ -41,13 +34,13 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     <View
       style={[
         styles.skeletonBase,
+        style,
         {
           height,
           borderRadius: circle ? height / 2 : 4,
           overflow: 'hidden',
           ...(typeof width === 'number' ? { width } : { flex: 1 }),
         },
-        style,
       ]}
       accessibilityState={{ busy: true }}
     >

@@ -4,7 +4,9 @@ import { UserContext } from '../../context/UserContext';
 
 const ProtectedRoutes: React.FC = () => {
   const { username } = useContext(UserContext);
-  if (!username) {return <Navigate to="/" replace />;}
+  if (!username) {
+    return <Navigate to="/" replace />;
+  }
   return <Outlet />;
 };
 

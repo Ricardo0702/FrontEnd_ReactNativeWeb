@@ -1,18 +1,8 @@
-import React, { use } from 'react';
-import {
-  Modal as RNModal,
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ViewStyle,
-  ScrollView,
-  Dimensions,
-  GestureResponderEvent,
-} from 'react-native';
+import React from 'react';
+import { Modal as RNModal, View, StyleSheet, Text, TouchableOpacity, ViewStyle, ScrollView, Dimensions, GestureResponderEvent } from 'react-native';
 import useResponsive from './UseResponsive';
 import Icon from './Icon';
-import { faRectangleXmark, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import colors from './Colors';
 
 export interface ModalProps {
@@ -21,7 +11,14 @@ export interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
   size?: 'xxs' | 'xs' | 's' | 'm' | 'xl';
-  position?: 'center' | 'top' | 'bottom'; // Posición opcional
+  position?: 'center' | 'top' | 'bottom';
+  style?: ViewStyle;
+  animationType?: 'none' | 'slide' | 'fade';
+  hideHeader?: boolean;
+  overlayOpacity?: number;
+  borderRadius?: number;
+  headerStyle?: ViewStyle;
+  contentStyle?: ViewStyle;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -31,6 +28,13 @@ const Modal: React.FC<ModalProps> = ({
   children,
   size = 'm',
   position = 'center',
+  style,
+  animationType = 'slide',
+  hideHeader = false,
+  overlayOpacity = 0.5,
+  borderRadius = 10,
+  headerStyle,
+  contentStyle,
 }) => {
   if (!visible) return null;
 
@@ -57,17 +61,17 @@ const Modal: React.FC<ModalProps> = ({
   const getSizeStyle = () => {
     switch (size) {
       case 'xxs':
-        return useResponsive({type: 'Modal', size: 'xxs'})
+        return useResponsive({ type: 'Modal', size: 'xxs' });
       case 'xs':
-        return useResponsive({type: 'Modal', size: 'xs'});
+        return useResponsive({ type: 'Modal', size: 'xs' });
       case 's':
-        return useResponsive({type: 'Modal', size: 's'});
+        return useResponsive({ type: 'Modal', size: 's' });
       case 'm':
-        return useResponsive({type: 'Modal', size: 'm'});
+        return useResponsive({ type: 'Modal', size: 'm' });
       case 'xl':
-        return useResponsive({type: 'Modal', size: 'l'});
+        return useResponsive({ type: 'Modal', size: 'l' });
       default:
-        return useResponsive({type: 'Modal', size: 'm'});
+        return useResponsive({ type: 'Modal', size: 'm' });
     }
   };
 
@@ -76,18 +80,27 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <RNModal transparent visible={visible} animationType="slide">
-      {/* Capa overlay que captura clics fuera del modal */}
-      <View style={[styles.overlay, getPositionStyle()]} onStartShouldSetResponder={() => true} onResponderRelease={onClose}>
-        <View style={[styles.modalContainer, getSizeStyle()]} onStartShouldSetResponder={() => true} onResponderRelease={handleModalContentPress}>
-          <View style={styles.header}>
-            <Text style={styles.title}>{title}</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Icon icon={faXmark} size={24} color={colors.darksteel}/>
-            </TouchableOpacity>
-          </View>
+    <RNModal transparent visible={visible} animationType={animationType}>
+      <View
+        style={[styles.overlay, getPositionStyle(), { backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})` }]}
+        onStartShouldSetResponder={() => true}
+        onResponderRelease={onClose}
+      >
+        <View
+          style={[styles.modalContainer, getSizeStyle(), { borderRadius }, style]}
+          onStartShouldSetResponder={() => true}
+          onResponderRelease={handleModalContentPress}
+        >
+          {!hideHeader && (
+            <View style={[styles.header, headerStyle]}>
+              <Text style={styles.title}>{title}</Text>
+              <TouchableOpacity onPress={onClose}>
+                <Icon icon={faXmark} size={24} color={colors.darksteel} />
+              </TouchableOpacity>
+            </View>
+          )}
           <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View style={styles.content}>{children}</View>
+            <View style={[styles.content, contentStyle]}>{children}</View>
           </ScrollView>
         </View>
       </View>
@@ -95,18 +108,16 @@ const Modal: React.FC<ModalProps> = ({
   );
 };
 
-const {height: screenHeight} = Dimensions.get('window');
+const { height: screenHeight } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
     backgroundColor: 'white',
-    borderRadius: 10,
     overflow: 'hidden',
-    maxHeight: screenHeight * 0.8, // evita que el modal crezca más allá del 80% de la pantalla
+    maxHeight: screenHeight * 0.8,
   },
   header: {
     flexDirection: 'row',
@@ -119,7 +130,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   scrollContent: {
     flexGrow: 1,

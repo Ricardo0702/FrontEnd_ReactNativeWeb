@@ -1,4 +1,4 @@
-import axios from './AxiosConfig'; 
+import axios from './AxiosConfig';
 import type { Project } from '../types/IProject';
 
 const API_URL = '/auth/projects';

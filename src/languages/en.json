@@ -1,10 +1,7 @@
 {
   "text": {
-    "show": {
-      "rows": "Shown rows"
-    },
     "select": {
-      "rows": ""
+      "rows": "Select rows"
     }
   },
   "textinput": {
@@ -39,13 +36,13 @@
       "project": "Error editing project.",
       "role": "Error editing role."
     },
-    "login": "Login error.",
     "username": {
       "cannot be empty": "Username cannot be empty."
     },
     "password": {
       "cannot be empty": "Password cannot be empty."
-    }
+    },
+    "login": "Login error."
   },
   "type": {
     "address": "Address",
@@ -54,13 +51,20 @@
     "project": "Project"
   },
   "action": {
-    "edited": "Edited",
     "created": "Created",
     "deleted": "Deleted",
+    "edited": "Edited",
     "added": "Added",
     "editado/a": "Edited"
   },
   "title": {
+    "registered": {
+      "addresses": "Registered Addresses",
+      "people": "Registered People",
+      "projects": "Registered Projects",
+      "roles": "Registered Roles",
+      "users": "Registered Users"
+    },
     "edit": {
       "address": "Edit Address",
       "person": "Edit Person",
@@ -69,17 +73,10 @@
     "associated": {
       "person": "Associated Person",
       "projects": "Associated Projects",
-      "directions": "Associated Addresses"
+      "Addresses": "Associated Addresses"
     },
     "associate": {
       "person": "Associate Person"
-    },
-    "registered": {
-      "addresses": "Registered Addresses",
-      "people": "Registered People",
-      "projects": "Registered Projects",
-      "roles": "Registered Roles",
-      "users": "Registered Users"
     },
     "select": {
       "page": "Select a Page"
@@ -93,59 +90,6 @@
       "roles": "Assigned Roles"
     },
     "web project": "Web Project"
-  },
-  "label": {
-    "street": "Street",
-    "city": "City",
-    "name": "Name",
-    "age": "Age",
-    "Name": "Name",
-    "sreet": "Street",
-    "project": {
-      "name": "Project Name"
-    },
-    "role": {
-      "name": "Role Name",
-      "description": "Role description"
-    },
-    "Username": "Username",
-    "username": "Username",
-    "password": "Password",
-    "user": "Username"
-  },
-  "button": {
-    "save": "Save",
-    "delete": "Delete",
-    "associate": {
-      "person": "Associate Person",
-      "project": "Associate Project"
-    },
-    "add": {
-      "address": "Add Address",
-      "person": "Add Person",
-      "project": "Add Project",
-      "role": "Add Role",
-      "user": "Add User"
-    },
-    "edit": "Edit",
-    "people": "People",
-    "projects": "Projects",
-    "addresses": "Addresses",
-    "cancel": "Cancel",
-    "logout": "Logout",
-    "saver": "Save",
-    "assign": {
-      "role": "Assign Role"
-    },
-    "create": {
-      "user": "Create User"
-    },
-    "login": "Login"
-  },
-  "select": {
-    "person": "Select a person",
-    "project": "Select a project",
-    "role": "Select a role"
   },
   "modal": {
     "edit": {
@@ -167,6 +111,53 @@
     },
     "login": "Login"
   },
+  "label": {
+    "street": "Street",
+    "city": "City",
+    "name": "Name",
+    "age": "Age",
+    "Name": "Name",
+    "sreet": "Street",
+    "project": {
+      "name": "Project Name"
+    },
+    "role": {
+      "name": "Role Name",
+      "description": "Role description"
+    },
+    "Username": "Username",
+    "user": "Username",
+    "password": "Password"
+  },
+  "button": {
+    "save": "Save",
+    "add": {
+      "address": "Add Address",
+      "person": "Add Person",
+      "project": "Add Project",
+      "role": "Add Role",
+      "user": "Add User"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "associate": {
+      "person": "Associate Person",
+      "project": "Associate Project"
+    },
+    "people": "People",
+    "projects": "Projects",
+    "addresses": "Addresses",
+    "cancel": "Cancel",
+    "logout": "Logout",
+    "saver": "Save",
+    "assign": {
+      "role": "Assign Role"
+    },
+    "create": {
+      "user": "Create User"
+    },
+    "login": "Login"
+  },
   "columns": {
     "street": "Street",
     "city": "City",
@@ -179,6 +170,11 @@
     "description": "Description",
     "username": "Username",
     "roles": "Roles"
+  },
+  "select": {
+    "person": "Select a person",
+    "project": "Select a project",
+    "role": "Select a role"
   },
   "Recent changes:": "Recent changes:",
   "There are no recent changes": "There are no recent changes.",
