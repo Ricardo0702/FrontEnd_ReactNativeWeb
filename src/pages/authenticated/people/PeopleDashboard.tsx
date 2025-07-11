@@ -7,12 +7,13 @@ import { Skeleton } from '../../../components/Skeleton';
 import { fetchPeople, createPerson, deletePerson } from '../../../services/PersonService';
 import { saveRecentChange } from '../../../services/localStorage';
 import type { Person } from '../../../types/IPerson';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import PeopleTable from './PeopleTable';
 import PersonModification from './PersonModification';
 import { useTranslation } from 'react-i18next';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { UserContext } from '../../../context/UserContext';
+import { useTheme } from '../../../context/ThemeContext';
 
 const PeopleDashboard: React.FC = () => {
   const [people, setPeople] = useState<Person[]>([]);
@@ -26,6 +27,7 @@ const PeopleDashboard: React.FC = () => {
   const [selectedPersonId, setSelectedPersonId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { authorities } = useContext(UserContext);
+  const { colors } = useTheme();
 
   const fetchData = async () => {
     try {
@@ -112,7 +114,7 @@ const PeopleDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 30 }}>
-          <Title text={t('title.registered.people')} size="xl" align="center" underline />
+          <Title text={t('title.registered.people')} size="xl" align="center" underline color={colors.text}/>
         </View>
 
         <View style={styles.tableContainer}>

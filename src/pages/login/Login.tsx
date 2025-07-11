@@ -7,7 +7,7 @@ import TextInput from '../../components/TextInput';
 import { useTranslation } from 'react-i18next';
 import { UserContext } from '../../context/UserContext';
 import Icon from '../../components/Icon';
-import colors from '../../components/Colors';
+import { useTheme } from '../../context/ThemeContext';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
@@ -28,6 +28,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
   const [touchedSignUp, setTouchedSignUp] = useState(false);
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
+  const { colors } = useTheme();
 
   const handleLogin = async () => {
     setTouchedLogin(true);

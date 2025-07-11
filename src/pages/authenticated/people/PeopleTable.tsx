@@ -6,7 +6,7 @@ import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 import { highlightText } from '../../../components/HighlightText';
 
 interface PeopleTableProps {
@@ -20,6 +20,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, set
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
   const { authorities } = useContext(UserContext);
+  const { colors } = useTheme();
 
   const renderHeaderButton = (hasAuthority(authorities, Authority.ROLE_PEOPLE) || hasAuthority(authorities, Authority.ROLE_ADMIN)) && (
     <View style={{ alignItems: 'flex-start' }}>
@@ -27,7 +28,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, set
         title={t('button.add.person')}
         onPress={() => setShowModalForm(true)}
         height={50}
-        color="white"
+        color={colors.whiteText}
         style={{ backgroundColor: colors.darksteel, borderRadius: 6 }}
         width={windowWidth * 0.1}
       />
@@ -55,7 +56,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, set
       sortable: true,
       filterable: true,
       render: (value, row, _, highlightText, highlight) => (
-        <Text>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
+        <Text style={{color: colors.text}}>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
       ),
     },
     {
@@ -63,7 +64,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, set
       accessor: 'age',
       sortable: true,
       render: (value, row, _, highlightText, highlight) => (
-        <Text>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
+        <Text style={{color: colors.text}}>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
       ),
     },
     {
@@ -92,7 +93,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, set
         return (
           <View style={{ flexDirection: 'column' }}>
             {directions.map((d, index) => (
-              <Text key={d.id ?? index}>
+              <Text style={{color: colors.text}} key={d.id ?? index}>
                 {highlightTextFunc ? highlightTextFunc(`${d.street} (${d.city})`, highlight || '') : `${d.street} (${d.city})`}
               </Text>
             ))}
@@ -109,7 +110,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, set
         const projectsText = Array.isArray(value) ? value.join(', ') : (value ?? ' ');
         return (
           <View style={{ flexWrap: 'wrap' }}>
-            <Text style={{ flexShrink: 1 }}>{highlightText ? highlightText(projectsText, filterValue || '') : projectsText}</Text>
+            <Text style={{color: colors.text, flexShrink: 1 }}>{highlightText ? highlightText(projectsText, filterValue || '') : projectsText}</Text>
           </View>
         );
       },

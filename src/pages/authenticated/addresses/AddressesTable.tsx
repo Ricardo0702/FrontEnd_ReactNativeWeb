@@ -3,7 +3,7 @@ import type { Address } from '../../../types/IAddress';
 import { useWindowDimensions, View, Text } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
@@ -19,6 +19,7 @@ const AddressesTable: React.FC<AddressesTableProps> = ({ Addresses, onDelete, on
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
   const { authorities } = useContext(UserContext);
+  const { colors } = useTheme();
 
   const renderHeaderButton = (hasAuthority(authorities, Authority.ROLE_ADDRESSES) || hasAuthority(authorities, Authority.ROLE_ADMIN)) && (
     <View style={{ alignItems: 'flex-start' }}>

@@ -3,7 +3,7 @@ import { Modal as RNModal, View, StyleSheet, Text, TouchableOpacity, ViewStyle, 
 import useResponsive from './UseResponsive';
 import Icon from './Icon';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import colors from './Colors';
+import { useTheme } from '../context/ThemeContext';
 
 export interface ModalProps {
   title: string;
@@ -37,6 +37,8 @@ const Modal: React.FC<ModalProps> = ({
   contentStyle,
 }) => {
   if (!visible) return null;
+
+  const { colors } = useTheme();
 
   const getPositionStyle = (): ViewStyle => {
     if (position === 'top') {
@@ -87,13 +89,13 @@ const Modal: React.FC<ModalProps> = ({
         onResponderRelease={onClose}
       >
         <View
-          style={[styles.modalContainer, getSizeStyle(), { borderRadius }, style]}
+          style={[styles.modalContainer, {backgroundColor: colors.whiteBackground}, getSizeStyle(), { borderRadius }, style]}
           onStartShouldSetResponder={() => true}
           onResponderRelease={handleModalContentPress}
         >
           {!hideHeader && (
-            <View style={[styles.header, headerStyle]}>
-              <Text style={styles.title}>{title}</Text>
+            <View style={[styles.header, {borderColor: colors.ccc}, headerStyle]}>
+              <Text style={[styles.title, {color: colors.text}]}>{title}</Text>
               <TouchableOpacity onPress={onClose}>
                 <Icon icon={faXmark} size={24} color={colors.darksteel} />
               </TouchableOpacity>
@@ -115,7 +117,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalContainer: {
-    backgroundColor: 'white',
     overflow: 'hidden',
     maxHeight: screenHeight * 0.8,
   },
@@ -125,7 +126,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderBottomWidth: 1,
-    borderColor: '#ccc',
   },
   title: {
     fontSize: 18,

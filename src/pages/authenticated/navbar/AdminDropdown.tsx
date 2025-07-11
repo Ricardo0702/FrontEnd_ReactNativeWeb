@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Colors from '../../../components/Colors';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/Icon';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '../../../context/ThemeContext';
 
 interface AdminDropdownProps {
   dropdownStyle?: object;
@@ -16,6 +16,7 @@ const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle, closeMenu 
   const [langOpen, setLangOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,11 +38,11 @@ const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle, closeMenu 
   return (
     <View style={styles.container} ref={dropdownRef as any}>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={styles.navLink}>{t('navbar.admin')}</Text>
-        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
+        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.admin')}</Text>
+        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
       </TouchableOpacity>
       {langOpen && (
-        <View style={dropdownStyle ?? styles.adminDropdown}>
+        <View style={dropdownStyle ?? [styles.adminDropdown, {backgroundColor: colors.darksteel}]}>
           <TouchableOpacity
             onPress={() => {
               navigate('/auth/users');
@@ -49,7 +50,7 @@ const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle, closeMenu 
               closeMenu?.();
             }}
           >
-            <Text style={styles.navLink}>{t('navbar.users')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.users')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -58,7 +59,7 @@ const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle, closeMenu 
               closeMenu?.();
             }}
           >
-            <Text style={styles.navLink}>{t('navbar.roles')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.roles')}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -68,12 +69,11 @@ const AdminDropdown: React.FC<AdminDropdownProps> = ({ dropdownStyle, closeMenu 
 
 const styles = StyleSheet.create({
 
-  navLink: { color: 'white', fontSize: 17, marginVertical: 5 },
+  navLink: { fontSize: 17, marginVertical: 5 },
   
   adminDropdown: {
     position: 'absolute',
     top: 30,
-    backgroundColor: Colors.darksteel,
     padding: 10,
     borderRadius: 5,
     left: 10,

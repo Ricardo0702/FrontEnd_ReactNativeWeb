@@ -9,7 +9,7 @@ import PagesDropdown from './PgesDropdown';
 import { UserContext } from '../../../context/UserContext';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 
 interface DesktopMenuProps {
   onLogout: () => void;
@@ -21,6 +21,7 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ onLogout, onChangeLanguage })
   const navigate = useNavigate();
   const { authorities } = useContext(UserContext);
   const [logoutModal, setLogoutModal] = useState(false);
+  const { colors } = useTheme();
 
   const handleLogoutClick = () => {
     setLogoutModal(true);
@@ -43,13 +44,17 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ onLogout, onChangeLanguage })
       )}
       <LanguageDropdown onChangeLanguage={onChangeLanguage} />
       <TouchableOpacity onPress={handleLogoutClick}>
-        <Text style={styles.navLink}>{t('navbar.logout')}</Text>
+        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={cancelLogout} size="xxs" position="top">
         <Text style={{ marginBottom: 20, alignSelf: 'center' }}> {t('confirm.logout.message')} </Text>
         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-          <Button title={t('button.cancel')} onPress={() => setLogoutModal(false)} size="xxs" color="white" style={styles.cancelButton} />
-          <Button title={t('button.logout')} onPress={confirmLogout} size="xxs" color="white" style={styles.confirmButton} />
+          <Button title={t('button.cancel')} size="xxs" color={colors.whiteText} style={[styles.cancelButton, {backgroundColor: colors.darksteel}]}
+            onPress={() => setLogoutModal(false)} 
+          />
+          <Button title={t('button.logout')} size="xxs" color={colors.whiteText} style={[styles.confirmButton, {backgroundColor: colors.darksteel}]}
+            onPress={confirmLogout} 
+          />
         </View>
       </Modal>
     </View>
@@ -65,11 +70,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   
-  navLink: { color: 'white', fontSize: 17, marginVertical: 5 },
+  navLink: { fontSize: 17, marginVertical: 5 },
   
-  cancelButton: { backgroundColor: colors.darksteel, color: 'white', marginBottom: 20 },
+  cancelButton: { color: 'white', marginBottom: 20 },
 
-  confirmButton: { backgroundColor: colors.darksteel, color: 'white' },
+  confirmButton: { color: 'white' },
 });
 
 export default DesktopMenu;

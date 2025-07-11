@@ -6,12 +6,13 @@ import { RecentChange } from '../../../types/IRecentChange';
 import Title from '../../../components/Title';
 import { useTranslation } from 'react-i18next';
 import RecentChanges from './RecentChanges';
-import Colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 
 const MainDashboard: React.FC = () => {
   const navigate = useNavigate();
   const [recentChanges, setRecentChanges] = useState<RecentChange[] | null>(null);
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   useEffect(() => {
     setTimeout(() => {
@@ -27,21 +28,21 @@ const MainDashboard: React.FC = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Title style={styles.title} text={t('title.select.page')} size="xl" align="center" />
+        <Title style={styles.title} text={t('title.select.page')} size="xl" align="center" color={colors.text}/>
 
-        <View style={styles.button}>
-          <Button title={t('button.people')} color="white" size="m" fontSize={20} onPress={() => navigate('/auth/people')} />
+        <View style={[styles.button, {backgroundColor: colors.darksteel}] }>
+          <Button title={t('button.people')} color={colors.whiteText} size="m" fontSize={20} onPress={() => navigate('/auth/people')} />
         </View>
 
-        <View style={styles.button}>
-          <Button title={t('button.projects')} color="white" size="m" fontSize={20} onPress={() => navigate('/auth/projects')} />
+        <View style={[styles.button, {backgroundColor: colors.darksteel}]}>
+          <Button title={t('button.projects')} color={colors.whiteText} size="m" fontSize={20} onPress={() => navigate('/auth/projects')} />
         </View>
 
-        <View style={styles.button}>
-          <Button title={t('button.addresses')} color="white" size="m" fontSize={20} onPress={() => navigate('/auth/directions')} />
+        <View style={[styles.button, {backgroundColor: colors.darksteel}] }>
+          <Button title={t('button.addresses')} color={colors.whiteText} size="m" fontSize={20} onPress={() => navigate('/auth/directions')} />
         </View>
 
-        <Text style={styles.subtitle}>{t('Recent changes:')}</Text>
+        <Text style={[styles.subtitle, {color: colors.text}]}>{t('Recent changes:')}</Text>
         <View style={{ marginHorizontal: 30 }}>
           <RecentChanges />
         </View>
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  button: { backgroundColor: Colors.darksteel, marginBottom: 15, borderRadius: 5 },
+  button: { marginBottom: 15, borderRadius: 5 },
 });
 
 export default MainDashboard;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../components/Icon';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
@@ -16,6 +16,7 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
   const [langOpen, setLangOpen] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,11 +38,11 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
   return (
     <View style={styles.container} ref={dropdownRef as any}>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={styles.navLink}>{t('navbar.pages')}</Text>
-        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
+        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.pages')}</Text>
+        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
       </TouchableOpacity>
       {langOpen && (
-        <View style={dropdownStyle ?? styles.pagesDropdown}>
+        <View style={dropdownStyle ?? [styles.pagesDropdown, {backgroundColor: colors.darksteel}]}>
           <TouchableOpacity
             onPress={() => {
               navigate('/auth/people');
@@ -49,7 +50,7 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
               closeMenu?.();
             }}
           >
-            <Text style={styles.navLink}>{t('navbar.people')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.people')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -58,7 +59,7 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
               closeMenu?.();
             }}
           >
-            <Text style={styles.navLink}>{t('navbar.projects')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.projects')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -67,7 +68,7 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
               closeMenu?.();
             }}
           >
-            <Text style={styles.navLink}>{t('navbar.addresses')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.addresses')}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -77,12 +78,11 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
 
 const styles = StyleSheet.create({
 
-  navLink: { color: 'white', fontSize: 17, marginVertical: 5 },
+  navLink: { fontSize: 17, marginVertical: 5 },
   
   pagesDropdown: {
     position: 'absolute',
     top: 30,
-    backgroundColor: Colors.darksteel,
     padding: 10,
     borderRadius: 5,
   },

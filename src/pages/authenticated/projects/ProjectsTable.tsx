@@ -3,7 +3,7 @@ import type { Project } from '../../../types/IProject';
 import { useWindowDimensions, View } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
@@ -19,6 +19,7 @@ const ProjectsTable: React.FC<ProjectTableProps> = ({ projects, onDelete, onEdit
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
   const { authorities } = useContext(UserContext);
+  const { colors } = useTheme();
 
   const renderHeaderButton = (hasAuthority(authorities, Authority.ROLE_PROJECTS) || hasAuthority(authorities, Authority.ROLE_ADMIN)) && (
     <View style={{ alignItems: 'flex-start' }}>

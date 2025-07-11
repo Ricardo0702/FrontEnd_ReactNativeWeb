@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput as RNTextInput, StyleSheet, TextInputProps as RNTextInputProps } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'value'> {
   value?: string | number | null;
@@ -33,13 +34,14 @@ const TextInput: React.FC<TextInputProps> = ({
   rightIcon,
 }) => {
   const stringValue = value !== undefined && value !== null ? String(value) : '';
+  const { colors } = useTheme();
 
   return (
     <View style={[containerStyle]}>
-      {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
+      {label ? <Text style={[styles.label, {color: colors.text},labelStyle]}>{label}</Text> : null}
       <View style={styles.inputWrapper}>
         <RNTextInput
-          style={[styles.input, inputStyle, rightIcon ? { paddingRight: 40 } : {}]}
+          style={[styles.input, {borderColor: colors.midgrey, color: colors.black}, inputStyle, rightIcon ? { paddingRight: 40 } : {}]}
           value={stringValue}
           onChangeText={(text) => onChangeText?.(text)}
           secureTextEntry={secure}
@@ -59,7 +61,6 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '600',
     marginBottom: 4,
-    color: '#333',
   },
   inputWrapper: {
     position: 'relative',
@@ -67,11 +68,9 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#999',
     borderRadius: 6,
     paddingHorizontal: 12,
     fontSize: 16,
-    color: '#000',
     height: 45,
   },
   rightIcon: {

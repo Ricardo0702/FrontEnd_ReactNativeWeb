@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Colors from '../../components/Colors';
+import { useTheme } from '../../context/ThemeContext';
 import Icon from '../../components/Icon';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,6 +9,7 @@ const LoginNavbar: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { colors } = useTheme();
 
   const flagCa = require('../../../public/assets/cat.png');
   const flagEs = require('../../../public/assets/es.png');
@@ -36,7 +37,7 @@ const LoginNavbar: React.FC = () => {
   }, [langOpen]);
 
   return (
-    <View style={styles.navbar}>
+    <View style={[styles.navbar, {backgroundColor: colors.darksteel}]}>
       <Text style={styles.title}>{t('title.My Dashboard')}</Text>
 
       <View style={styles.languageSelector} ref={dropdownRef as any}>
@@ -45,7 +46,7 @@ const LoginNavbar: React.FC = () => {
           <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
         </TouchableOpacity>
         {langOpen && (
-          <View style={styles.languageDropdown}>
+          <View style={[styles.languageDropdown, {backgroundColor: colors.darksteel}]}>
             <TouchableOpacity style={styles.option} onPress={() => changeLanguage('es')}>
               <Text style={styles.navLink}>{t('language.spanish')}</Text>
               <Image source={flagEs} style={styles.flag} />
@@ -68,7 +69,6 @@ const LoginNavbar: React.FC = () => {
 const styles = StyleSheet.create({
 
   navbar: {
-    backgroundColor: Colors.darksteel,
     paddingVertical: 10,
     paddingHorizontal: 50,
     flexDirection: 'row',
@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 30,
     left: 0,
-    backgroundColor: Colors.darksteel,
     padding: 10,
     borderRadius: 5,
     zIndex: 100,

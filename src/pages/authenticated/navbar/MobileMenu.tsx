@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Colors from '../../../components/Colors';
 import { useTranslation } from 'react-i18next';
 import LanguageDropdown from './LanguageDropdown';
 import { hasAuthority, Authority } from '../../../hooks/UseAuthority';
@@ -10,7 +9,7 @@ import PagesDropdown from './PgesDropdown';
 import { UserContext } from '../../../context/UserContext';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 
 interface MobileMenuProps {
   onLogout: () => void;
@@ -23,6 +22,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
   const navigate = useNavigate();
   const { authorities } = useContext(UserContext);
   const [logoutModal, setLogoutModal] = useState(false);
+  const { colors } = useTheme();
 
   const handleLogoutClick = () => {
     setLogoutModal(true);
@@ -36,16 +36,16 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
   };
 
   return (
-    <View style={styles.dropdown}>
-      <PagesDropdown dropdownStyle={{ backgroundColor: Colors.darksteel, padding: 5 }} closeMenu={closeMenu} />
+    <View style={[styles.dropdown, {backgroundColor: colors.midsteel}]}>
+      <PagesDropdown dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5 }} closeMenu={closeMenu} />
       {hasAuthority(authorities, Authority.ROLE_ADMIN) && (
         <>
-          <AdminDropdown dropdownStyle={{ backgroundColor: Colors.darksteel, padding: 5 }} closeMenu={closeMenu} />
+          <AdminDropdown dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5 }} closeMenu={closeMenu} />
         </>
       )}
-      <LanguageDropdown onChangeLanguage={onChangeLanguage} closeMenu={closeMenu} dropdownStyle={{ backgroundColor: Colors.darksteel, padding: 5 }} />
+      <LanguageDropdown onChangeLanguage={onChangeLanguage} closeMenu={closeMenu} dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5 }} />
       <TouchableOpacity onPress={handleLogoutClick}>
-        <Text style={styles.navLink}>{t('navbar.logout')}</Text>
+        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={cancelLogout} size="s" position="top">
         <Text style={{ marginBottom: 20, alignSelf: 'center' }}> {t('confirm.logout.message')} </Text>
@@ -56,8 +56,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
             paddingTop: 30,
           }}
         >
-          <Button title={t('button.cancel')} onPress={() => setLogoutModal(false)} size="xxs" color="white" style={styles.cancelButton} />
-          <Button title={t('button.logout')} onPress={confirmLogout} size="xxs" color="white" style={styles.confirmButton} />
+          <Button title={t('button.cancel')} size="xxs" color={colors.whiteText} onPress={() => setLogoutModal(false)} 
+            style={[styles.cancelButton, {color: colors.whiteText, backgroundColor: colors.darksteel}]}/>
+          <Button title={t('button.logout')} size="xxs" color={colors.whiteText} onPress={confirmLogout}
+            style={[{color: colors.whiteText, backgroundColor: colors.darksteel}]}/>
         </View>
       </Modal>
     </View>
@@ -68,16 +70,14 @@ const styles = StyleSheet.create({
 
   dropdown: {
     marginTop: 5,
-    backgroundColor: Colors.midsteel,
     padding: 5,
     borderRadius: 8,
   },
 
-  navLink: { color: 'white', fontSize: 17, marginVertical: 5 },
+  navLink: { fontSize: 17, marginVertical: 5 },
 
-  cancelButton: { backgroundColor: colors.darksteel, color: 'white', marginBottom: 20 },
+  cancelButton: { marginBottom: 20 },
 
-  confirmButton: { backgroundColor: colors.darksteel, color: 'white' },
 });
 
 export default MobileMenu;

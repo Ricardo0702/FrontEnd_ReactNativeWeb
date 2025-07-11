@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, type DimensionValue } from 'react-native';
-import colors from './Colors';
+import { useTheme } from '../context/ThemeContext';
 import useResponsive from './UseResponsive';
 import { useTranslation, Trans } from 'react-i18next';
 
@@ -25,6 +25,7 @@ const Button: React.FC<ButtonProps> = ({ title, onPress, minWidth, width, height
   const fontSizeValue = fontSize;
   const fontColor = color;
   const { t } = useTranslation();
+  const {colors} = useTheme();
 
   const getType = () => {
     switch (type) {
@@ -36,7 +37,7 @@ const Button: React.FC<ButtonProps> = ({ title, onPress, minWidth, width, height
       case 'save':
         return {
           buttonStyle: { backgroundColor: colors.darksteel },
-          textStyle: { color: 'white' },
+          textStyle: { color: colors.whiteText },
         };
       case 'link':
         return {
@@ -49,12 +50,12 @@ const Button: React.FC<ButtonProps> = ({ title, onPress, minWidth, width, height
       case 'add':
         return {
           buttonStyle: { backgroundColor: colors.lightBlue },
-          textStyle: { color: 'black' },
+          textStyle: { color: colors.text },
         };
       case 'associate':
         return {
           buttonStyle: { backgroundColor: 'transparent' },
-          textStyle: { color: 'black' },
+          textStyle: { color: colors.text },
         };
       default:
         return { buttonStyle: {}, textStyle: { color: fontColor } };

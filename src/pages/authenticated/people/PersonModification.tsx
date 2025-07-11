@@ -12,6 +12,7 @@ import { saveRecentChange } from '../../../services/localStorage';
 import Title from '../../../components/Title';
 import Select from '../../../components/Select';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../../../context/ThemeContext';
 
 type Props = {
   personId: number | null;
@@ -28,6 +29,7 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
   const [newStreet, setNewStreet] = useState('');
   const [newCity, setNewCity] = useState('');
   const [associatedProjects, setAssociatedProjects] = useState<Project[]>([]);
+  const { colors } = useTheme();
 
   const loadAssociatedProjects = async () => {
     if (!localPerson.projectIds || localPerson.projectIds.length === 0) {
@@ -145,32 +147,33 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
   );
 
   return (
-    <View style={styles.container}>
-      <Title text={t('title.edit.person')} type="Subtitle" style={{ marginBottom: 20 }} />
+    <View style={[styles.container, {backgroundColor: colors.whiteBackground}]}>
+      <Title text={t('title.edit.person')} type="Subtitle" style={{marginBottom: 20, color: colors.text }} />
       <TextInput
         label={t('label.Name')}
         value={localPerson.name}
-        inputStyle={styles.input}
+        inputStyle={[styles.input, {borderColor :colors.ccc}]}
         onChangeText={(value: string) => setLocalPerson({ ...localPerson, name: value })}
       />
       <TextInput
         label={t('label.age')}
         value={localPerson.age}
         keyboardType="numeric"
-        inputStyle={styles.input}
+        inputStyle={[styles.input, {borderColor :colors.ccc}]}
         onChangeText={(value: string) => setLocalPerson({ ...localPerson, age: parseInt(value) })}
       />
 
       <Button title={t('button.save')} onPress={handleUpdate} type="save" />
 
-      <Title text={t('title.associated.projects')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.associated.projects')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20, color: colors.text }} />
       {(localPerson.projectIds || []).map((id) => {
         const project = projects.find((p) => p.id === id);
         if (!project) return null;
         return (
           <View key={id} style={styles.listItem}>
-            <Text>{project.name}</Text>
+            <Text style={{color: colors.text}}>{project.name}</Text>
             <Button
+              style={{color: colors.text}}
               title={t('button.delete')}
               type="delete"
               onPress={() => {
@@ -187,7 +190,7 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         );
       })}
 
-      <Title text={t('title.add.project')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.add.project')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20, color: colors.text }} />
       <Select
         selectedValue={newProjectId}
         options={projects.map((project) => ({
@@ -207,7 +210,7 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
       <Button
         title={t('button.associate.project')}
         type="save"
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 10, color: colors.text }}
         onPress={() => {
           const project = projects.find((p) => p.id === newProjectId);
           if (project === undefined || newProjectId === undefined) return;
@@ -221,16 +224,17 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         }}
       />
 
-      <Title text={t('title.associated.Addresses')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.associated.Addresses')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20, color: colors.text }} />
       {(localPerson.addressIds || []).map((id) => {
         const Address = Addresses.find((d) => d.id === id);
         if (!Address) return null;
         return (
           <View key={id} style={styles.listItem}>
-            <Text>
+            <Text style={{color: colors.text}}>
               {Address.street} - {Address.city}
             </Text>
             <Button
+              style={{color: colors.text}}
               title={t('button.delete')}
               type="delete"
               onPress={() => {
@@ -247,9 +251,10 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         );
       })}
 
-      <TextInput label={t('label.sreet')} value={newStreet} onChangeText={setNewStreet} inputStyle={styles.input} />
-      <TextInput label={t('label.city')} value={newCity} onChangeText={setNewCity} inputStyle={styles.input} />
+      <TextInput label={t('label.sreet')} value={newStreet} onChangeText={setNewStreet} inputStyle={[styles.input, {borderColor :colors.ccc}]} />
+      <TextInput label={t('label.city')} value={newCity} onChangeText={setNewCity} inputStyle={[styles.input, {borderColor :colors.ccc}]} />
       <Button
+        style={{color: colors.text}}
         title={t('button.add.address')}
         type="save"
         onPress={async () => {
@@ -270,10 +275,9 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
 
 const styles = StyleSheet.create({
 
-  container: { padding: 20, flex: 1, backgroundColor: '#fff' },
+  container: { padding: 20, flex: 1 },
 
-  input: { 
-    borderColor: '#ccc', 
+  input: {  
     borderWidth: 1, 
     marginBottom: 10, 
     padding: 8, 

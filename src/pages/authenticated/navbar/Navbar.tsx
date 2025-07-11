@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Colors from '../../../components/Colors';
 import { useTranslation } from 'react-i18next';
 import MobileMenu from './MobileMenu';
 import DesktopMenu from './DeskTopMenu';
+import { useTheme } from '../../../context/ThemeContext';
 
 interface NavbarProps {
   onLogout: () => void;
@@ -14,6 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const menuRef = useRef<HTMLDivElement>(null);
+  const { theme, toggleTheme, colors } = useTheme();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 700);
@@ -44,10 +45,11 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 
   return (
     <>
-      <View style={styles.navbar}>
+      <View style={[styles.navbar, { backgroundColor: colors.darksteel }]}>
         <TouchableOpacity onPress={() => (window.location.pathname = '/')}>
-          <Text style={styles.logo}>{t('title.My Dashboard')}</Text>
+          <Text style={[styles.logo, { color: colors.whiteText }]}>{t('title.My Dashboard')}</Text>
         </TouchableOpacity>
+
         {isMobile ? (
           <TouchableOpacity
             style={{ flex: 1, alignItems: 'flex-end' }}
@@ -56,16 +58,32 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
               setMenuOpen(!menuOpen);
             }}
           >
-            <Text style={styles.burger}>☰</Text>
+            <Text style={[styles.burger, { color: colors.whiteText }]}>☰</Text>
           </TouchableOpacity>
         ) : (
-          <DesktopMenu onLogout={onLogout} onChangeLanguage={changeLanguage} />
+          <>
+            <DesktopMenu onLogout={onLogout} onChangeLanguage={changeLanguage} />
+            <TouchableOpacity onPress={toggleTheme} style={styles.themeButton}>
+              <Text style={{ color: colors.whiteText }}>
+                {theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
+              </Text>
+            </TouchableOpacity>
+          </>
         )}
-        ;
       </View>
+
       {isMobile && menuOpen && (
-        <View style={styles.menuContainer} ref={menuRef as any}>
-          <MobileMenu onLogout={onLogout} onChangeLanguage={changeLanguage} closeMenu={() => setMenuOpen(false)} />
+        <View style={[styles.menuContainer, { backgroundColor: colors.midsteel }]} ref={menuRef as any}>
+          <MobileMenu
+            onLogout={onLogout}
+            onChangeLanguage={changeLanguage}
+            closeMenu={() => setMenuOpen(false)}
+          />
+          <TouchableOpacity onPress={toggleTheme} style={[styles.themeButton, { marginTop: 10 }]}>
+            <Text style={{ color: colors.whiteText }}>
+              {theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </>
@@ -73,9 +91,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
 };
 
 const styles = StyleSheet.create({
-  
   navbar: {
-    backgroundColor: Colors.darksteel,
     paddingVertical: 10,
     paddingHorizontal: 50,
     flexDirection: 'row',
@@ -89,20 +105,27 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
   },
 
-  logo: { fontSize: 24, fontWeight: 'bold', color: 'white' },
+  logo: { fontSize: 24, fontWeight: 'bold' },
 
-  burger: { fontSize: 26, color: 'white', padding: 5 },
-  
+  burger: { fontSize: 26, padding: 5 },
+
   menuContainer: {
     position: 'absolute',
     top: 60,
     right: 10,
     flex: 1,
     alignItems: 'flex-end',
-    backgroundColor: Colors.midsteel,
     zIndex: 999,
     borderRadius: 6,
     padding: 10,
+  },
+
+  themeButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
 });
 

@@ -1,11 +1,10 @@
 import React, { JSX, useContext, useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, useWindowDimensions, TouchableOpacity } from 'react-native';
-import Colors from './Colors';
 import TextInput from './TextInput';
 import { useTranslation } from 'react-i18next';
 import Select, { SelectOption } from './Select';
-import colors from './Colors';
 import { highlightText } from './HighlightText';
+import { useTheme } from '../context/ThemeContext';
 
 export interface TableProps<T> {
   columns: Array<{
@@ -50,6 +49,7 @@ const Table = <T,>({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
+  const {colors} = useTheme();
 
   if (!data.length || !columns.length) return null;
 
@@ -128,7 +128,7 @@ const Table = <T,>({
             fontSize: 11,
             lineHeight: 10,
             textAlign: 'center',
-            color: isSorted && sortDirection === 'asc' ? 'white' : colors.midsteel,
+            color: isSorted && sortDirection === 'asc' ? colors.whiteText : colors.midsteel,
           }}
         >
           ▲
@@ -138,7 +138,7 @@ const Table = <T,>({
             fontSize: 11,
             lineHeight: 10,
             textAlign: 'center',
-            color: isSorted && sortDirection === 'desc' ? 'white' : colors.midsteel,
+            color: isSorted && sortDirection === 'desc' ? colors.whiteText : colors.midsteel,
           }}
         >
           ▼
@@ -151,12 +151,12 @@ const Table = <T,>({
     return (
       <ScrollView style={[styles.cardsContainer, style]}>
         {data.map((row, rowIndex) => (
-          <View key={rowIndex} style={styles.card}>
+          <View key={rowIndex} style={[styles.card, {backgroundColor: colors.whiteBackground}]}>
             {columns.map((col, colIndex) => {
               const cellValue = col.accessor ? row[col.accessor] : null;
               return (
                 <View key={colIndex} style={styles.cardRow}>
-                  <Text style={styles.cardHeader}>{col.header}:</Text>
+                  <Text style={[styles.cardHeader, {color: colors.text}]}>{col.header}:</Text>
                   <Text style={styles.cardValue}>
                     {col.render
                       ? col.render(cellValue ?? '', row, rowIndex, highlightText, filterText)
@@ -206,7 +206,7 @@ const Table = <T,>({
           <Text
             style={{
               fontSize: 18,
-              color: currentPage === 0 ? '#ccc' : 'black',
+              color: currentPage === 0 ? colors.ccc : colors.text,
             }}
           >
             ◀
@@ -217,8 +217,8 @@ const Table = <T,>({
             <TouchableOpacity onPress={() => setCurrentPage(0)} style={{ paddingHorizontal: 6 }}>
               <Text
                 style={{
-                  color: currentPage === 0 ? 'white' : 'black',
-                  backgroundColor: currentPage === 0 ? Colors.darksteel : undefined,
+                  color: currentPage === 0 ? colors.whiteText : colors.text,
+                  backgroundColor: currentPage === 0 ? colors.darksteel : undefined,
                   borderRadius: 4,
                   paddingHorizontal: 6,
                 }}
@@ -237,8 +237,8 @@ const Table = <T,>({
               <Text
                 style={{
                   padding: 6,
-                  backgroundColor: isCurrent ? Colors.darksteel : '#eee',
-                  color: isCurrent ? 'white' : 'black',
+                  backgroundColor: isCurrent ? colors.darksteel : colors.eee,
+                  color: isCurrent ? colors.whiteText : colors.text,
                   borderRadius: 4,
                   minWidth: 24,
                   textAlign: 'center',
@@ -255,8 +255,8 @@ const Table = <T,>({
             <TouchableOpacity onPress={() => setCurrentPage(totalPages - 1)} style={{ paddingHorizontal: 6 }}>
               <Text
                 style={{
-                  color: currentPage === totalPages - 1 ? 'white' : 'black',
-                  backgroundColor: currentPage === totalPages - 1 ? Colors.darksteel : undefined,
+                  color: currentPage === totalPages - 1 ? colors.whiteText : colors.text,
+                  backgroundColor: currentPage === totalPages - 1 ? colors.darksteel : undefined,
                   borderRadius: 4,
                   paddingHorizontal: 6,
                 }}
@@ -274,7 +274,7 @@ const Table = <T,>({
           <Text
             style={{
               fontSize: 18,
-              color: currentPage === totalPages - 1 ? '#ccc' : 'black',
+              color: currentPage === totalPages - 1 ? '#ccc' : colors.text,
             }}
           >
             ▶
@@ -337,12 +337,12 @@ const Table = <T,>({
 
       <ScrollView horizontal style={[styles.container, style]}>
         <View style={{ width: windowWidth * (widthFactor ?? 0.8) }}>
-          <View style={[styles.row, styles.headerRow, { minHeight: minRowHeight }]}>
+          <View style={[styles.row, styles.headerRow, { borderBottomColor: colors.midgrey, backgroundColor: colors.darksteel, minHeight: minRowHeight }]}>
             {columns.map((col, idx) => (
               <TouchableOpacity
                 key={idx}
                 style={[
-                  styles.cell,
+                  styles.cell,{borderRightColor: colors.ccc},
                   styles.headerCell,
                   col.width
                     ? { width: col.width }
@@ -356,7 +356,7 @@ const Table = <T,>({
                 activeOpacity={col.sortable ? 0.6 : 1}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Text style={styles.headerText}>{col.header}</Text>
+                  <Text style={[styles.headerText, {color: colors.whiteText}]}>{col.header}</Text>
                   {renderSortIndicator(col)}
                 </View>
               </TouchableOpacity>
@@ -364,7 +364,9 @@ const Table = <T,>({
           </View>
 
           {paginatedData.map(({ item: row, matchingColumns }, rowIndex) => (
-            <View key={rowIndex} style={[styles.row, rowIndex % 2 === 0 ? styles.evenRow : styles.oddRow, { minHeight: minRowHeight }]}>
+            <View key={rowIndex} style={[styles.row, rowIndex % 2 === 0 ? {backgroundColor: colors.evenRow} : 
+              {backgroundColor: colors.oddRow}, { minHeight: minRowHeight }]}
+            >
               {columns.map((col, colIndex) => {
                 const cellValue = col.accessor ? row[col.accessor] : null;
                 const accessorKey = String(col.accessor);
@@ -374,7 +376,7 @@ const Table = <T,>({
                   <View
                     key={colIndex}
                     style={[
-                      styles.cell,
+                      styles.cell,{borderRightColor: colors.ccc},
                       col.width
                         ? { width: col.width }
                         : {
@@ -413,34 +415,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerRow: {
-    backgroundColor: Colors.darksteel,
     borderBottomWidth: 1,
-    borderBottomColor: '#999',
   },
   cell: {
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRightWidth: 1,
-    borderRightColor: '#ccc',
     justifyContent: 'center',
   },
   headerCell: {},
   headerText: {
     fontSize: 17,
-    color: 'white',
-  },
-  evenRow: {
-    backgroundColor: '#f9f9f9',
-  },
-  oddRow: {
-    backgroundColor: '#f0f0f0',
   },
   cardsContainer: {
     marginTop: 15,
     padding: 15,
   },
   card: {
-    backgroundColor: 'white',
     padding: 12,
     marginVertical: 8,
     shadowColor: '#000',

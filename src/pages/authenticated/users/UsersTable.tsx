@@ -4,7 +4,7 @@ import { View, useWindowDimensions, Text } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 
 interface UsersTableProps {
   users: User[];
@@ -16,6 +16,7 @@ interface UsersTableProps {
 const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit, setShowModalForm }) => {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
+  const { colors } = useTheme();
 
   const renderHeaderButton = (
     <View style={{ alignItems: 'flex-start' }}>

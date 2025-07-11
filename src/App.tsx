@@ -15,11 +15,14 @@ import { UserContextProvider } from './context/UserContextProvider';
 import { UserContext } from './context/UserContext';
 import ProtectedRoutes from './components/routes/ProtectedRoutes';
 import AdminRoutes from './components/routes/AdminRoutes';
+import { ThemeProvider } from './context/ThemeContext';
+import { useTheme } from './context/ThemeContext';
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const checkToken = async () => {
@@ -46,7 +49,7 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       {userContext.username && <Navbar onLogout={handleLogout} />}
       <Routes>
         <Route
@@ -81,15 +84,17 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <UserContextProvider>
-      <Router>
-        <AppContent />
-      </Router>
+      <ThemeProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </ThemeProvider>
     </UserContextProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, minHeight: '100%', backgroundColor: '#f9f9f9' },
+  container: { flex: 1, minHeight: '100%' }, //, backgroundColor: '#f9f9f9'
 });
 
 export default App;

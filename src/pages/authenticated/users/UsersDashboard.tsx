@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { UserContext } from '../../../context/UserContext';
 import Icon from '../../../components/Icon';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 
 const UsersDashboard: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -30,6 +30,7 @@ const UsersDashboard: React.FC = () => {
   const [signUpError, setSignUpError] = useState('');
   const [touchedSignUp, setTouchedSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { colors } = useTheme();
 
   const fetchData = async () => {
     try {

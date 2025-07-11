@@ -3,7 +3,7 @@ import type { Role } from '../../../types/IRole';
 import { useWindowDimensions, View } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
-import colors from '../../../components/Colors';
+import { useTheme } from '../../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 
 interface RoleTableProps {
@@ -16,6 +16,7 @@ interface RoleTableProps {
 const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit, setShowModalForm }) => {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowDimensions();
+  const { colors } = useTheme();
 
   const renderHeaderButton = (
     <View style={{ alignItems: 'flex-start' }}>
