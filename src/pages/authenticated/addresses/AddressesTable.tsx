@@ -27,7 +27,7 @@ const AddressesTable: React.FC<AddressesTableProps> = ({ Addresses, onDelete, on
         title={t('button.add.address')}
         onPress={() => setShowModalForm(true)}
         height={50}
-        color="white"
+        color= {colors.whiteText}
         style={{ backgroundColor: colors.darksteel, borderRadius: 6 }}
         width={windowWidth * 0.1}
       />
@@ -41,25 +41,40 @@ const AddressesTable: React.FC<AddressesTableProps> = ({ Addresses, onDelete, on
     filterable?: boolean;
     width?: number;
     minRowWidth?: number;
-    render?: (value: any, row: Address) => React.ReactNode;
+    render?: (
+          value: any,
+          row: Address,
+          rowIndex?: number,
+          highlightText?: (text: string, highlight: string) => React.ReactNode,
+          highlight?: string,
+        ) => React.ReactNode;
   }[] = [
     {
       header: t('columns.street'),
       accessor: 'street',
       filterable: true,
       sortable: true,
+      render: (value, row, _, highlightText, highlight) => (
+              <Text style={{color: colors.text}}>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
+            ),
     },
     {
       header: t('columns.city'),
       accessor: 'city',
       filterable: true,
       sortable: true,
+      render: (value, row, _, highlightText, highlight) => (
+              <Text style={{color: colors.text}}>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
+            ),
     },
     {
       header: t('columns.person'),
       accessor: 'personName',
       filterable: true,
       sortable: true,
+      render: (value, row, _, highlightText, highlight) => (
+              <Text style={{color: colors.text}}>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
+            ),
     },
     ...(hasAuthority(authorities, Authority.ROLE_ADDRESSES) || hasAuthority(authorities, Authority.ROLE_ADMIN)
       ? [

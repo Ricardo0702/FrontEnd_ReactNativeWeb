@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useTheme } from '../context/ThemeContext';
 
 export interface SelectOption {
   label: string;
@@ -16,13 +17,18 @@ export interface SelectProps {
 }
 
 const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, placeholder, style }) => {
+  const {colors} = useTheme();
+  
   if (Platform.OS === 'web') {
     return (
       <View style={[style]}>
         <select
           value={selectedValue === null || selectedValue === undefined ? '' : selectedValue}
           onChange={(e) => onValueChange(e.target.value)}
-          style={styles.webSelect}
+          style={{
+            ...styles.webSelect,
+            backgroundColor: colors.whiteBackground, color: colors.text
+          }}
         >
           {placeholder && (
             <option value="" disabled hidden>

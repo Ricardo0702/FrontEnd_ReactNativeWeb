@@ -9,6 +9,7 @@ import Title from '../../../components/Title';
 import { Skeleton } from '../../../components/Skeleton';
 import { useTranslation } from 'react-i18next';
 import RolesTable from './RolesTable';
+import { useTheme } from '../../../context/ThemeContext';
 
 const RolesDashboard: React.FC = () => {
   const [roles, setRoles] = useState<Role[]>([]);
@@ -19,6 +20,7 @@ const RolesDashboard: React.FC = () => {
   const [roleDescritpion, setRoleDescription] = useState('');
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
   const { t } = useTranslation();
+  const { colors } = useTheme();
 
   const fetchData = async () => {
     try {
@@ -94,7 +96,7 @@ const RolesDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 30 }}>
-          <Title text={t('title.registered.roles')} size="xl" align="center" underline />
+          <Title text={t('title.registered.roles')} size="xl" align="center" underline color = {colors.text}/>
         </View>
 
         <View style={styles.tableContainer}>
@@ -115,8 +117,10 @@ const RolesDashboard: React.FC = () => {
         }}
       >
         <View>
-          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} inputStyle={styles.input} autoFocus />
-          <TextInput label={t('label.role.name')} value={roleDescritpion} onChangeText={setRoleDescription} inputStyle={styles.input} autoFocus />
+          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} 
+            inputStyle={[styles.input, {borderColor: colors.ccc}]} autoFocus />
+          <TextInput label={t('label.role.name')} value={roleDescritpion} onChangeText={setRoleDescription} 
+            inputStyle={[styles.input, {borderColor: colors.ccc}]} autoFocus />
           <Button
             title={t('button.save')}
             type="save"
@@ -140,12 +144,13 @@ const RolesDashboard: React.FC = () => {
         size="s"
       >
         <View>
-          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} inputStyle={styles.input} autoFocus />
+          <TextInput label={t('label.role.name')} value={roleName} onChangeText={setRoleName} 
+            inputStyle={[styles.input, {borderColor: colors.ccc}]} autoFocus />
           <TextInput
             label={t('label.role.description')}
             value={roleDescritpion}
             onChangeText={setRoleDescription}
-            inputStyle={styles.input}
+            inputStyle={[styles.input, {borderColor: colors.ccc}]}
             autoFocus
           />
           <Button
@@ -184,7 +189,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
     width: '100%',
   },

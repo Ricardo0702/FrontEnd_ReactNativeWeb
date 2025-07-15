@@ -52,7 +52,7 @@ const TextInput: React.FC<TextInputProps> = ({
         />
         {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
       </View>
-      {errorMessage ? <Text style={[styles.error, errorStyle]}>{errorMessage}</Text> : null}
+      {errorMessage ? <Text style={[styles.error, {color: colors.red}, errorStyle]}>{errorMessage}</Text> : null}
     </View>
   );
 };
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
   },
   error: {
     marginTop: 4,
-    color: '#cc0000',
     fontSize: 12,
   },
 });

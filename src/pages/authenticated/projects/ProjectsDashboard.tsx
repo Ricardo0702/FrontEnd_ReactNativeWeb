@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import ProjectsTable from './ProjectsTable';
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
+import { useTheme } from '../../../context/ThemeContext';
 
 const ProjectsDashboard: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -21,6 +22,7 @@ const ProjectsDashboard: React.FC = () => {
   const [projectName, setProjectName] = useState('');
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
   const { authorities } = useContext(UserContext);
+  const { colors } = useTheme();
 
   const { t } = useTranslation();
 
@@ -109,9 +111,9 @@ const ProjectsDashboard: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={[styles.scrollContainer, {backgroundColor: colors.background}]}>
         <View style={{ paddingBottom: 30 }}>
-          <Title text={t('title.registered.projects')} size="xl" align="center" underline />
+          <Title text={t('title.registered.projects')} size="xl" align="center" underline color = {colors.text} />
         </View>
 
         <View style={styles.tableContainer}>
@@ -132,7 +134,8 @@ const ProjectsDashboard: React.FC = () => {
         size="xs"
       >
         <View>
-          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} inputStyle={styles.input} autoFocus />
+          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} 
+            inputStyle={[styles.input, {borderColor: colors.ccc}]} autoFocus />
           <Button
             title={t('button.save')}
             type="save"
@@ -147,7 +150,8 @@ const ProjectsDashboard: React.FC = () => {
 
       <Modal title={t('modal.add.project')} visible={showModalForm} onClose={() => setShowModalForm(false)} size="xs">
         <View>
-          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} inputStyle={styles.input} autoFocus />
+          <TextInput label={t('label.project.name')} value={projectName} onChangeText={setProjectName} 
+            inputStyle={[styles.input, {borderColor: colors.ccc}]} autoFocus />
           <Button title={t('button.saver')} onPress={handleCreateProject} type="save" />
         </View>
       </Modal>
@@ -175,7 +179,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
     width: '100%',
   },

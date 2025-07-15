@@ -24,7 +24,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit, setSho
         title={t('button.add.user')}
         onPress={() => setShowModalForm(true)}
         height={50}
-        color="white"
+        color={ colors.whiteText }
         style={{ backgroundColor: colors.darksteel, borderRadius: 6 }}
         width={windowWidth * 0.1}
       />
@@ -51,6 +51,9 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit, setSho
       accessor: 'username',
       filterable: true,
       sortable: true,
+      render: (value, row, _, highlightText, highlight) => (
+              <Text style={{color: colors.text}}>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
+            ),
     },
     {
       header: t('columns.roles'),
@@ -61,7 +64,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, onDelete, onEdit, setSho
         const rolesText = Array.isArray(value) ? value.join(', ') : (value ?? ' ');
         return (
           <View style={{ flexWrap: 'wrap' }}>
-            <Text style={{ flexShrink: 1 }}>{highlightText ? highlightText(rolesText, filterValue || '') : rolesText}</Text>
+            <Text style={{ flexShrink: 1, color: colors.text }}>{highlightText ? highlightText(rolesText, filterValue || '') : rolesText}</Text>
           </View>
         );
       },

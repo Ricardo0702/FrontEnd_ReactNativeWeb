@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import type { Project } from '../../../types/IProject';
-import { useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View, Text } from 'react-native';
 import Table from '../../../components/Table';
 import Button from '../../../components/Button';
 import { useTheme } from '../../../context/ThemeContext';
@@ -27,7 +27,7 @@ const ProjectsTable: React.FC<ProjectTableProps> = ({ projects, onDelete, onEdit
         title={t('button.add.project')}
         onPress={() => setShowModalForm(true)}
         height={50}
-        color="white"
+        color={ colors.whiteText}
         style={{ backgroundColor: colors.darksteel, borderRadius: 6 }}
         width={windowWidth * 0.1}
       />
@@ -40,13 +40,22 @@ const ProjectsTable: React.FC<ProjectTableProps> = ({ projects, onDelete, onEdit
     filterable?: boolean;
     sortable?: boolean;
     width?: number;
-    render?: (value: any, row: Project, rowIndex?: number) => React.ReactNode;
+    render?: (
+          value: any,
+          row: Project,
+          rowIndex?: number,
+          highlightText?: (text: string, highlight: string) => React.ReactNode,
+          highlight?: string,
+        ) => React.ReactNode;
   }[] = [
     {
       header: t('columns.name'),
       accessor: 'name',
       filterable: true,
       sortable: true,
+      render: (value, row, _, highlightText, highlight) => (
+              <Text style={{color: colors.text}}>{highlightText ? highlightText(String(value), highlight || '') : String(value)}</Text>
+            ),
     },
     ...(hasAuthority(authorities, Authority.ROLE_PROJECTS) || hasAuthority(authorities, Authority.ROLE_ADMIN)
       ? [

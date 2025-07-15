@@ -17,7 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const { theme, toggleTheme, colors } = useTheme();
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 700);
+    const handleResize = () => setIsMobile(window.innerWidth <= 730);
     const savedLang = localStorage.getItem('appLanguage');
     if (savedLang) i18n.changeLanguage(savedLang);
     handleResize();
@@ -63,11 +63,6 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
         ) : (
           <>
             <DesktopMenu onLogout={onLogout} onChangeLanguage={changeLanguage} />
-            <TouchableOpacity onPress={toggleTheme} style={styles.themeButton}>
-              <Text style={{ color: colors.whiteText }}>
-                {theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
-              </Text>
-            </TouchableOpacity>
           </>
         )}
       </View>
@@ -79,11 +74,6 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
             onChangeLanguage={changeLanguage}
             closeMenu={() => setMenuOpen(false)}
           />
-          <TouchableOpacity onPress={toggleTheme} style={[styles.themeButton, { marginTop: 10 }]}>
-            <Text style={{ color: colors.whiteText }}>
-              {theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}
-            </Text>
-          </TouchableOpacity>
         </View>
       )}
     </>

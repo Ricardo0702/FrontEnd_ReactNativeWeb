@@ -182,12 +182,14 @@
     "admin": "Admin",
     "users": "Usuarios",
     "roles": "Roles",
+    "config": "Config",
     "logout": "Cerrar sesión",
     "language": "Idioma",
     "pages": "Páginas",
     "people": "Personas",
     "projects": "Proyectos",
-    "addresses": "Direcciones"
+    "addresses": "Direcciones",
+    "theme": "Tema"
   },
   "confirm": {
     "logout": {
@@ -199,6 +201,10 @@
     "spanish": "Es",
     "catalan": "Cat",
     "english": "En"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro"
   },
   "unknown": {
     "street": "Calle desconocida",

@@ -9,6 +9,7 @@ import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import Select from '../../../components/Select';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../../../context/ThemeContext';
 
 type Props = {
   userId: number | null;
@@ -22,6 +23,7 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
   const [roles, setRoles] = useState<Role[]>([]);
   const [newRoleId, setNewRoleId] = useState<number | undefined>(undefined);
   const [associatedRoles, setAssociatedRoles] = useState<Role[]>([]);
+  const { colors }= useTheme();
 
   const loadAssociatedRoles = async () => {
     if (!localUser.roleIds || localUser.roleIds.length === 0) {
@@ -77,23 +79,23 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
   };
 
   return (
-    <View style={styles.container}>
-      <Title text={t('title.edit.user')} type="Subtitle" style={{ marginBottom: 20 }} />
+    <View style={[styles.container, {backgroundColor: colors.whiteBackground}]}>
+      <Title text={t('title.edit.user')} type="Subtitle" style={{ marginBottom: 20, color: colors.text}} />
       <TextInput
         label={t('label.Username')}
         value={localUser.username}
-        inputStyle={styles.input}
+        inputStyle={[styles.input, {borderColor: colors.ccc}]}
         onChangeText={(value: string) => setLocalUser({ ...localUser, username: value })}
       />
       <Button title={t('button.save')} onPress={handleUpdate} type="save" />
 
-      <Title text={t('title.assigned.roles')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.assigned.roles')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20, color: colors.text }} />
       {(localUser.roleIds || []).map((id) => {
         const role = roles.find((r) => r.id === id);
         if (!role) return null;
         return (
           <View key={id} style={styles.listItem}>
-            <Text>{role.name}</Text>
+            <Text style= {{color: colors.text}}>{role.name}</Text>
             <Button
               title={t('button.delete')}
               type="delete"
@@ -111,7 +113,7 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
         );
       })}
 
-      <Title text={t('title.add.role')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.add.role')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20, color: colors.text }} />
       <Select
         selectedValue={newRoleId}
         options={roles.map((role) => ({ label: role.name, value: role.id }))}
@@ -150,7 +152,6 @@ const styles = StyleSheet.create({
   container: { padding: 20, flex: 1, backgroundColor: '#fff' },
 
   input: {
-    borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 10,
     padding: 8,

@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../context/ThemeContext';
 import Icon from '../../components/Icon';
+import ConfigDropdown from '../authenticated/navbar/dropdowns/ConfigDropdown';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 const LoginNavbar: React.FC = () => {
@@ -38,30 +39,8 @@ const LoginNavbar: React.FC = () => {
 
   return (
     <View style={[styles.navbar, {backgroundColor: colors.darksteel}]}>
-      <Text style={styles.title}>{t('title.My Dashboard')}</Text>
-
-      <View style={styles.languageSelector} ref={dropdownRef as any}>
-        <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.navLink}>{t('navbar.language')}</Text>
-          <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color="white" />
-        </TouchableOpacity>
-        {langOpen && (
-          <View style={[styles.languageDropdown, {backgroundColor: colors.darksteel}]}>
-            <TouchableOpacity style={styles.option} onPress={() => changeLanguage('es')}>
-              <Text style={styles.navLink}>{t('language.spanish')}</Text>
-              <Image source={flagEs} style={styles.flag} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.option} onPress={() => changeLanguage('ca')}>
-              <Text style={styles.navLink}>{t('language.catalan')}</Text>
-              <Image source={flagCa} style={styles.flag} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.option} onPress={() => changeLanguage('en')}>
-              <Text style={styles.navLink}>{t('language.english')}</Text>
-              <Image source={flagEn} style={styles.flag} />
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
+      <Text style={[styles.title, {color: colors.whiteText}]}>{t('title.My Dashboard')}</Text>
+      <ConfigDropdown onChangeLanguage={changeLanguage}/>
     </View>
   );
 };
@@ -82,21 +61,7 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
   },
 
-  title: { fontSize: 24, fontWeight: 'bold', color: 'white' },
-
-  navLink: { color: 'white', fontSize: 17, marginVertical: 5 },
-
-  languageSelector: { position: 'relative' },
-
-  languageDropdown: {
-    position: 'absolute',
-    top: 30,
-    left: 0,
-    padding: 10,
-    borderRadius: 5,
-    zIndex: 100,
-    alignItems: 'flex-end',
-  },
+  title: { fontSize: 24, fontWeight: 'bold'},
 
   flag: {
     width: 20,
@@ -104,8 +69,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginTop: 2,
   },
-
-  option: { flexDirection: 'row', alignItems: 'center', marginVertical: 4 },
 });
 
 export default LoginNavbar;

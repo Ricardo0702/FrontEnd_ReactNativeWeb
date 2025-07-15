@@ -10,6 +10,7 @@ import { saveRecentChange } from '../../../services/localStorage';
 import Title from '../../../components/Title';
 import Select from '../../../components/Select';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '../../../context/ThemeContext';
 
 type Props = {
   AddressId: number | null;
@@ -22,6 +23,7 @@ export default function AddressModification({ AddressId, AddressForm, onUpdateAd
   const [localAddress, setLocalAddress] = useState<Address>(AddressForm);
   const [people, setPeople] = useState<Person[]>([]);
   const [newPersonId, setNewPersonId] = useState<number | undefined>(undefined);
+  const { colors } = useTheme();
 
   const loadPeople = async () => {
     try {
@@ -61,24 +63,24 @@ export default function AddressModification({ AddressId, AddressForm, onUpdateAd
   };
 
   return (
-    <View style={styles.container}>
-      <Title text={t('title.edit.address')} type="Subtitle" style={{ marginBottom: 20 }} />
+    <View style={[styles.container, {backgroundColor: colors.whiteBackground}]}>
+      <Title text={t('title.edit.address')} type="Subtitle" style={{ marginBottom: 20, color: colors.text }}/>
       <TextInput
         label={t('label.street')}
         value={localAddress.street}
-        inputStyle={styles.input}
+        inputStyle={[styles.input, {borderColor :colors.ccc}]}
         onChangeText={(value: string) => setLocalAddress({ ...localAddress, street: value })}
       />
       <TextInput
         label={t('label.city')}
         value={localAddress.city}
-        inputStyle={styles.input}
+        inputStyle={[styles.input, {borderColor :colors.ccc}]}
         onChangeText={(value: string) => setLocalAddress({ ...localAddress, city: value })}
       />
 
       <Button title={t('button.save')} onPress={handleUpdate} type="save" />
 
-      <Title text={t('title.associated.person')} type="Subtitle" style={{ marginTop: 2, marginBottom: 20 }} />
+      <Title text={t('title.associated.person')} type="Subtitle" style={{ marginTop: 2, marginBottom: 20, color: colors.text }}/>
       <View
         style={{
           flexDirection: 'row',
@@ -86,7 +88,7 @@ export default function AddressModification({ AddressId, AddressForm, onUpdateAd
           alignItems: 'center',
         }}
       >
-        <Text>{localAddress.personName}</Text>
+        <Text style={{color: colors.text}}>{localAddress.personName}</Text>
         <Button
           title={t('button.delete')}
           type="delete"
@@ -102,7 +104,7 @@ export default function AddressModification({ AddressId, AddressForm, onUpdateAd
         />
       </View>
 
-      <Title text={t('title.associate.person')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20 }} />
+      <Title text={t('title.associate.person')} type="Subtitle" style={{ marginTop: 20, marginBottom: 20, color: colors.text }}/>
       <Select
         selectedValue={newPersonId}
         options={people.map((person) => ({
@@ -141,10 +143,9 @@ export default function AddressModification({ AddressId, AddressForm, onUpdateAd
 
 const styles = StyleSheet.create({
 
-  container: { padding: 20, flex: 1, backgroundColor: '#fff' },
+  container: { padding: 20, flex: 1 },
 
   input: {
-    borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 10,
     padding: 8,

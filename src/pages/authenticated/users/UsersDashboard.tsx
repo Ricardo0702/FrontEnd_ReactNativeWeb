@@ -95,9 +95,9 @@ const UsersDashboard: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={[styles.scrollContainer, {backgroundColor: colors.background}]}>
         <View style={{ paddingBottom: 30 }}>
-          <Title text={t('title.registered.users')} size="xl" align="center" underline />
+          <Title text={t('title.registered.users')} size="xl" align="center" underline color= {colors.text} />
         </View>
 
         <View style={styles.tableContainer}>
@@ -122,7 +122,7 @@ const UsersDashboard: React.FC = () => {
             label={t('label.user')}
             value={username}
             onChangeText={setUsername}
-            inputStyle={[styles.inputField, touchedSignUp && username.trim() === '' && styles.inputError]}
+            inputStyle={[styles.inputField, touchedSignUp && username.trim() === '' && [styles.inputError, {borderColor: colors.red}]]}
             errorMessage={touchedSignUp && username.trim() === '' ? t('error.username.cannot be empty') : ''}
           />
 
@@ -133,7 +133,7 @@ const UsersDashboard: React.FC = () => {
             secure={!showPassword}
             onSubmitEditing={handleCreateUser}
             returnKeyType="done"
-            inputStyle={[styles.inputField, touchedSignUp && password.trim() === '' && styles.inputError]}
+            inputStyle={[styles.inputField, {borderColor: colors.ccc}, touchedSignUp && password.trim() === '' && styles.inputError]}
             errorMessage={touchedSignUp && password.trim() === '' ? t('error.password.cannot be empty') : ''}
             rightIcon={
               <TouchableOpacity activeOpacity={1} onPress={() => setShowPassword((prev) => !prev)}>
@@ -142,7 +142,9 @@ const UsersDashboard: React.FC = () => {
             }
           />
           {signUpError !== '' && (
-            <Text style={styles.errorText}>{typeof signUpError === 'string' ? signUpError : JSON.stringify(signUpError, null, 2)}</Text>
+            <Text style={[styles.errorText, {color: colors.red}]}>
+              {typeof signUpError === 'string' ? signUpError : JSON.stringify(signUpError, null, 2)}
+            </Text>
           )}
           <Button title={t('button.save')} onPress={handleCreateUser} type="save" />
         </View>
@@ -186,7 +188,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 8,
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
   },
 
@@ -203,16 +204,15 @@ const styles = StyleSheet.create({
   inputField: {
     width: 250,
     height: 45,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 15,
   },
 
-  inputError: { borderColor: 'red' },
+  inputError: {},
   
-  errorText: { color: 'red', marginBottom: 10, textAlign: 'center' },
+  errorText: { marginBottom: 10, textAlign: 'center' },
 });
 
 export default UsersDashboard;

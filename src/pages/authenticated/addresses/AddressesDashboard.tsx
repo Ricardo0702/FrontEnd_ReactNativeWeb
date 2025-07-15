@@ -15,6 +15,7 @@ import AddressesTable from './AddressesTable';
 import { UserContext } from '../../../context/UserContext';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { Skeleton } from '../../../components/Skeleton';
+import { useTheme } from '../../../context/ThemeContext';
 
 const AddressesDashboard: React.FC = () => {
   const [Addresses, setAddresses] = useState<Address[]>([]);
@@ -29,6 +30,7 @@ const AddressesDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { authorities } = useContext(UserContext);
   const [error, setError] = useState<string | undefined>(undefined);
+  const { colors } = useTheme();
 
   const fetchData = async () => {
     try {
@@ -116,7 +118,7 @@ const AddressesDashboard: React.FC = () => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 30 }}>
-          <Title text={t('title.registered.addresses')} size="xl" align="center" underline />
+          <Title text={t('title.registered.addresses')} size="xl" align="center" underline color={colors.text} />
         </View>
 
         <View style={styles.tableContainer}>

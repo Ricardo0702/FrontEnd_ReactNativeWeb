@@ -63,7 +63,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={{ paddingBottom: 10 }}>
-          <Title style={{ paddingBottom: 30 }} text={t('title.web project')} size="xl" align="center" underline bold />
+          <Title style={{ paddingBottom: 30, color: colors.darksteel }} text={t('title.web project')} size="xl" align="center" underline bold />
         </View>
         <View
           style={{
@@ -95,7 +95,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             label={t('label.user')}
             value={username}
             onChangeText={setUsername}
-            inputStyle={[styles.inputField, touchedSignUp && username.trim() === '' && styles.inputError]}
+            inputStyle={[styles.inputField, {borderColor: colors.ccc}, touchedSignUp && username.trim() === '' && { borderColor: colors.red }]}
             errorMessage={touchedSignUp && username.trim() === '' ? t('error.username.cannot be empty') : ''}
           />
           <TextInput
@@ -105,7 +105,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             secure={!showPassword}
             onSubmitEditing={handleSignUp}
             returnKeyType="done"
-            inputStyle={[styles.inputField, touchedSignUp && password.trim() === '' && styles.inputError]}
+            inputStyle={[styles.inputField, {borderColor: colors.ccc}, touchedSignUp && password.trim() === '' && { borderColor: colors.red }]}
             errorMessage={touchedSignUp && password.trim() === '' ? t('error.password.cannot be empty') : ''}
             rightIcon={
               <TouchableOpacity activeOpacity={1} onPress={() => setShowPassword((prev) => !prev)}>
@@ -114,7 +114,9 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             }
           />
           {signUpError !== '' && (
-            <Text style={styles.errorText}>{typeof signUpError === 'string' ? signUpError : JSON.stringify(signUpError, null, 2)}</Text>
+            <Text style={[styles.errorText, {color: colors.red}]}>
+              {typeof signUpError === 'string' ? signUpError : JSON.stringify(signUpError, null, 2)}
+            </Text>
           )}
           <Button title={t('button.create.user')} onPress={handleSignUp} type="save" />
         </View>
@@ -134,7 +136,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             label={t('label.user')}
             value={username}
             onChangeText={setUsername}
-            inputStyle={[styles.inputField, touchedLogin && username.trim() === '' && styles.inputError]}
+            inputStyle={[styles.inputField, {borderColor: colors.ccc}, touchedLogin && username.trim() === '' && { borderColor: colors.red }]}
             errorMessage={touchedLogin && username.trim() === '' ? t('error.username.cannot be empty') : ''}
           />
           <TextInput
@@ -144,7 +146,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             secure={!showPassword}
             onSubmitEditing={handleLogin}
             returnKeyType="done"
-            inputStyle={[styles.inputField, touchedLogin && password.trim() === '' && styles.inputError]}
+            inputStyle={[styles.inputField, {borderColor: colors.ccc}, touchedLogin && password.trim() === '' && { borderColor: colors.red }]}
             errorMessage={touchedLogin && password.trim() === '' ? t('error.password.cannot be empty') : ''}
             rightIcon={
               <TouchableOpacity activeOpacity={1} onPress={() => setShowPassword((prev) => !prev)}>
@@ -153,7 +155,7 @@ const LoginForm: React.FC<Props> = ({ onLoginSuccess, onSignUpSuccess }) => {
             }
           />
           {loginError !== '' && (
-            <Text style={styles.errorText}>{typeof loginError === 'string' ? loginError : JSON.stringify(loginError, null, 2)}</Text>
+            <Text style={[styles.errorText, {color: colors.red}]}>{typeof loginError === 'string' ? loginError : JSON.stringify(loginError, null, 2)}</Text>
           )}
           <Button title={t('button.login')} onPress={handleLogin} type="save" />
         </View>
@@ -195,16 +197,13 @@ const styles = StyleSheet.create({
   inputField: {
     width: 250,
     height: 45,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 15,
   },
 
-  inputError: { borderColor: 'red' },
-
-  errorText: { color: 'red', marginBottom: 10, textAlign: 'center' },
+  errorText: { marginBottom: 10, textAlign: 'center' },
 });
 
 export default LoginForm;

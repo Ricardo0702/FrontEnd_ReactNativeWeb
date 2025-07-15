@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import LanguageDropdown from './LanguageDropdown';
 import { useTranslation } from 'react-i18next';
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
-import AdminDropdown from './AdminDropdown';
-import PagesDropdown from './PgesDropdown';
+import AdminDropdown from './dropdowns/AdminDropdown';
+import PagesDropdown from './dropdowns/PgesDropdown';
+import ConfigDropdown from './dropdowns/ConfigDropdown';
 import { UserContext } from '../../../context/UserContext';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
@@ -42,12 +42,12 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ onLogout, onChangeLanguage })
           <AdminDropdown />
         </>
       )}
-      <LanguageDropdown onChangeLanguage={onChangeLanguage} />
+      <ConfigDropdown onChangeLanguage={onChangeLanguage} />
       <TouchableOpacity onPress={handleLogoutClick}>
         <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={cancelLogout} size="xxs" position="top">
-        <Text style={{ marginBottom: 20, alignSelf: 'center' }}> {t('confirm.logout.message')} </Text>
+        <Text style={{ marginBottom: 20, alignSelf: 'center', color: colors.text }}> {t('confirm.logout.message')} </Text>
         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
           <Button title={t('button.cancel')} size="xxs" color={colors.whiteText} style={[styles.cancelButton, {backgroundColor: colors.darksteel}]}
             onPress={() => setLogoutModal(false)} 
@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
   
   navLink: { fontSize: 17, marginVertical: 5 },
   
-  cancelButton: { color: 'white', marginBottom: 20 },
+  cancelButton: { marginBottom: 20 },
 
-  confirmButton: { color: 'white' },
+  confirmButton: {},
 });
 
 export default DesktopMenu;

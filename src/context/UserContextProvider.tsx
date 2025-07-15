@@ -67,6 +67,8 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     sessionStorage.removeItem('token');
   };
 
+  // Carga de todos los colores [light, dark + (peticion al back de todas los customized)]
+
   return (
     <UserContext.Provider
       value={{

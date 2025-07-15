@@ -22,6 +22,7 @@ export interface AppColors {
   evenRow: string;
   oddRow: string;
   black: string;
+  highlight: string;
 }
 
 export const lightColors: AppColors = {
@@ -46,7 +47,8 @@ export const lightColors: AppColors = {
   midsteel: '#7E858E',
   evenRow: '#f9f9f9',
   oddRow: '#f0f0f0',
-  black: 'black'
+  black: 'black',
+  highlight: '#FFF59D'
 };
 
 export const darkColors: AppColors = {
@@ -58,19 +60,20 @@ export const darkColors: AppColors = {
   text: '#f0f0f0', // igual
   link: '#3498db', // igual
   red: '#ee6151', // antes: #e74c3c
-  lightRed: '#91403a', // antes: #7b2d26
+  lightRed: '#552b28', //'#91403a', antes: #7b2d26
   green: '#44d685', // antes: #2ecc71
   lightGreen: '#1a6b3c', // antes: #14532d
   blue: '#3498db', // igual
   lightBlue: '#284fa9', // antes: #1e3a8a
   yellow: '#f4ab33', // antes: #f39c12
   lightYellow: '#967200', // antes: #7c5e00
-  darksteel: '#f0f1f3', // antes: #e5e7eb
-  lightsteel: '#475061', // antes: #374151
+  darksteel: '#d0d2d6', //'#f0f1f3',  antes: #e5e7eb
+  lightsteel: '#2e333f', //'#475061', antes: #374151
   midsteel: '#aeb5bd', // antes: #9ca3af
   whiteText: '#111111', // antes: black
   evenRow: '#131313', // antes: #060606
   oddRow: '#1b1b1b', // antes: #0f0f0f
-  black: 'white'
+  black: 'white',
+  highlight: '#FFD7404D'
 };
 

@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import LanguageDropdown from './LanguageDropdown';
 import { hasAuthority, Authority } from '../../../hooks/UseAuthority';
-import AdminDropdown from './AdminDropdown';
+import AdminDropdown from './dropdowns/AdminDropdown';
 import { useNavigate } from 'react-router-dom';
-import PagesDropdown from './PgesDropdown';
+import PagesDropdown from './dropdowns/PgesDropdown';
 import { UserContext } from '../../../context/UserContext';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
 import { useTheme } from '../../../context/ThemeContext';
+import ConfigDropdown from './dropdowns/ConfigDropdown';
 
 interface MobileMenuProps {
   onLogout: () => void;
@@ -43,12 +43,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
           <AdminDropdown dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5 }} closeMenu={closeMenu} />
         </>
       )}
-      <LanguageDropdown onChangeLanguage={onChangeLanguage} closeMenu={closeMenu} dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5 }} />
+      <ConfigDropdown onChangeLanguage={onChangeLanguage} closeMenu={closeMenu} 
+        dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5, zIndex: 100, alignItems: 'flex-start', }} />
       <TouchableOpacity onPress={handleLogoutClick}>
         <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={cancelLogout} size="s" position="top">
-        <Text style={{ marginBottom: 20, alignSelf: 'center' }}> {t('confirm.logout.message')} </Text>
+        <Text style={{ marginBottom: 20, alignSelf: 'center', color: colors.text }}> {t('confirm.logout.message')} </Text>
         <View
           style={{
             flexDirection: 'column',

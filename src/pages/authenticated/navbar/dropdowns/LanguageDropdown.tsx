@@ -1,22 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '../../../context/ThemeContext';
-import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/Icon';
+import { useTheme } from '../../../../context/ThemeContext'
+import Icon from '../../../../components/Icon';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
-interface PagesDropdownProps {
+interface LanguageDropdownProps {
+  onChangeLanguage: (lng: string) => void;
   dropdownStyle?: object;
   closeMenu?: () => void;
+  colorStyle?: TextStyle;
 }
 
-const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu }) => {
+const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, dropdownStyle, closeMenu, colorStyle }) => {
   const { t } = useTranslation();
   const [langOpen, setLangOpen] = useState(false);
-  const navigate = useNavigate();
+  const flagCa = require('../../../../../public/assets/cat.png');
+  const flagEs = require('../../../../../public/assets/es.png');
+  const flagEn = require('../../../../../public/assets/en.png');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { colors } = useTheme();
+
+  const changeLanguage = (lng: string) => {
+    onChangeLanguage(lng);
+    setLangOpen(false);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,37 +46,44 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
   return (
     <View style={styles.container} ref={dropdownRef as any}>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.pages')}</Text>
+        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.language')}</Text>
         <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
       </TouchableOpacity>
       {langOpen && (
-        <View style={dropdownStyle ?? [styles.pagesDropdown, {backgroundColor: colors.darksteel}]}>
+        <View style={dropdownStyle ? [dropdownStyle] : [styles.languageDropdown, { backgroundColor: colors.darksteel }]}>
+
           <TouchableOpacity
+            style={styles.option}
             onPress={() => {
-              navigate('/auth/people');
+              changeLanguage('es');
               setLangOpen(false);
               closeMenu?.();
             }}
           >
-            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.people')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}, colorStyle]}>{t('language.spanish')}</Text>
+            <Image source={flagEs} style={styles.flag} />
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.option}
             onPress={() => {
-              navigate('/auth/projects');
+              changeLanguage('ca');
               setLangOpen(false);
               closeMenu?.();
             }}
           >
-            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.projects')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}, colorStyle]}>{t('language.catalan')}</Text>
+            <Image source={flagCa} style={styles.flag} />
           </TouchableOpacity>
           <TouchableOpacity
+            style={styles.option}
             onPress={() => {
-              navigate('/auth/directions');
+              changeLanguage('en');
               setLangOpen(false);
               closeMenu?.();
             }}
           >
-            <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.addresses')}</Text>
+            <Text style={[styles.navLink, {color: colors.whiteText}, colorStyle]}>{t('language.english')}</Text>
+            <Image source={flagEn} style={styles.flag} />
           </TouchableOpacity>
         </View>
       )}
@@ -78,16 +93,27 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
 
 const styles = StyleSheet.create({
 
+  container: { position: 'relative' },
+
   navLink: { fontSize: 17, marginVertical: 5 },
-  
-  pagesDropdown: {
-    position: 'absolute',
+
+  languageDropdown: {
     top: 30,
+    left: 0,
     padding: 10,
     borderRadius: 5,
+    zIndex: 100,
+    alignItems: 'flex-end',
   },
-  
-  container: { position: 'relative' },
+
+  flag: {
+    width: 20,
+    height: 12,
+    marginLeft: 8,
+    marginTop: 2,
+  },
+
+  option: { flexDirection: 'row', alignItems: 'center' },
 });
 
-export default PagesDropdown;
+export default LanguageDropdown;
