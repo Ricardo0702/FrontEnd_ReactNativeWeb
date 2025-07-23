@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../../../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../../components/Icon';
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faFile, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 
 interface PagesDropdownProps {
   dropdownStyle?: object;
@@ -17,10 +17,10 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { colors } = useTheme();
+  const isMobile = window.innerWidth <= 700;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const isMobile = window.innerWidth <= 700;
       if (!isMobile) {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
           setLangOpen(false);
@@ -38,12 +38,15 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
   return (
     <View style={styles.container} ref={dropdownRef as any}>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style = {{marginRight: 6, marginTop: 3}}>
+          <Icon icon={faFile} size={14} color={isMobile? colors.darksteel : colors.midsteel} />
+        </View>
         <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.pages')}</Text>
         <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? [styles.pagesDropdown, {backgroundColor: colors.darksteel}]}>
-          <TouchableOpacity
+          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
             onPress={() => {
               navigate('/auth/people');
               setLangOpen(false);
@@ -51,8 +54,11 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
             }}
           >
             <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.people')}</Text>
+            <View style = {{marginLeft: 6, marginTop: 3}}>
+              <Icon icon={faArrowUpRightFromSquare} size={14} color={colors.midsteel} />
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity
+          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
             onPress={() => {
               navigate('/auth/projects');
               setLangOpen(false);
@@ -60,8 +66,11 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
             }}
           >
             <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.projects')}</Text>
+            <View style = {{marginLeft: 6, marginTop: 3}}>
+              <Icon icon={faArrowUpRightFromSquare} size={14} color={colors.midsteel} />
+            </View>
           </TouchableOpacity>
-          <TouchableOpacity
+          <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
             onPress={() => {
               navigate('/auth/directions');
               setLangOpen(false);
@@ -69,6 +78,9 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
             }}
           >
             <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.addresses')}</Text>
+            <View style = {{marginLeft: 6, marginTop: 3}}>
+              <Icon icon={faArrowUpRightFromSquare} size={14} color={colors.midsteel} />
+            </View>
           </TouchableOpacity>
         </View>
       )}

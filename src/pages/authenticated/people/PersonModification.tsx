@@ -13,6 +13,8 @@ import Title from '../../../components/Title';
 import Select from '../../../components/Select';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../../context/ThemeContext';
+import Icon from '../../../components/Icon';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 type Props = {
   personId: number | null;
@@ -147,7 +149,7 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
   );
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.whiteBackground}]}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       <Title text={t('title.edit.person')} type="Subtitle" style={{marginBottom: 20, color: colors.text }} />
       <TextInput
         label={t('label.Name')}
@@ -172,20 +174,27 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
         return (
           <View key={id} style={styles.listItem}>
             <Text style={{color: colors.text}}>{project.name}</Text>
-            <Button
-              style={{color: colors.text}}
-              title={t('button.delete')}
-              type="delete"
-              onPress={() => {
-                const updatedPerson = {
-                  ...localPerson,
-                  projectIds: localPerson.projectIds?.filter((prId) => prId !== id) ?? null,
-                  projectNames: localPerson.projectNames?.filter((n) => n !== project.name) ?? null,
-                };
-                setLocalPerson(updatedPerson);
-                handleRemoveProject(id, updatedPerson);
-              }}
-            />
+            <View style={{ backgroundColor: colors.lightRed }}>
+              <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <Button
+                  style={{color: colors.text}}
+                  title={t('button.delete')}
+                  type="delete"
+                  onPress={() => {
+                    const updatedPerson = {
+                      ...localPerson,
+                      projectIds: localPerson.projectIds?.filter((prId) => prId !== id) ?? null,
+                      projectNames: localPerson.projectNames?.filter((n) => n !== project.name) ?? null,
+                    };
+                    setLocalPerson(updatedPerson);
+                    handleRemoveProject(id, updatedPerson);
+                  }}
+                />
+                <View style = {{marginLeft: 2, marginTop: 2}}>
+                  <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
+                </View>
+              </View>
+            </View>
           </View>
         );
       })}
@@ -233,20 +242,28 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
             <Text style={{color: colors.text}}>
               {Address.street} - {Address.city}
             </Text>
-            <Button
-              style={{color: colors.text}}
-              title={t('button.delete')}
-              type="delete"
-              onPress={() => {
-                const updatedPerson = {
-                  ...localPerson,
-                  AddressIds: localPerson.addressIds?.filter((dirId) => dirId !== id) ?? null,
-                  streets: localPerson.streets?.filter((s) => s !== Address.street) ?? null,
-                };
-                setLocalPerson(updatedPerson);
-                handleRemoveAddress(id, updatedPerson);
-              }}
-            />
+
+            <View style={{ backgroundColor: colors.lightRed }}>
+              <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <Button
+                  style={{color: colors.text}}
+                  title={t('button.delete')}
+                  type="associate"
+                  onPress={() => {
+                    const updatedPerson = {
+                      ...localPerson,
+                      AddressIds: localPerson.addressIds?.filter((dirId) => dirId !== id) ?? null,
+                      streets: localPerson.streets?.filter((s) => s !== Address.street) ?? null,
+                    };
+                    setLocalPerson(updatedPerson);
+                    handleRemoveAddress(id, updatedPerson);
+                  }}
+                />
+                <View style = {{marginLeft: 2, marginTop: 2}}>
+                  <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
+                </View>
+              </View>
+            </View>
           </View>
         );
       })}

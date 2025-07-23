@@ -14,7 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const menuRef = useRef<HTMLDivElement>(null);
-  const { theme, toggleTheme, colors } = useTheme();
+  const { themeName, toggleTheme, colors } = useTheme();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 730);
@@ -50,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
           <Text style={[styles.logo, { color: colors.whiteText }]}>{t('title.My Dashboard')}</Text>
         </TouchableOpacity>
 
-        {isMobile ? (
+        {isMobile  ? (
           <TouchableOpacity
             style={{ flex: 1, alignItems: 'flex-end' }}
             onPress={(e) => {

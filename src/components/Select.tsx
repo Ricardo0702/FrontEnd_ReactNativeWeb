@@ -27,7 +27,7 @@ const Select: React.FC<SelectProps> = ({ options, selectedValue, onValueChange, 
           onChange={(e) => onValueChange(e.target.value)}
           style={{
             ...styles.webSelect,
-            backgroundColor: colors.whiteBackground, color: colors.text
+            backgroundColor: colors.background, color: colors.text, borderColor: colors.darksteel
           }}
         >
           {placeholder && (
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     borderRadius: 4,
-    borderColor: '#ccc',
     borderWidth: 1,
   },
 });

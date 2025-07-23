@@ -10,6 +10,8 @@ import { UserContext } from '../../../context/UserContext';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
 import { useTheme } from '../../../context/ThemeContext';
+import Icon from '../../../components/Icon';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 interface DesktopMenuProps {
   onLogout: () => void;
@@ -43,10 +45,13 @@ const DesktopMenu: React.FC<DesktopMenuProps> = ({ onLogout, onChangeLanguage })
         </>
       )}
       <ConfigDropdown onChangeLanguage={onChangeLanguage} />
-      <TouchableOpacity onPress={handleLogoutClick}>
+      <TouchableOpacity onPress={handleLogoutClick} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style = {{marginRight: 6, marginTop: 3}}>
+          <Icon icon={faRightFromBracket} size={14} color={colors.midsteel} />
+        </View>
         <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
-      <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={cancelLogout} size="xxs" position="top">
+      <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={() => {setLogoutModal(false); console.log('onClose')}} size="xxs" position="top">
         <Text style={{ marginBottom: 20, alignSelf: 'center', color: colors.text }}> {t('confirm.logout.message')} </Text>
         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
           <Button title={t('button.cancel')} size="xxs" color={colors.whiteText} style={[styles.cancelButton, {backgroundColor: colors.darksteel}]}

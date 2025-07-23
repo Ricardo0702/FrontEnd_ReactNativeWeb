@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { fetchProjects, createProject, deleteProject, updateProject } from '../../../services/ProjectService';
 import type { Project } from '../../../types/IProject';
 import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
 import TextInput from '../../../components/TextInput';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import Title from '../../../components/Title';
 import { saveRecentChange } from '../../../services/localStorage';
 import { Skeleton } from '../../../components/Skeleton';
@@ -19,8 +19,10 @@ const ProjectsDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedDeleteProjectId, setSelectedDeleteProjectId] = useState<number>(0);
   const { authorities } = useContext(UserContext);
   const { colors } = useTheme();
 
@@ -60,7 +62,7 @@ const ProjectsDashboard: React.FC = () => {
     }
   };
 
-  const handleDeleteProject = async (projectId: number) => {
+  const confirmDeleteProject = async (projectId: number) => {
     try {
       const deletedProject = projects.find((p) => p.id === projectId);
       await deleteProject(projectId);
@@ -77,6 +79,15 @@ const ProjectsDashboard: React.FC = () => {
     } catch (error) {
       console.error(t('error.deleting.project'), error);
     }
+  };
+
+  const handleDeleteProject = useCallback(async (id: number) => {
+      setSelectedDeleteProjectId(id);
+      setDeleteModal(true);
+  }, []);
+
+  const cancelDeleteProject = () => {
+    setDeleteModal(false);
   };
 
   const handleEditProject = (project: Project) => {
@@ -155,6 +166,18 @@ const ProjectsDashboard: React.FC = () => {
           <Button title={t('button.saver')} onPress={handleCreateProject} type="save" />
         </View>
       </Modal>
+
+      <Modal title={t('title.confirm.delete')} visible={deleteModal} onClose={cancelDeleteProject} size="xxs" position="center">
+        <Text style={{ marginBottom: 20, alignSelf: 'center', color: colors.text }}> {t('confirm.delete.message.project')} </Text>
+        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+          <Button title={t('button.cancel')} size="xxs" color={colors.whiteText} style={[styles.cancelButton, {backgroundColor: colors.darksteel}]}
+            onPress={() => setDeleteModal(false)} 
+          />
+          <Button title={t('button.delete')} size="xxs" color={colors.whiteText} style={[styles.confirmButton, {backgroundColor: colors.darksteel}]}
+            onPress={() => confirmDeleteProject(selectedDeleteProjectId)} 
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -182,6 +205,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '100%',
   },
+
+  cancelButton: { marginBottom: 20 },
+
+  confirmButton: {},
 });
 
 export default ProjectsDashboard;

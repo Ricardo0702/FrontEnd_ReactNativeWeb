@@ -7,7 +7,7 @@ import { Skeleton } from '../../../components/Skeleton';
 import { fetchPeople, createPerson, deletePerson } from '../../../services/PersonService';
 import { saveRecentChange } from '../../../services/localStorage';
 import type { Person } from '../../../types/IPerson';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import PeopleTable from './PeopleTable';
 import PersonModification from './PersonModification';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +28,8 @@ const PeopleDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { authorities } = useContext(UserContext);
   const { colors } = useTheme();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [selectedDeletePersonId, setSelectedDeletePersonId] = useState<number>(0);
 
   const fetchData = async () => {
     try {
@@ -43,7 +45,7 @@ const PeopleDashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleDeletePerson = useCallback(
+  const confirmDeletePerson = useCallback(
     async (personId: number) => {
       try {
         const deletedPerson = people.find((p) => p.id === personId);
@@ -63,6 +65,15 @@ const PeopleDashboard: React.FC = () => {
     },
     [people],
   );
+
+  const handleDeletePerson = useCallback(async (id: number) => {
+    setSelectedDeletePersonId(id);
+    setDeleteModal(true);
+  }, []);
+
+  const cancelDeletePerson = () => {
+    setDeleteModal(false);
+  };
 
   const handleCreatePerson = async () => {
     try {
@@ -145,12 +156,21 @@ const PeopleDashboard: React.FC = () => {
       <Modal
         title={t('modal.edit.person')}
         visible={showUpdateModal}
-        onClose={() => {
-          setUpdateModal(false);
-        }}
+        onClose={() => {setUpdateModal(false), console.log('onClose')}}
         size="xl"
       >
         <PersonModification personId={selectedPersonId} personForm={form.current} onUpdatePerson={update} />
+      </Modal>
+      <Modal title={t('title.confirm.delete')} visible={deleteModal} onClose={cancelDeletePerson} size="xxs" position="center">
+        <Text style={{ marginBottom: 20, alignSelf: 'center', color: colors.text }}> {t('confirm.delete.message.person')} </Text>
+        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+          <Button title={t('button.cancel')} size="xxs" color={colors.whiteText} style={[styles.cancelButton, {backgroundColor: colors.darksteel}]}
+            onPress={() => setDeleteModal(false)} 
+          />
+          <Button title={t('button.delete')} size="xxs" color={colors.whiteText} style={[styles.confirmButton, {backgroundColor: colors.darksteel}]}
+            onPress={() => confirmDeletePerson(selectedDeletePersonId)} 
+          />
+        </View>
       </Modal>
     </View>
   );
@@ -192,6 +212,10 @@ const styles = StyleSheet.create({
   },
 
   selectContainer: { maxHeight: 200 },
+
+  cancelButton: { marginBottom: 20 },
+
+  confirmButton: {},
 });
 
 export default PeopleDashboard;

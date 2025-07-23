@@ -151,7 +151,8 @@ const Table = <T,>({
     return (
       <ScrollView style={[styles.cardsContainer, style]}>
         {data.map((row, rowIndex) => (
-          <View key={rowIndex} style={[styles.card, {backgroundColor: colors.whiteBackground}]}>
+          <View key={rowIndex} style={[styles.card, rowIndex % 2 === 0 ? {backgroundColor: colors.evenRow} : 
+              {backgroundColor: colors.oddRow}]}>
             {columns.map((col, colIndex) => {
               const cellValue = col.accessor ? row[col.accessor] : null;
               return (
@@ -274,7 +275,7 @@ const Table = <T,>({
           <Text
             style={{
               fontSize: 18,
-              color: currentPage === totalPages - 1 ? '#ccc' : colors.text,
+              color: currentPage === totalPages - 1 ? colors.ccc : colors.text,
             }}
           >
             ▶
@@ -398,7 +399,7 @@ const Table = <T,>({
             </View>
           ))}
           {paginationEnabled && (
-            <View style={{ justifyContent: 'center', alignItems: 'center' }}>{sortedData.length > 0 && <PaginationControls />}</View>
+            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 5 }}>{sortedData.length > 0 && <PaginationControls />}</View>
           )}
         </View>
       </ScrollView>

@@ -7,7 +7,7 @@ import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
 import Title from '../../../components/Title';
 import TextInput from '../../../components/TextInput';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 import { saveRecentChange } from '../../../services/localStorage';
 import AddressModification from './AddressModification';
 import { useTranslation } from 'react-i18next';
@@ -18,13 +18,15 @@ import { Skeleton } from '../../../components/Skeleton';
 import { useTheme } from '../../../context/ThemeContext';
 
 const AddressesDashboard: React.FC = () => {
-  const [Addresses, setAddresses] = useState<Address[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const { t } = useTranslation();
   const form = useRef<Address>({} as Address);
   const [people, setPeople] = useState<Person[]>([]);
   const [showModalForm, setShowModalForm] = useState(false);
   const [showUpdateModal, setUpdateModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
+  const [selectedDeleteAddressId, setSelectedDeleteAddressId] = useState<number>(0);
   const [Addressestreet, setAddressestreet] = useState('');
   const [AddressCity, setAddressCity] = useState('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -67,9 +69,9 @@ const AddressesDashboard: React.FC = () => {
     }
   };
 
-  const handleDeleteAddress = async (AddressId: number) => {
+  const confirmDeleteAddress = useCallback (async (AddressId: number) => {
     try {
-      const deletedAddress = Addresses.find((d) => d.id === AddressId);
+      const deletedAddress = addresses.find((d) => d.id === AddressId);
       await deleteAddress(AddressId);
       setAddresses((prev) => prev.filter((d) => d.id !== AddressId));
 
@@ -84,6 +86,15 @@ const AddressesDashboard: React.FC = () => {
     } catch (error) {
       console.error(t('error.deleting.address'), error);
     }
+  },[addresses]);
+
+  const handleDeleteAddress = useCallback(async (id: number) => {
+      setSelectedDeleteAddressId(id);
+      setDeleteModal(true);
+    }, []);
+  
+  const cancelDeleteAddress = () => {
+    setDeleteModal(false);
   };
 
   const handleEditAddress = useCallback(async (Address: Address) => {
@@ -125,7 +136,7 @@ const AddressesDashboard: React.FC = () => {
           {isLoading ? (
             skeletonRows
           ) : (
-            <AddressesTable Addresses={Addresses} onDelete={handleDeleteAddress} onEdit={handleEditAddress} setShowModalForm={setShowModalForm} />
+            <AddressesTable Addresses={addresses} onDelete={handleDeleteAddress} onEdit={handleEditAddress} setShowModalForm={setShowModalForm} />
           )}
         </View>
       </ScrollView>
@@ -146,6 +157,17 @@ const AddressesDashboard: React.FC = () => {
           <TextInput label={t('label.street')} value={Addressestreet} onChangeText={setAddressestreet} inputStyle={styles.input} autoFocus />
           <TextInput label={t('label.city')} value={AddressCity} onChangeText={setAddressCity} inputStyle={styles.input} />
           <Button title={t('button.save')} onPress={handleCreateAddress} type="save" />
+        </View>
+      </Modal>
+      <Modal title={t('title.confirm.delete')} visible={deleteModal} onClose={cancelDeleteAddress} size="xxs" position="center">
+        <Text style={{ marginBottom: 20, alignSelf: 'center', color: colors.text }}> {t('confirm.delete.message.address')} </Text>
+        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+          <Button title={t('button.cancel')} size="xxs" color={colors.whiteText} style={[styles.cancelButton, {backgroundColor: colors.darksteel}]}
+            onPress={() => setDeleteModal(false)} 
+          />
+          <Button title={t('button.delete')} size="xxs" color={colors.whiteText} style={[styles.confirmButton, {backgroundColor: colors.darksteel}]}
+            onPress={() => confirmDeleteAddress(selectedDeleteAddressId)} 
+          />
         </View>
       </Modal>
     </View>
@@ -178,6 +200,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '100%',
   },
+
+  cancelButton: { marginBottom: 20 },
+
+  confirmButton: {},
 });
 
 export default AddressesDashboard;

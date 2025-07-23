@@ -1,8 +1,11 @@
 {
   "text": {
     "select": {
-      "rows": "Select rows"
-    }
+      "rows": "Select rows",
+      "background colors": "Select a background color"
+    },
+    "light colors": "Light colors",
+    "dark colors": "Dark colors"
   },
   "textinput": {
     "filter": "Filter..."
@@ -64,6 +67,9 @@
       "projects": "Registered Projects",
       "roles": "Registered Roles",
       "users": "Registered Users"
+    },
+    "confirm": {
+      "delete": "Delete confirmation"
     },
     "edit": {
       "address": "Edit Address",
@@ -131,6 +137,8 @@
   },
   "button": {
     "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
     "add": {
       "address": "Add Address",
       "person": "Add Person",
@@ -139,7 +147,6 @@
       "user": "Add User"
     },
     "edit": "Edit",
-    "delete": "Delete",
     "associate": {
       "person": "Associate Person",
       "project": "Associate Project"
@@ -147,7 +154,6 @@
     "people": "People",
     "projects": "Projects",
     "addresses": "Addresses",
-    "cancel": "Cancel",
     "logout": "Logout",
     "saver": "Save",
     "assign": {
@@ -157,6 +163,21 @@
       "user": "Create User"
     },
     "login": "Login"
+  },
+  "confirm": {
+    "delete": {
+      "message": {
+        "address": "Are you sure you want to delete the address?",
+        "person": "Are you sure you want to delete the person?",
+        "project": "Are you sure you want to delete the project?",
+        "role": "Are you sure you want to delete the role?",
+        "user": "Are you sure you want to delete the user?"
+      }
+    },
+    "logout": {
+      "title": "Logout confirmation",
+      "message": "Are you sure you want to logout?"
+    }
   },
   "columns": {
     "street": "Street",
@@ -179,23 +200,17 @@
   "Recent changes:": "Recent changes:",
   "There are no recent changes": "There are no recent changes.",
   "navbar": {
+    "logout": "Logout",
     "admin": "Admin",
     "users": "Users",
     "roles": "Roles",
     "config": "Config",
-    "logout": "Logout",
     "language": "Language",
     "pages": "Pages",
     "people": "People",
     "projects": "Projects",
     "addresses": "Addresses",
     "theme": "Theme"
-  },
-  "confirm": {
-    "logout": {
-      "title": "Logout confirmation",
-      "message": "Are you sure you want to logout?"
-    }
   },
   "language": {
     "spanish": "Es",
@@ -204,7 +219,8 @@
   },
   "theme": {
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "custom": "Customize"
   },
   "unknown": {
     "street": "Unknown street",

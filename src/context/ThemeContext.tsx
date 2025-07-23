@@ -1,45 +1,70 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AppColors, lightColors, darkColors } from '../components/Colors';
+import { AppColors, lightColors, darkColors } from '../components/colors/Colors';
 
-type ThemeMode = 'light' | 'dark';
+
+type ThemeName = 'light' | 'dark' | 'custom';
 
 interface ThemeContextType {
-  theme: ThemeMode;
+  themeName: ThemeName;
   colors: AppColors;
   toggleTheme: () => void;
-  setTheme: (theme: ThemeMode) => void;
+  setThemeByName: (themeName: ThemeName) => void;
+  setCustomColors: (preset: AppColors) => void;
+  setPreviewColors: (preset: AppColors) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'light',
+  themeName: 'light',
   colors: lightColors,
   toggleTheme: () => {},
-  setTheme: () => {},
+  setThemeByName: () => {},
+  setCustomColors: () => {},
+  setPreviewColors: () => {}
 });
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setThemeState] = useState<ThemeMode>('light');
+  const [colors, setColors] = useState<AppColors>(lightColors);
+  const themeName: ThemeName = colors.name === 'light' || colors.name === 'dark' ? colors.name : 'custom';
+
   useEffect(() => {
-    const storedTheme = localStorage.getItem('theme') as ThemeMode | null;
-    if (storedTheme === 'light' || storedTheme === 'dark') {
-      setThemeState(storedTheme);
+    const stored = sessionStorage.getItem('colors');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as AppColors;
+        setColors(parsed);
+      } catch {
+        setColors(lightColors);
+      }
     }
   }, []);
+
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
+    const newColors = themeName === 'light' ? darkColors : lightColors;
+    setColors(newColors);
+    sessionStorage.setItem('colors', JSON.stringify(newColors));
   };
 
-  const setTheme = (newTheme: ThemeMode) => {
-    setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
+  const setThemeByName = (newThemeName: ThemeName) => {
+    let newColors: AppColors;
+    if (newThemeName === 'light') newColors = lightColors;
+    else if (newThemeName === 'dark') newColors = darkColors;
+    else newColors = colors; 
+
+    setColors(newColors);
+    sessionStorage.setItem('colors', JSON.stringify(newColors));
   };
 
-  const colors = theme === 'light' ? lightColors : darkColors;
+  const setCustomColors = (preset: AppColors) => {
+    setColors(preset);
+    sessionStorage.setItem('colors', JSON.stringify(preset));
+  };
+
+  const setPreviewColors = (preset: AppColors) => {
+    setColors(preset);
+  };
 
   return (
-    <ThemeContext.Provider value={{ theme, colors, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ themeName, colors, toggleTheme, setThemeByName, setCustomColors, setPreviewColors }}>
       {children}
     </ThemeContext.Provider>
   );

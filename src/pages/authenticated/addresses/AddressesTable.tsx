@@ -7,6 +7,8 @@ import { useTheme } from '../../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { Authority, hasAuthority } from '../../../hooks/UseAuthority';
 import { UserContext } from '../../../context/UserContext';
+import Icon from '../../../components/Icon';
+import { faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 interface AddressesTableProps {
   Addresses: Address[];
@@ -87,11 +89,21 @@ const AddressesTable: React.FC<AddressesTableProps> = ({ Addresses, onDelete, on
                 return (
                   <View style={{ flex: 1, flexDirection: 'row', gap: 10 }}>
                     <View style={{ backgroundColor }}>
-                      <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
+                      <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
+                        <View style = {{marginLeft: 2, marginTop: 2}}>
+                          <Icon icon={faPenToSquare} size={14} color={colors.darksteel} />
+                        </View>
+                      </View>
                     </View>
 
                     <View style={{ backgroundColor: colors.lightRed }}>
-                      <Button title={t('button.delete')} type="associate" onPress={() => onDelete(row.id)} />
+                      <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                        <Button title={t('button.delete')} type="associate" onPress={() => onDelete(row.id)} />
+                        <View style = {{marginLeft: 2, marginTop: 2}}>
+                         <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
+                        </View>
+                     </View>
                     </View>
                   </View>
                 );
@@ -99,11 +111,21 @@ const AddressesTable: React.FC<AddressesTableProps> = ({ Addresses, onDelete, on
               return (
                 <View style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
                   <View style={{ backgroundColor }}>
-                    <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
+                    <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                      <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
+                      <View style = {{marginLeft: 2, marginTop: 2}}>
+                        <Icon icon={faPenToSquare} size={14} color={colors.darksteel} />
+                      </View>
+                    </View>
                   </View>
 
                   <View style={{ backgroundColor: colors.lightRed }}>
+                    <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <Button title={t('button.delete')} type="associate" onPress={() => onDelete(row.id)} />
+                      <View style = {{marginLeft: 2, marginTop: 2}}>
+                        <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
+                      </View>
+                    </View>
                   </View>
                 </View>
               );

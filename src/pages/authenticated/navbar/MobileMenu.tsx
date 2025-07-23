@@ -45,7 +45,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
       )}
       <ConfigDropdown onChangeLanguage={onChangeLanguage} closeMenu={closeMenu} 
         dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5, zIndex: 100, alignItems: 'flex-start', }} />
-      <TouchableOpacity onPress={handleLogoutClick}>
+      <TouchableOpacity onPress={handleLogoutClick} >
         <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={cancelLogout} size="s" position="top">

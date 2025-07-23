@@ -6,6 +6,7 @@ import Icon from '../../../../components/Icon';
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import ThemesDropdown from './ThemeDropdown';
 import LanguageDropdown from './LanguageDropdown';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
 
 interface ConfigDropdownProps {
   onChangeLanguage: (lng: string) => void;
@@ -17,7 +18,10 @@ const ConfigDropdown: React.FC<ConfigDropdownProps> = ({ onChangeLanguage, dropd
   const { t } = useTranslation();
   const { colors } = useTheme();
   const [open, setOpen] = useState(false);
-  const dropdownRef = useRef<any>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const isMobile = window.innerWidth <= 700;
+  const [showCustomModal, setShowCustomModal] = useState(false);
 
   const changeLanguage = (lng: string) => {
     onChangeLanguage(lng);
@@ -26,10 +30,14 @@ const ConfigDropdown: React.FC<ConfigDropdownProps> = ({ onChangeLanguage, dropd
   };
   
   useEffect(() => {
-    const isMobile = window.innerWidth <= 700;
     const handleClickOutside = (event: MouseEvent) => {
-      if (!isMobile && dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpen(false);
+      const target = event.target as Node;
+
+      if (!isMobile && dropdownRef.current && !dropdownRef.current.contains(target)) {
+        const clickedInsideModal = modalRef.current && modalRef.current.contains(target);
+        if (!clickedInsideModal && !showCustomModal) {
+          setOpen(false);
+        }
       }
     };
 
@@ -38,19 +46,26 @@ const ConfigDropdown: React.FC<ConfigDropdownProps> = ({ onChangeLanguage, dropd
     }
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [open]);
+  }, [open,  showCustomModal]);
 
   return (
-    <View ref={dropdownRef} style={styles.container}>
+    <View ref={dropdownRef as any} style={styles.container}>
       <TouchableOpacity onPress={() => setOpen(!open)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style = {{marginRight: 6, marginTop: 3}}>
+          <Icon icon={faGear} size={14} color={isMobile? colors.darksteel : colors.midsteel} />
+        </View>
         <Text style={[styles.navLink, { color: colors.whiteText }]}>{t('navbar.config')}</Text>
         <Icon icon={open ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
       </TouchableOpacity>
 
       {open && (
         <View style={dropdownStyle ? [dropdownStyle] : [styles.dropdown, { backgroundColor: colors.darksteel }]}>
-          <ThemesDropdown dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5, alignItems: 'flex-start'}} colorStyle={{color: colors.whiteText}} closeMenu={closeMenu}/>
-          <LanguageDropdown onChangeLanguage={changeLanguage} dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5, alignItems: 'flex-start' }} 
+          <ThemesDropdown 
+            dropdownStyle={{ backgroundColor: colors.midsteel, padding: 5, alignItems: 'flex-start' }} 
+            colorStyle={{ color: colors.whiteText }} closeMenu={closeMenu}  modalRef={modalRef}
+            showCustomModal={showCustomModal} setShowCustomModal={setShowCustomModal}
+          />
+          <LanguageDropdown onChangeLanguage={changeLanguage} dropdownStyle={{ backgroundColor: colors.midsteel, padding: 5}} 
             colorStyle={{color: colors.whiteText}} closeMenu={closeMenu}/>
         </View>
       )}

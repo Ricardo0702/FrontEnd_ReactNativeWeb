@@ -1,8 +1,11 @@
 {
   "text": {
     "select": {
-      "rows": "Seleccionar files"
-    }
+      "rows": "Seleccionar files",
+      "background colors": "Selecciona un color pel fons"
+    },
+    "light colors": "Colors clars",
+    "dark colors": "Colors foscs"
   },
   "textinput": {
     "filter": "Filtrar..."
@@ -64,6 +67,9 @@
       "projects": "Projectes registrats",
       "roles": "Rols registrats",
       "users": "Usuaris registrats"
+    },
+    "confirm": {
+      "delete": "Confirmació d'eliminació"
     },
     "edit": {
       "address": "Editar adreça",
@@ -131,6 +137,8 @@
   },
   "button": {
     "save": "Desar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
     "add": {
       "address": "Afegir adreça",
       "person": "Afegir persona",
@@ -139,7 +147,6 @@
       "user": "Afegir usuari"
     },
     "edit": "Editar",
-    "delete": "Eliminar",
     "associate": {
       "person": "Associar persona",
       "project": "Associar projecte"
@@ -147,7 +154,6 @@
     "people": "Persones",
     "projects": "Projectes",
     "addresses": "Adreces",
-    "cancel": "Cancelar",
     "logout": "Tancar sessió",
     "saver": "Desar",
     "assign": {
@@ -157,6 +163,21 @@
       "user": "Crear usuari"
     },
     "login": "Iniciar sessió"
+  },
+  "confirm": {
+    "delete": {
+      "message": {
+        "address": "Segur que vols eliminar l'adreça?",
+        "person": "Segur que vols eliminar la persona?",
+        "project": "Segur que vols eliminar el projecte?",
+        "role": "Segur que vols eliminar el rol?",
+        "user": "Segur que vols eliminar l'usuari?"
+      }
+    },
+    "logout": {
+      "title": "Confirmació de tancament de sessió",
+      "message": "Segur que vols tancar la sessió?"
+    }
   },
   "columns": {
     "street": "Carrer",
@@ -179,23 +200,17 @@
   "Recent changes:": "Canvis recents:",
   "There are no recent changes": "No hi ha canvis recents.",
   "navbar": {
+    "logout": "Tancar sessió",
     "admin": "Admin",
     "users": "Usuaris",
     "roles": "Rols",
     "config": "Config",
-    "logout": "Tancar sessió",
     "language": "Idioma",
     "pages": "Pàgines",
     "people": "Persones",
     "projects": "Projectes",
     "addresses": "Adreces",
     "theme": "Tema"
-  },
-  "confirm": {
-    "logout": {
-      "title": "Confirmació de tancament de sessió",
-      "message": "Segur que vols tancar la sessió?"
-    }
   },
   "language": {
     "spanish": "Es",
@@ -204,7 +219,8 @@
   },
   "theme": {
     "light": "Clar",
-    "dark": "Fosc"
+    "dark": "Fosc",
+    "custom": "Customitzar"
   },
   "unknown": {
     "street": "Carrer desconegut",

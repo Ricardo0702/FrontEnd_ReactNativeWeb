@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, TextStyle } from 'reac
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../../../context/ThemeContext'
 import Icon from '../../../../components/Icon';
-import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faLanguage } from '@fortawesome/free-solid-svg-icons';
 
 interface LanguageDropdownProps {
   onChangeLanguage: (lng: string) => void;
@@ -26,26 +26,12 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, d
     setLangOpen(false);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const isMobile = window.innerWidth <= 700;
-      if (!isMobile) {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-          setLangOpen(false);
-        }
-      }
-    };
-    if (langOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [langOpen]);
-
   return (
     <View style={styles.container} ref={dropdownRef as any}>
       <TouchableOpacity onPress={() => setLangOpen(!langOpen)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style = {{marginRight: 6, marginTop: 4}}>
+          <Icon icon={faLanguage} size={15} color={colors.midsteel} />
+        </View>
         <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.language')}</Text>
         <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
       </TouchableOpacity>
@@ -113,7 +99,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  option: { flexDirection: 'row', alignItems: 'center' },
+  option: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
 });
 
 export default LanguageDropdown;

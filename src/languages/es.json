@@ -1,8 +1,11 @@
 {
   "text": {
     "select": {
-      "rows": "Selecconar filas"
-    }
+      "rows": "Selecconar filas",
+      "background colors": "Selecciona un color para el fondo"
+    },
+    "light colors": "Colores claros",
+    "dark colors": "Colores oscuros"
   },
   "textinput": {
     "filter": "Filtrar..."
@@ -64,6 +67,9 @@
       "projects": "Proyectos Registrados",
       "roles": "Roles Registrados",
       "users": "Usuarios Registrados"
+    },
+    "confirm": {
+      "delete": "Confirmación de eliminación"
     },
     "edit": {
       "address": "Editar Dirección",
@@ -131,6 +137,8 @@
   },
   "button": {
     "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
     "add": {
       "address": "Añadir Dirección",
       "person": "Añadir Persona",
@@ -139,7 +147,6 @@
       "user": "Añadir Usuario"
     },
     "edit": "Editar",
-    "delete": "Eliminar",
     "associate": {
       "person": "Asociar Persona",
       "project": "Asociar Proyecto"
@@ -147,7 +154,6 @@
     "people": "Personas",
     "projects": "Proyectos",
     "addresses": "Direcciones",
-    "cancel": "Cancelar",
     "logout": "Cerrar sesión",
     "saver": "Guardar",
     "assign": {
@@ -157,6 +163,21 @@
       "user": "Crear Usuario"
     },
     "login": "Iniciar Sesión"
+  },
+  "confirm": {
+    "delete": {
+      "message": {
+        "address": "¿Seguro que quieres eliminar la dirección?",
+        "person": "¿Seguro que quieres eliminar la persona?",
+        "project": "¿Seguro que quieres eliminar el proyecto?",
+        "role": "¿Seguro que quieres eliminar el rol?",
+        "user": "¿Seguro que quieres eliminar el usuario?"
+      }
+    },
+    "logout": {
+      "title": "Confirmación de cierre de sesión",
+      "message": "¿Seguro que quieres cerrar sesión?"
+    }
   },
   "columns": {
     "street": "Calle",
@@ -179,23 +200,17 @@
   "Recent changes:": "Cambios recientes:",
   "There are no recent changes": "No hay cambios recientes.",
   "navbar": {
+    "logout": "Cerrar sesión",
     "admin": "Admin",
     "users": "Usuarios",
     "roles": "Roles",
     "config": "Config",
-    "logout": "Cerrar sesión",
     "language": "Idioma",
     "pages": "Páginas",
     "people": "Personas",
     "projects": "Proyectos",
     "addresses": "Direcciones",
     "theme": "Tema"
-  },
-  "confirm": {
-    "logout": {
-      "title": "Confirmación de cierre de sesión",
-      "message": "¿Seguro que quieres cerrar sesión?"
-    }
   },
   "language": {
     "spanish": "Es",
@@ -204,7 +219,8 @@
   },
   "theme": {
     "light": "Claro",
-    "dark": "Oscuro"
+    "dark": "Oscuro",
+    "custom": "Customizar"
   },
   "unknown": {
     "street": "Calle desconocida",

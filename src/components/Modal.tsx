@@ -1,5 +1,16 @@
-import React from 'react';
-import { Modal as RNModal, View, StyleSheet, Text, TouchableOpacity, ViewStyle, ScrollView, Dimensions, GestureResponderEvent } from 'react-native';
+import React, { forwardRef } from 'react';
+import {
+  Modal as RNModal,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ViewStyle,
+  ScrollView,
+  Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import useResponsive from './UseResponsive';
 import Icon from './Icon';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +32,7 @@ export interface ModalProps {
   contentStyle?: ViewStyle;
 }
 
-const Modal: React.FC<ModalProps> = ({
+const Modal = forwardRef<HTMLDivElement, ModalProps>(({
   title,
   visible,
   onClose,
@@ -35,86 +46,76 @@ const Modal: React.FC<ModalProps> = ({
   borderRadius = 10,
   headerStyle,
   contentStyle,
-}) => {
-  if (!visible) return null;
-
+}, ref) => {
   const { colors } = useTheme();
 
+  if (!visible) return null;
+
   const getPositionStyle = (): ViewStyle => {
-    if (position === 'top') {
-      return {
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingTop: 50,
-      };
-    } else if (position === 'bottom') {
-      return {
-        justifyContent: 'flex-end',
-        marginBottom: 50,
-      };
-    } else {
-      return {
-        justifyContent: 'center',
-        alignItems: 'center',
-      };
+    switch (position) {
+      case 'top':
+        return { justifyContent: 'flex-start', alignItems: 'center', paddingTop: 50 };
+      case 'bottom':
+        return { justifyContent: 'flex-end', marginBottom: 50 };
+      default:
+        return { justifyContent: 'center', alignItems: 'center' };
     }
   };
 
   const getSizeStyle = () => {
     switch (size) {
-      case 'xxs':
-        return useResponsive({ type: 'Modal', size: 'xxs' });
-      case 'xs':
-        return useResponsive({ type: 'Modal', size: 'xs' });
-      case 's':
-        return useResponsive({ type: 'Modal', size: 's' });
-      case 'm':
-        return useResponsive({ type: 'Modal', size: 'm' });
-      case 'xl':
-        return useResponsive({ type: 'Modal', size: 'l' });
-      default:
-        return useResponsive({ type: 'Modal', size: 'm' });
+      case 'xxs': return useResponsive({ type: 'Modal', size: 'xxs' });
+      case 'xs':  return useResponsive({ type: 'Modal', size: 'xs' });
+      case 's':   return useResponsive({ type: 'Modal', size: 's' });
+      case 'm':   return useResponsive({ type: 'Modal', size: 'm' });
+      case 'xl':  return useResponsive({ type: 'Modal', size: 'l' });
+      default:    return useResponsive({ type: 'Modal', size: 'm' });
     }
-  };
-
-  const handleModalContentPress = (event: GestureResponderEvent) => {
-    event.stopPropagation();
   };
 
   return (
     <RNModal transparent visible={visible} animationType={animationType}>
-      <View
-        style={[styles.overlay, getPositionStyle(), { backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})` }]}
-        onStartShouldSetResponder={() => true}
-        onResponderRelease={onClose}
-      >
-        <View
-          style={[styles.modalContainer, {backgroundColor: colors.whiteBackground}, getSizeStyle(), { borderRadius }, style]}
-          onStartShouldSetResponder={() => true}
-          onResponderRelease={handleModalContentPress}
-        >
-          {!hideHeader && (
-            <View style={[styles.header, {borderColor: colors.ccc}, headerStyle]}>
-              <Text style={[styles.title, {color: colors.text}]}>{title}</Text>
-              <TouchableOpacity onPress={onClose}>
-                <Icon icon={faXmark} size={24} color={colors.darksteel} />
-              </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={onClose} accessible={false}>
+        <View style={[styles.overlay, getPositionStyle(), { backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})` }]}>
+          <TouchableWithoutFeedback onPress={() => {}} accessible={false}>
+            <View
+              ref={ref as any}
+              style={[
+                styles.modalContainer,
+                { backgroundColor: colors.background },
+                getSizeStyle(),
+                { borderRadius },
+                style,
+              ]}
+            >
+              {!hideHeader && (
+                <View style={[styles.header, { borderColor: colors.ccc }, headerStyle]}>
+                  <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+                  <TouchableOpacity onPress={onClose}>
+                    <Icon icon={faXmark} size={24} color={colors.darksteel} />
+                  </TouchableOpacity>
+                </View>
+              )}
+              <ScrollView contentContainerStyle={styles.scrollContent}>
+                <View style={[styles.content, contentStyle]}>
+                  {children}
+                </View>
+              </ScrollView>
             </View>
-          )}
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View style={[styles.content, contentStyle]}>{children}</View>
-          </ScrollView>
+          </TouchableWithoutFeedback>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </RNModal>
   );
-};
+});
 
 const { height: screenHeight } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
+    width: '100%',
+    height: '100%',
   },
   modalContainer: {
     overflow: 'hidden',
