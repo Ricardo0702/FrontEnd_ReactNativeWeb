@@ -161,7 +161,7 @@ const PeopleTable: React.FC<PeopleTableProps> = ({ people, onDelete, onEdit, set
 
                   <View style={{ backgroundColor: colors.lightRed }}>
                     <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    <Button title={t('button.delete')} type="associate" onPress={() => onDelete(row.id)} />
+                      <Button title={t('button.delete')} type="associate" onPress={() => onDelete(row.id)} />
                       <View style = {{marginLeft: 2, marginTop: 2}}>
                         <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
                       </View>

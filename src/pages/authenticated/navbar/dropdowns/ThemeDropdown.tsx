@@ -5,12 +5,14 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { UserContext } from '../../../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../../components/Icon';
-import { faCaretDown, faCaretUp, faPalette, faSliders, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faPalette, faSliders, faMoon, faTrashCan, faSun, faDownload, faPaintbrush } from '@fortawesome/free-solid-svg-icons';
 import { generateColorsFromBackground } from '../../../../components/colors/GenerateColorsFromBackground';
 import Modal from '../../../../components/Modal';
 import HSLColorPicker from '../../../../components/colors/HSLColorPicker';
 import { associateUser, createBaseColor } from '../../../../services/BaseColorService';
 import { fetchUserByUsername } from '../../../../services/UserService';
+import { deleteBaseColor } from '../../../../services/BaseColorService';
+import Button from '../../../../components/Button';
 
 interface ThemesDropdownProps {
   dropdownStyle?: object;
@@ -30,12 +32,15 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { themeName, setThemeByName, colors, setCustomColors, setPreviewColors } = useTheme();
   const isMobile = window.innerWidth <= 700;
-  const { username } = useContext(UserContext);
-  // Estados para manejar el color personalizado
+  const { username, id, baseColors, baseColorIds } = useContext(UserContext);
   const [prevColor, setPrevColor] = useState('');
   const [customColor, setCustomColor] = useState('');
   const [colorApplied, setColorApplied] = useState(false);
+
+  {/*Modificar el flatList par que savedColors sea un useState'<'BaseColor'>',}
+    de tal forma que se pueda trabajar sobre su id o sobre el color, al seleccionar cada uno */}
   const [savedColors, setSavedColors] = useState<string[]>([]);
+  
   const [selectedSavedColor, setSelectedSavedColor] = useState<string | null>(null);
   const { width, height } = useWindowDimensions();
 
@@ -47,22 +52,25 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
 
   useEffect(() => {
     const loadUserColors = async () => {
-      try {
-        const user = await fetchUserByUsername(username);
-
-        const colorsString = (user.baseColors || []).join(',');
-
-        const colors = Array.from(colorsString.matchAll(/hsl\(\d{1,3},\s*\d{1,3}%,\s*\d{1,3}%\)/g))
-          .map(match => match[0]);
-
-        setSavedColors(colors);
-      } catch (error) {
-        console.error('Error fetching user base colors:', error);
-      }
-    };
-
+    try {
+      setSavedColors(baseColors.flat());
+    } catch (error) {
+      console.error('Error fetching user base colors:', error);
+    }
+  };
     loadUserColors();
   }, [showCustomModal, username]);
+
+  const handleDeleteAllColors = async() => {
+    try {
+      const colorIds = baseColorIds.flat();
+      if (colorIds === null) return;
+      await Promise.all(colorIds.map(id => deleteBaseColor(id)));
+      setSavedColors([]);
+    } catch (error) {
+      console.error('Error deleting base colors: ', error);
+    }
+  }
 
   useEffect(() => {
     if (showCustomModal) {
@@ -102,10 +110,12 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
       const newColor = await createBaseColor(color); 
       const user = await fetchUserByUsername(username); // desde contexto
       await associateUser(newColor.id, user.id);
+      setSavedColors( prev => prev.includes(color) ? prev : [...prev, color] );
       const newColors = generateColorsFromBackground(color);
       setThemeByName('custom');
       setCustomColors(newColors);
       setColorApplied(true);
+      setSavedColors
     } catch (error) {
       console.error('Error al aplicar el color personalizado:', error);
     }
@@ -147,53 +157,67 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
             title={t('text.select.background colors')}
             visible={showCustomModal}
             onClose={handleClose}
-            size="xl"
+            size="m"
             position="center"
           >
-            <Text style={[styles.modalDescription, { color: colors.text }]}>
-              {t('text.select.background colors')}
-            </Text>
-
             {savedColors.length > 0 && (
               <View style={{ marginBottom: 20 }}>
-                <View style = {{}}> acabar este view. Quiero añadir un icono touchable que me 
-                  permita eliminar qualquiera de los colores guardados
-                  <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
-                    {t('text.saved colors')}
-                  </Text>
-                </View> 
-                <FlatList
-                  horizontal
-                  data={savedColors}
-                  keyExtractor={(item) => item}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity
-                      style={[
-                        styles.colorCircle,
-                        {
-                          backgroundColor: item,
-                          borderColor: selectedSavedColor === item ? colors.background : colors.ccc,
-                          borderWidth: selectedSavedColor === item ? 3 : 2,
-                          marginHorizontal: 5,
-                        },
-                      ]}
-                      onPress={() => {
-                        const newColors = generateColorsFromBackground(item);
-                        setThemeByName('custom');
-                        setCustomColors(newColors);
-                        setColorApplied(true);
-                      }}
-                      activeOpacity={0.7}
+                <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                    <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+                      {t('text.saved colors')}
+                    </Text>
+                    <View style={{ marginLeft: 6, marginBottom: 6}}>
+                      <Icon icon={faDownload} size={17} color={colors.darksteel} />
+                    </View>
+                  </View>
+                  <View style= {{flexDirection: 'row', alignItems: 'center'}}>
+
+                    {/*Modificar el flatList par que sabedColors sea un useState'<'BaseColor'>',}
+                     de tal forma que se pueda trabajar sobre su id o sobre el color, al seleccionar cada uno */}
+                    <FlatList
+                      horizontal
+                      data={savedColors}
+                      keyExtractor={(item) => item}
+                      renderItem={({ item }) => (
+                        <View style={{ alignItems: 'center', marginHorizontal: 5 }}>
+                          <TouchableOpacity
+                            style={[
+                              styles.colorCircle,
+                              {
+                                backgroundColor: item,
+                                borderColor: selectedSavedColor === item ? colors.background : colors.ccc,
+                                borderWidth: selectedSavedColor === item ? 3 : 2,
+                              },
+                            ]}
+                            onPress={() => {handleColorSelection(item) }}
+                            activeOpacity={0.7}
+                          />
+                        </View>
+                      )}
+                      contentContainerStyle={{ paddingHorizontal: 10 }}
+                      showsHorizontalScrollIndicator={false}
                     />
-                  )}
-                  contentContainerStyle={{ paddingHorizontal: 10 }}
-                  showsHorizontalScrollIndicator={false}
-                />
+
+                    <View style = {{flexDirection: 'row', borderRadius: 10, justifyContent: 'center', marginTop: 5, alignItems: 'center', backgroundColor: colors.lightRed}}>
+                      <Button title={t('button.reset')} type="associate" onPress={() => handleDeleteAllColors()} />
+                      <View style = {{marginLeft: 2, marginTop: 2}}>
+                        <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
+                      </View>
+                    </View>
+                  </View>
+                </View>
               </View>
             )}
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 20, marginTop: 10 }}>
+              <View style ={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={[styles.modalSectionTitle, { color: colors.text }]}>{t('text.light colors')}</Text>
+                <View style={{ marginLeft: 6, marginBottom: 5}}>
+                  <Icon icon={faSun} size={17} color={colors.darksteel} />
+                </View>
+              </View>
+            </View>
 
-
-            <Text style={[styles.modalSectionTitle, { color: colors.text }]}>{t('text.light colors')}</Text>
             <FlatList
               data={LIGHT_COLORS}
               renderItem={({ item }) => (
@@ -215,10 +239,16 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
               contentContainerStyle={styles.colorList}
               scrollEnabled={false}
             />
-
-            <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 20 }]}>
-              {t('text.dark colors')}
-            </Text>
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
+              <View style ={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={[styles.modalSectionTitle, { color: colors.text}]}>
+                  {t('text.dark colors')}
+                </Text>
+                <View style={{ marginLeft: 6, marginBottom: 5}}>
+                  <Icon icon={faMoon} size={17} color={colors.darksteel} />
+                </View>
+              </View>
+            </View>
             <FlatList
               data={DARK_COLORS}
               renderItem={({ item }) => (
@@ -242,10 +272,15 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
             />
 
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-              <Text style={[styles.modalSectionTitle, { color: colors.text, marginTop: 20 }]}>
-                {t('text.custom color')}
-              </Text>
-              <View style={{ width: width * 0.7, flex: 1, alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
+                <Text style={[styles.modalSectionTitle, { color: colors.text }]}>
+                  {t('text.custom color')}
+                </Text>
+                <View style={{ marginLeft: 6, marginBottom: 6}}>
+                  <Icon icon={faPaintbrush} size={17} color={colors.darksteel} />
+                </View>
+              </View>
+              <View style={{ width: width * 0.5, flex: 1, alignItems: 'center' }}>
                 <HSLColorPicker
                   onColorSelect={(color) => {handleColorSelection(color);}}
                   onColorPreview={(color) => {

@@ -9,6 +9,9 @@ interface Props {
 export const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [username, setUsername] = useState<string>('');
   const [authorities, setAuthorities] = useState<string[]>([]);
+  const [id, setId] = useState<number>(0);
+  const [baseColorIds, setBaseColorIds] = useState<number[]>([]);
+  const [baseColors, setBaseColors] = useState<string[]>([]);
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -21,6 +24,9 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     if (!token) {
       setUsername('');
       setAuthorities([]);
+      setId(0);
+      setBaseColorIds([]);
+      setBaseColors([]);
       sessionStorage.removeItem('token');
       return;
     }
@@ -31,10 +37,16 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
       const payload = JSON.parse(atob(payloadBase64));
       setUsername(payload.username);
       setAuthorities(payload.roles || []);
+      setId(payload.id);
+      setBaseColorIds([payload.baseColorIds]);
+      setBaseColors([payload.baseColors]);
     } catch (e) {
       console.error('Failed to decode token:', e);
       setUsername('');
       setAuthorities([]);
+      setId(0);
+      setBaseColorIds([]);
+      setBaseColors([]);
       sessionStorage.removeItem('token');
     }
   };
@@ -72,6 +84,9 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
+        baseColorIds,
+        baseColors,
+        id,
         username,
         authorities,
         loginByUsername,

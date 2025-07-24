@@ -11,7 +11,7 @@ export interface HSLColorPickerProps {
 }
 
 const HSLColorPicker = ({ onColorSelect, onColorPreview }: HSLColorPickerProps) => {
-  const [hue, setHue] = useState(0);
+  const [hue, setHue] = useState(180);
   const [saturation, setSaturation] = useState(50);
   const [lightness, setLightness] = useState(50);
 

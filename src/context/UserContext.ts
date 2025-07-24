@@ -6,6 +6,9 @@ export interface UserContextType {
   logout: () => void;
   username: string;
   authorities: string[];
+  id: number;
+  baseColorIds: number[];
+  baseColors: string[];
   signUp: (username: string, password: string) => void;
 }
 
