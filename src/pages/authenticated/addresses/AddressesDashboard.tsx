@@ -127,7 +127,7 @@ const AddressesDashboard: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} style={{backgroundColor: colors.background}}>
         <View style={{ paddingBottom: 30 }}>
           <Title text={t('title.registered.addresses')} size="xl" align="center" underline color={colors.text} />
         </View>

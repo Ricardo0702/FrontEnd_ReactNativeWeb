@@ -4,6 +4,6 @@ export interface User {
   password: string;
   roleIds: number[] | null;
   roles: string[];
-  baseColorIds: number[] | null;
+  baseColorIds: number[];
   baseColors: string[];
 }

@@ -26,7 +26,7 @@ const MainDashboard: React.FC = () => {
   }, []);
 
   return (
-    <ScrollView>
+    <ScrollView style = {{backgroundColor: colors.background}}>
       <View style={styles.container}>
         <Title style={styles.title} text={t('title.select.page')} size="xl" align="center" color={colors.text}/>
 

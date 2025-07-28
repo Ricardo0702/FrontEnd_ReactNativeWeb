@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AppColors, lightColors, darkColors } from '../components/colors/Colors';
+import { UserContext } from './UserContext';
+import { fetchUser } from '../services/UserService';
+import { BaseColor } from '../types/IBaseColor';
+import { fetchActiveColorForUser } from '../services/BaseColorService';
+import { generateColorsFromBackground } from '../components/colors/GenerateColorsFromBackground';
 
 
 type ThemeName = 'light' | 'dark' | 'custom';
@@ -11,6 +16,7 @@ interface ThemeContextType {
   setThemeByName: (themeName: ThemeName) => void;
   setCustomColors: (preset: AppColors) => void;
   setPreviewColors: (preset: AppColors) => void;
+  resetColors: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
@@ -19,24 +25,49 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
   setThemeByName: () => {},
   setCustomColors: () => {},
-  setPreviewColors: () => {}
+  setPreviewColors: () => {},
+  resetColors: () => {}
 });
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [colors, setColors] = useState<AppColors>(lightColors);
   const themeName: ThemeName = colors.name === 'light' || colors.name === 'dark' ? colors.name : 'custom';
+  const { id } = useContext(UserContext);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem('colors');
-    if (stored) {
+    const loadUserColor = async () => {
       try {
-        const parsed = JSON.parse(stored) as AppColors;
-        setColors(parsed);
-      } catch {
+        const userColor = await fetchActiveColorForUser(id);
+        if (userColor != null && userColor.color) {
+          setColors(generateColorsFromBackground(userColor.color));
+        } else {
+          const stored = sessionStorage.getItem('colors');
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored) as AppColors;
+              setColors(parsed);
+            } catch {
+              setColors(lightColors);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching active user color:', error);
         setColors(lightColors);
       }
-    }
-  }, []);
+    };
+    if (id) { loadUserColor(); }
+    else {
+      const stored = sessionStorage.getItem('colors');
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored) as AppColors;
+          setColors(parsed);
+        } catch {
+          setColors(lightColors);
+        }
+      }
+    }; }, [id]);
 
   const toggleTheme = () => {
     const newColors = themeName === 'light' ? darkColors : lightColors;
@@ -63,8 +94,12 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     setColors(preset);
   };
 
+  const resetColors = () => {
+    setColors(lightColors);
+  };
+
   return (
-    <ThemeContext.Provider value={{ themeName, colors, toggleTheme, setThemeByName, setCustomColors, setPreviewColors }}>
+    <ThemeContext.Provider value={{ themeName, colors, toggleTheme, setThemeByName, setCustomColors, setPreviewColors, resetColors }}>
       {children}
     </ThemeContext.Provider>
   );

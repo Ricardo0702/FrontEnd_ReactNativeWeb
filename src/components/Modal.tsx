@@ -96,7 +96,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(({
                   </TouchableOpacity>
                 </View>
               )}
-              <ScrollView contentContainerStyle={styles.scrollContent}>
+              <ScrollView contentContainerStyle={styles.scrollContent} style= {{backgroundColor: colors.background}}>
                 <View style={[styles.content, contentStyle]}>
                   {children}
                 </View>

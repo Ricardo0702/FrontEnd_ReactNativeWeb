@@ -45,7 +45,7 @@ export const lightColors: AppColors = {
   yellow: '#f1c40f',
   lightYellow: '#fff9e6',
   darksteel: '#1f2937',
-  lightsteel: '#DDE1E6',
+  lightsteel: '#E5E8EC',
   midsteel: '#7E858E',
   evenRow: '#f9f9f9',
   oddRow: '#f0f0f0',
@@ -55,27 +55,27 @@ export const lightColors: AppColors = {
 
 export const darkColors: AppColors = {
   name: 'dark',
-  eee: '#1e1e1e', // antes: #111111
-  midgrey: '#777777', // antes: #666666
-  ccc: '#444444', // antes: #333333
-  background: '#1f1f1f', // antes: #121212
-  whiteBackground: '#111111', // antes: black
-  text: '#f0f0f0', // igual
-  link: '#3498db', // igual
-  red: '#ee6151', // antes: #e74c3c
-  lightRed: '#552b28', //'#91403a', antes: #7b2d26
-  green: '#44d685', // antes: #2ecc71
-  lightGreen: '#1a6b3c', // antes: #14532d
-  blue: '#3498db', // igual
-  lightBlue: '#284fa9', // antes: #1e3a8a
-  yellow: '#f4ab33', // antes: #f39c12
-  lightYellow: '#967200', // antes: #7c5e00
-  darksteel: '#d0d2d6', //'#f0f1f3',  antes: #e5e7eb
-  lightsteel: '#2e333f', //'#475061', antes: #374151
-  midsteel: '#98A0AA', // antes: #9ca3af
-  whiteText: '#111111', // antes: black
-  evenRow: '#131313', // antes: #060606
-  oddRow: '#1b1b1b', // antes: #0f0f0f
+  eee: '#1e1e1e',
+  midgrey: '#777777',
+  ccc: '#444444', 
+  background: '#1f1f1f', 
+  whiteBackground: '#111111', 
+  text: '#f0f0f0', 
+  link: '#3498db', 
+  red: '#ee6151', 
+  lightRed: '#552b28', 
+  green: '#44d685', 
+  lightGreen: '#1a6b3c',
+  blue: '#3498db',
+  lightBlue: '#284fa9',
+  yellow: '#f4ab33', 
+  lightYellow: '#967200', 
+  darksteel: '#d0d2d6', 
+  lightsteel: '#3A3F4A', 
+  midsteel: '#98A0AA', 
+  whiteText: '#111111',
+  evenRow: '#131313', 
+  oddRow: '#1b1b1b', 
   black: 'white',
   highlight: '#FFD7404D'
 };

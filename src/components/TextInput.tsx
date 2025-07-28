@@ -41,7 +41,7 @@ const TextInput: React.FC<TextInputProps> = ({
       {label ? <Text style={[styles.label, {color: colors.text},labelStyle]}>{label}</Text> : null}
       <View style={styles.inputWrapper}>
         <RNTextInput
-          style={[styles.input, {borderColor: colors.darksteel, color: colors.black}, inputStyle, rightIcon ? { paddingRight: 40 } : {}]}
+          style={[styles.input, {borderColor: colors.darksteel, color: colors.text}, inputStyle, rightIcon ? { paddingRight: 40 } : {}]}
           value={stringValue}
           onChangeText={(text) => onChangeText?.(text)}
           secureTextEntry={secure}

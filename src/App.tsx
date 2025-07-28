@@ -22,7 +22,12 @@ const AppContent: React.FC = () => {
   const navigate = useNavigate();
   const userContext = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
-  const { colors } = useTheme();
+  const { colors, resetColors } = useTheme();
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleGlobalReset = () => {
+    setRefreshKey(prev => prev + 1);
+  };
 
   useEffect(() => {
     const checkToken = async () => {
@@ -37,11 +42,13 @@ const AppContent: React.FC = () => {
 
   const handleLoginSuccess = () => {
     navigate('/auth/dashboard');
+    userContext.loginByStorage();
   };
 
   const handleLogout = () => {
     userContext.logout();
     navigate('/');
+    window.location.reload();
   };
 
   if (isLoading) {
@@ -86,7 +93,7 @@ const App: React.FC = () => {
     <UserContextProvider>
       <ThemeProvider>
         <Router>
-          <AppContent />
+          <AppContent/>
         </Router>
       </ThemeProvider>
     </UserContextProvider>

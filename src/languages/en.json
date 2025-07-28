@@ -1,11 +1,44 @@
 {
+  "button": {
+    "preview": "Preview",
+    "apply color": "Apply color",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "add": {
+      "address": "Add Address",
+      "role": "Add Role",
+      "user": "Add User",
+      "person": "Add Person",
+      "project": "Add Project"
+    },
+    "edit": "Edit",
+    "associate": {
+      "person": "Associate Person",
+      "project": "Associate Project"
+    },
+    "saver": "Save",
+    "assign": {
+      "role": "Assign Role"
+    },
+    "people": "People",
+    "projects": "Projects",
+    "addresses": "Addresses",
+    "logout": "Logout",
+    "create": {
+      "user": "Create User"
+    },
+    "login": "Login"
+  },
   "text": {
     "select": {
       "rows": "Select rows",
       "background colors": "Select a background color"
     },
+    "saved colors": "Saved colors",
     "light colors": "Light colors",
-    "dark colors": "Dark colors"
+    "dark colors": "Dark colors",
+    "custom color": "Custom color"
   },
   "textinput": {
     "filter": "Filter..."
@@ -13,31 +46,32 @@
   "error": {
     "loading": {
       "people": "Error loading people.",
+      "roles": "Error loading roles.",
       "associated": {
-        "projects": "Error loading associated projects.",
-        "roles": "Error loading associated roles."
+        "roles": "Error loading associated roles.",
+        "projects": "Error loading associated projects."
       },
       "data": "Error loading data.",
-      "projects": "Error loading projects.",
-      "roles": "Error loading roles."
+      "saved colors": "Error loading saved colors.",
+      "projects": "Error loading projects."
     },
     "creating": {
       "address": "Error creating address.",
-      "person": "Error creating person.",
-      "project": "Error creating project.",
       "role": "Error creating role.",
-      "user": "Error creating user."
+      "user": "Error creating user.",
+      "person": "Error creating person.",
+      "project": "Error creating project."
     },
     "deleting": {
       "address": "Error deleting address.",
-      "person": "Error deleting person.",
-      "project": "Error deleting project.",
       "role": "Error deleting role.",
-      "user": "Error deleting user."
+      "user": "Error deleting user.",
+      "person": "Error deleting person.",
+      "project": "Error deleting project."
     },
     "editing": {
-      "project": "Error editing project.",
-      "role": "Error editing role."
+      "role": "Error editing role.",
+      "project": "Error editing project."
     },
     "username": {
       "cannot be empty": "Username cannot be empty."
@@ -63,18 +97,18 @@
   "title": {
     "registered": {
       "addresses": "Registered Addresses",
-      "people": "Registered People",
-      "projects": "Registered Projects",
       "roles": "Registered Roles",
-      "users": "Registered Users"
+      "users": "Registered Users",
+      "people": "Registered People",
+      "projects": "Registered Projects"
     },
     "confirm": {
       "delete": "Delete confirmation"
     },
     "edit": {
       "address": "Edit Address",
-      "person": "Edit Person",
-      "user": "Edit User"
+      "user": "Edit User",
+      "person": "Edit Person"
     },
     "associated": {
       "person": "Associated Person",
@@ -84,33 +118,33 @@
     "associate": {
       "person": "Associate Person"
     },
+    "assigned": {
+      "roles": "Assigned Roles"
+    },
+    "add": {
+      "role": "Add Role",
+      "project": "Add Project"
+    },
     "select": {
       "page": "Select a Page"
     },
     "My Dashboard": "My Dashboard",
-    "add": {
-      "project": "Add Project",
-      "role": "Add Role"
-    },
-    "assigned": {
-      "roles": "Assigned Roles"
-    },
     "web project": "Web Project"
   },
   "modal": {
     "edit": {
       "address": "Edit Address",
-      "person": "Edit Person",
-      "project": "Edit Project",
       "role": "Edit Role",
-      "user": "Edit User"
+      "user": "Edit User",
+      "person": "Edit Person",
+      "project": "Edit Project"
     },
     "add": {
       "address": "Add Address",
-      "person": "Add Person",
-      "project": "Add Project",
       "role": "Add Role",
-      "user": "Add User"
+      "user": "Add User",
+      "person": "Add Person",
+      "project": "Add Project"
     },
     "create": {
       "user": "Create New User"
@@ -120,58 +154,29 @@
   "label": {
     "street": "Street",
     "city": "City",
-    "name": "Name",
-    "age": "Age",
-    "Name": "Name",
-    "sreet": "Street",
-    "project": {
-      "name": "Project Name"
-    },
     "role": {
       "name": "Role Name",
       "description": "Role description"
     },
     "Username": "Username",
     "user": "Username",
-    "password": "Password"
-  },
-  "button": {
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "add": {
-      "address": "Add Address",
-      "person": "Add Person",
-      "project": "Add Project",
-      "role": "Add Role",
-      "user": "Add User"
-    },
-    "edit": "Edit",
-    "associate": {
-      "person": "Associate Person",
-      "project": "Associate Project"
-    },
-    "people": "People",
-    "projects": "Projects",
-    "addresses": "Addresses",
-    "logout": "Logout",
-    "saver": "Save",
-    "assign": {
-      "role": "Assign Role"
-    },
-    "create": {
-      "user": "Create User"
-    },
-    "login": "Login"
+    "password": "Password",
+    "name": "Name",
+    "age": "Age",
+    "Name": "Name",
+    "sreet": "Street",
+    "project": {
+      "name": "Project Name"
+    }
   },
   "confirm": {
     "delete": {
       "message": {
         "address": "Are you sure you want to delete the address?",
-        "person": "Are you sure you want to delete the person?",
-        "project": "Are you sure you want to delete the project?",
         "role": "Are you sure you want to delete the role?",
-        "user": "Are you sure you want to delete the user?"
+        "user": "Are you sure you want to delete the user?",
+        "person": "Are you sure you want to delete the person?",
+        "project": "Are you sure you want to delete the project?"
       }
     },
     "logout": {
@@ -185,20 +190,23 @@
     "person": "Person",
     "actions": "Actions",
     "name": "Name",
-    "age": "Age",
-    "addresses": "Addresses",
-    "projects": "Projects",
     "description": "Description",
     "username": "Username",
-    "roles": "Roles"
+    "roles": "Roles",
+    "baseColors": "Base Colors",
+    "age": "Age",
+    "addresses": "Addresses",
+    "projects": "Projects"
   },
   "select": {
     "person": "Select a person",
-    "project": "Select a project",
-    "role": "Select a role"
+    "role": "Select a role",
+    "project": "Select a project"
   },
   "Recent changes:": "Recent changes:",
   "There are no recent changes": "There are no recent changes.",
+  "Show less": "Show less",
+  "Show more": "Show more",
   "navbar": {
     "logout": "Logout",
     "admin": "Admin",

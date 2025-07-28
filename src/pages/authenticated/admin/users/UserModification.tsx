@@ -79,7 +79,7 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
   };
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.whiteBackground}]}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
       <Title text={t('title.edit.user')} type="Subtitle" style={{ marginBottom: 20, color: colors.text}} />
       <TextInput
         label={t('label.Username')}

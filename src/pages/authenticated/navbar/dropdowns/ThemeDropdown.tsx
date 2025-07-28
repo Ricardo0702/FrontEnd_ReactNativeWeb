@@ -5,14 +5,14 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { UserContext } from '../../../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../../../../components/Icon';
-import { faCaretDown, faCaretUp, faPalette, faSliders, faMoon, faTrashCan, faSun, faDownload, faPaintbrush } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faCaretUp, faPalette, faSliders, faMoon, faTrashCan, faSun, faDownload, faPaintbrush, faGear } from '@fortawesome/free-solid-svg-icons';
 import { generateColorsFromBackground } from '../../../../components/colors/GenerateColorsFromBackground';
 import Modal from '../../../../components/Modal';
 import HSLColorPicker from '../../../../components/colors/HSLColorPicker';
-import { associateUser, createBaseColor } from '../../../../services/BaseColorService';
+import { activateColorForUser, associateUser, createBaseColor } from '../../../../services/BaseColorService';
 import { fetchUserByUsername } from '../../../../services/UserService';
-import { deleteBaseColor } from '../../../../services/BaseColorService';
-import Button from '../../../../components/Button';
+import { deleteBaseColor, removeUser, deactivateColorsForUser } from '../../../../services/BaseColorService';
+import { BaseColor } from '../../../../types/IBaseColor';
 
 interface ThemesDropdownProps {
   dropdownStyle?: object;
@@ -32,45 +32,40 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { themeName, setThemeByName, colors, setCustomColors, setPreviewColors } = useTheme();
   const isMobile = window.innerWidth <= 700;
-  const { username, id, baseColors, baseColorIds } = useContext(UserContext);
+  const { username, id, baseColors, baseColorIds, loginByStorage } = useContext(UserContext);
   const [prevColor, setPrevColor] = useState('');
   const [customColor, setCustomColor] = useState('');
   const [colorApplied, setColorApplied] = useState(false);
-
-  {/*Modificar el flatList par que savedColors sea un useState'<'BaseColor'>',}
-    de tal forma que se pueda trabajar sobre su id o sobre el color, al seleccionar cada uno */}
-  const [savedColors, setSavedColors] = useState<string[]>([]);
-  
-  const [selectedSavedColor, setSelectedSavedColor] = useState<string | null>(null);
+  const [savedColors, setSavedColors] = useState<BaseColor[]>([]);
+  const [selectedSavedColor, setSelectedSavedColor] = useState<BaseColor>();
   const { width, height } = useWindowDimensions();
+  const [showTrashIcons, setShowTrashIcons] = useState(false);
+
 
   const handleSelectTheme = (selectedTheme: ThemeMode) => {
     setThemeByName(selectedTheme);
     setLangOpen(false);
     closeMenu?.();
+    if(id) {deactivateColorsForUser(id);}
   };
 
   useEffect(() => {
     const loadUserColors = async () => {
     try {
-      setSavedColors(baseColors.flat());
+      const combinedColors = baseColors.flat().map((color, index) => ({
+        id: baseColorIds.flat()[index],
+        color,
+        onUse: false,
+        userId: undefined,
+        userName: undefined,
+      }));
+      setSavedColors(combinedColors);
     } catch (error) {
-      console.error('Error fetching user base colors:', error);
+      console.error(t('error.loading.saved colors'), error);
     }
   };
     loadUserColors();
   }, [showCustomModal, username]);
-
-  const handleDeleteAllColors = async() => {
-    try {
-      const colorIds = baseColorIds.flat();
-      if (colorIds === null) return;
-      await Promise.all(colorIds.map(id => deleteBaseColor(id)));
-      setSavedColors([]);
-    } catch (error) {
-      console.error('Error deleting base colors: ', error);
-    }
-  }
 
   useEffect(() => {
     if (showCustomModal) {
@@ -97,29 +92,38 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
 
   const handleClose = () => {
     setShowCustomModal(false);
-    console.log('onClose');
     if (!colorApplied && prevColor) {
       const prevColors = generateColorsFromBackground(prevColor);
       setPreviewColors(prevColors);
     }
     setColorApplied(false);
+    loginByStorage();
   };
 
   const handleColorSelection = async (color: string) => {
     try {
-      const newColor = await createBaseColor(color); 
-      const user = await fetchUserByUsername(username); // desde contexto
-      await associateUser(newColor.id, user.id);
-      setSavedColors( prev => prev.includes(color) ? prev : [...prev, color] );
+      const existingColor = savedColors.find(c => c.color === color);
+      if (existingColor) {
+        const newColors = generateColorsFromBackground(color);
+        setThemeByName('custom');
+        setCustomColors(newColors);
+        setColorApplied(true);
+        await activateColorForUser(existingColor.id, id);
+        return;
+      }
+      const newColor = await createBaseColor(color);
+      await associateUser(newColor.id, id);
+      setSavedColors(prev => [...prev, newColor]);
       const newColors = generateColorsFromBackground(color);
       setThemeByName('custom');
       setCustomColors(newColors);
       setColorApplied(true);
-      setSavedColors
+      await activateColorForUser(newColor.id, id);
     } catch (error) {
       console.error('Error al aplicar el color personalizado:', error);
     }
   };
+
 
 
   return (
@@ -171,41 +175,57 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
                       <Icon icon={faDownload} size={17} color={colors.darksteel} />
                     </View>
                   </View>
-                  <View style= {{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ alignItems: 'center' }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      justifyContent: 'center',
+                      paddingHorizontal: 10,
+                    }}
+                  >
+                    <TouchableOpacity
+                      style={{ alignSelf: 'flex-end', marginBottom: showTrashIcons ? 46 : 20}}
+                      onPress={() => setShowTrashIcons(!showTrashIcons)}
+                    >
+                      <Icon icon={faGear} size={20} color={colors.darksteel} />
+                    </TouchableOpacity>
+                    {savedColors.map((item) => (
+                      <View
+                        key={item.id?.toString()}
+                        style={{ alignItems: 'center', margin: 5, marginHorizontal: 10 }}
+                      >
+                        <TouchableOpacity
+                          style={[
+                            styles.colorCircle,
+                            {
+                              backgroundColor: item.color,
+                              borderColor:
+                                selectedSavedColor?.id === item.id
+                                  ? colors.background
+                                  : colors.ccc,
+                              borderWidth: selectedSavedColor?.id === item.id ? 3 : 2,
+                            },
+                          ]}
+                          onPress={() => handleColorSelection(item.color)}
+                          activeOpacity={0.7}
+                        />
 
-                    {/*Modificar el flatList par que sabedColors sea un useState'<'BaseColor'>',}
-                     de tal forma que se pueda trabajar sobre su id o sobre el color, al seleccionar cada uno */}
-                    <FlatList
-                      horizontal
-                      data={savedColors}
-                      keyExtractor={(item) => item}
-                      renderItem={({ item }) => (
-                        <View style={{ alignItems: 'center', marginHorizontal: 5 }}>
+                        {showTrashIcons && (
                           <TouchableOpacity
-                            style={[
-                              styles.colorCircle,
-                              {
-                                backgroundColor: item,
-                                borderColor: selectedSavedColor === item ? colors.background : colors.ccc,
-                                borderWidth: selectedSavedColor === item ? 3 : 2,
-                              },
-                            ]}
-                            onPress={() => {handleColorSelection(item) }}
-                            activeOpacity={0.7}
-                          />
-                        </View>
-                      )}
-                      contentContainerStyle={{ paddingHorizontal: 10 }}
-                      showsHorizontalScrollIndicator={false}
-                    />
-
-                    <View style = {{flexDirection: 'row', borderRadius: 10, justifyContent: 'center', marginTop: 5, alignItems: 'center', backgroundColor: colors.lightRed}}>
-                      <Button title={t('button.reset')} type="associate" onPress={() => handleDeleteAllColors()} />
-                      <View style = {{marginLeft: 2, marginTop: 2}}>
-                        <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
+                            style={{ marginTop: 10 }}
+                            onPress={() => {removeUser(item.id, id), setSavedColors((prevColors) =>
+                              prevColors.filter((color) => color.id !== item.id));
+                            }}
+                          >
+                            <Icon icon={faTrashCan} size={16} color={colors.darksteel} />
+                          </TouchableOpacity>
+                        )}
                       </View>
-                    </View>
+                    ))}
                   </View>
+                </View>
+
                 </View>
               </View>
             )}
@@ -229,6 +249,7 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
                     const newColors = generateColorsFromBackground(item);
                     setThemeByName('custom');
                     setCustomColors(newColors);
+                    if (id) { deactivateColorsForUser(id);}
                   }}
                   activeOpacity={0.7}
                 />
@@ -260,6 +281,7 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
                     const newColors = generateColorsFromBackground(item);
                     setThemeByName('custom');
                     setCustomColors(newColors);
+                    if (id) { deactivateColorsForUser(id);}
                   }}
                   activeOpacity={0.7}
                 />

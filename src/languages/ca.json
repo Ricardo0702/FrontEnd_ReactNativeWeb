@@ -1,11 +1,44 @@
 {
+  "button": {
+    "preview": "Previsualitzar",
+    "apply color": "Aplicar color",
+    "save": "Desar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "add": {
+      "address": "Afegir adreça",
+      "role": "Afegir rol",
+      "user": "Afegir usuari",
+      "person": "Afegir persona",
+      "project": "Afegir projecte"
+    },
+    "edit": "Editar",
+    "associate": {
+      "person": "Associar persona",
+      "project": "Associar projecte"
+    },
+    "saver": "Desar",
+    "assign": {
+      "role": "Assignar rol"
+    },
+    "people": "Persones",
+    "projects": "Projectes",
+    "addresses": "Adreces",
+    "logout": "Tancar sessió",
+    "create": {
+      "user": "Crear usuari"
+    },
+    "login": "Iniciar sessió"
+  },
   "text": {
     "select": {
       "rows": "Seleccionar files",
       "background colors": "Selecciona un color pel fons"
     },
+    "saved colors": "Colors guardats",
     "light colors": "Colors clars",
-    "dark colors": "Colors foscs"
+    "dark colors": "Colors foscs",
+    "custom color": "personalitzar color"
   },
   "textinput": {
     "filter": "Filtrar..."
@@ -13,31 +46,32 @@
   "error": {
     "loading": {
       "people": "Error en carregar les persones.",
+      "roles": "Error en carregar els rols",
       "associated": {
-        "projects": "Error en carregar els projectes associats.",
-        "roles": "Error en carregar els rols associats"
+        "roles": "Error en carregar els rols associats",
+        "projects": "Error en carregar els projectes associats."
       },
       "data": "Error en carregar les dades.",
-      "projects": "Error en carregar els projectes.",
-      "roles": "Error en carregar els rols"
+      "saved colors": "Error en carregar els colors guardats.",
+      "projects": "Error en carregar els projectes."
     },
     "creating": {
       "address": "Error en crear l'adreça.",
-      "person": "Error en crear la persona.",
-      "project": "Error en crear el projecte.",
       "role": "Error en crear el rol",
-      "user": "Error en crear l'usuari."
+      "user": "Error en crear l'usuari.",
+      "person": "Error en crear la persona.",
+      "project": "Error en crear el projecte."
     },
     "deleting": {
       "address": "Error en eliminar l'adreça.",
-      "person": "Error en eliminar la persona.",
-      "project": "Error en eliminar el projecte.",
       "role": "Error en eliminar el rol",
-      "user": "Error en eliminar l'usuari"
+      "user": "Error en eliminar l'usuari",
+      "person": "Error en eliminar la persona.",
+      "project": "Error en eliminar el projecte."
     },
     "editing": {
-      "project": "Error en editar el projecte.",
-      "role": "Error en editar el rol"
+      "role": "Error en editar el rol",
+      "project": "Error en editar el projecte."
     },
     "username": {
       "cannot be empty": "El nom d'usuari no pot estar buit."
@@ -63,18 +97,18 @@
   "title": {
     "registered": {
       "addresses": "Adreces registrades",
-      "people": "Persones registrades",
-      "projects": "Projectes registrats",
       "roles": "Rols registrats",
-      "users": "Usuaris registrats"
+      "users": "Usuaris registrats",
+      "people": "Persones registrades",
+      "projects": "Projectes registrats"
     },
     "confirm": {
       "delete": "Confirmació d'eliminació"
     },
     "edit": {
       "address": "Editar adreça",
-      "person": "Editar persona",
-      "user": "Editar usuari"
+      "user": "Editar usuari",
+      "person": "Editar persona"
     },
     "associated": {
       "person": "Persona associada",
@@ -84,33 +118,33 @@
     "associate": {
       "person": "Associar persona"
     },
+    "assigned": {
+      "roles": "Rols assignats"
+    },
+    "add": {
+      "role": "Afegir rol",
+      "project": "Afegir projecte"
+    },
     "select": {
       "page": "Selecciona una pàgina"
     },
     "My Dashboard": "El meu panell",
-    "add": {
-      "project": "Afegir projecte",
-      "role": "Afegir rol"
-    },
-    "assigned": {
-      "roles": "Rols assignats"
-    },
     "web project": "Projecte web"
   },
   "modal": {
     "edit": {
       "address": "Editar adreça",
-      "person": "Editar persona",
-      "project": "Editar projecte",
       "role": "Editar rol",
-      "user": "Editar usuari"
+      "user": "Editar usuari",
+      "person": "Editar persona",
+      "project": "Editar projecte"
     },
     "add": {
       "address": "Afegir adreça",
-      "person": "Afegir persona",
-      "project": "Afegir projecte",
       "role": "Afegir rol",
-      "user": "Afegir usuari"
+      "user": "Afegir usuari",
+      "person": "Afegir persona",
+      "project": "Afegir projecte"
     },
     "create": {
       "user": "Crear nou usuari"
@@ -120,58 +154,29 @@
   "label": {
     "street": "Carrer",
     "city": "Ciutat",
-    "name": "Nom",
-    "age": "Edat",
-    "Name": "Nom",
-    "sreet": "Carrer",
-    "project": {
-      "name": "Nom del projecte"
-    },
     "role": {
       "name": "Nom del rol",
       "description": "Descripció del rol"
     },
     "Username": "Usuari",
     "user": "Usuari",
-    "password": "Contrasenya"
-  },
-  "button": {
-    "save": "Desar",
-    "cancel": "Cancelar",
-    "delete": "Eliminar",
-    "add": {
-      "address": "Afegir adreça",
-      "person": "Afegir persona",
-      "project": "Afegir projecte",
-      "role": "Afegir rol",
-      "user": "Afegir usuari"
-    },
-    "edit": "Editar",
-    "associate": {
-      "person": "Associar persona",
-      "project": "Associar projecte"
-    },
-    "people": "Persones",
-    "projects": "Projectes",
-    "addresses": "Adreces",
-    "logout": "Tancar sessió",
-    "saver": "Desar",
-    "assign": {
-      "role": "Assignar rol"
-    },
-    "create": {
-      "user": "Crear usuari"
-    },
-    "login": "Iniciar sessió"
+    "password": "Contrasenya",
+    "name": "Nom",
+    "age": "Edat",
+    "Name": "Nom",
+    "sreet": "Carrer",
+    "project": {
+      "name": "Nom del projecte"
+    }
   },
   "confirm": {
     "delete": {
       "message": {
         "address": "Segur que vols eliminar l'adreça?",
-        "person": "Segur que vols eliminar la persona?",
-        "project": "Segur que vols eliminar el projecte?",
         "role": "Segur que vols eliminar el rol?",
-        "user": "Segur que vols eliminar l'usuari?"
+        "user": "Segur que vols eliminar l'usuari?",
+        "person": "Segur que vols eliminar la persona?",
+        "project": "Segur que vols eliminar el projecte?"
       }
     },
     "logout": {
@@ -185,20 +190,23 @@
     "person": "Persona",
     "actions": "Accions",
     "name": "Nom",
-    "age": "Edat",
-    "addresses": "Adreces",
-    "projects": "Projectes",
     "description": "Descripció",
     "username": "Nom d'usuari",
-    "roles": "Rols"
+    "roles": "Rols",
+    "baseColors": "Colors base",
+    "age": "Edat",
+    "addresses": "Adreces",
+    "projects": "Projectes"
   },
   "select": {
     "person": "Selecciona una persona",
-    "project": "Selecciona un projecte",
-    "role": "Selecciona un rol"
+    "role": "Selecciona un rol",
+    "project": "Selecciona un projecte"
   },
   "Recent changes:": "Canvis recents:",
   "There are no recent changes": "No hi ha canvis recents.",
+  "Show less": "Mostrar menys",
+  "Show more": "Mostrar més",
   "navbar": {
     "logout": "Tancar sessió",
     "admin": "Admin",

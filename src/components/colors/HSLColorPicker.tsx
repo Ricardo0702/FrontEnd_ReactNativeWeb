@@ -4,6 +4,7 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { useTheme } from '../../context/ThemeContext';
 import Button from '../Button';
+import { t } from 'i18next';
 
 export interface HSLColorPickerProps {
   onColorSelect: (color: string) => void;
@@ -55,14 +56,14 @@ const HSLColorPicker = ({ onColorSelect, onColorPreview }: HSLColorPickerProps) 
 
       <View style={styles.buttonRow}>
         <Button
-          title="button.preview"
+          title={t("button.preview")}
           style={[styles.button, { backgroundColor: colors.darksteel }]}
           color={colors.whiteText}
           onPress={() => onColorPreview(color)}
         />
 
         <Button
-          title="button.apply color"
+          title={t("button.apply color")}
           style={[styles.button, { backgroundColor: colors.darksteel }]}
           color={colors.whiteText}
           onPress={() => onColorSelect(color)}

@@ -1,6 +1,8 @@
 import React, { useState, ReactNode, useEffect } from 'react';
 import { UserContext } from './UserContext';
 import axios from '../services/AxiosConfig';
+import { User } from '../types/IUser';
+import { fetchUser } from '../services/UserService';
 
 interface Props {
   children: ReactNode;
@@ -78,8 +80,6 @@ export const UserContextProvider: React.FC<Props> = ({ children }) => {
     setAuthorities([]);
     sessionStorage.removeItem('token');
   };
-
-  // Carga de todos los colores [light, dark + (peticion al back de todas los customized)]
 
   return (
     <UserContext.Provider

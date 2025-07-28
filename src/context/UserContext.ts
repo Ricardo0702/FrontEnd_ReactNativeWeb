@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { User } from '../types/IUser';
 
 export interface UserContextType {
   loginByUsername: (username: string, password: string) => void;
