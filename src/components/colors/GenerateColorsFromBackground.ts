@@ -29,6 +29,7 @@ export function generateColorsFromBackground(bg: string): AppColors {
     link: mixWithBg(baseColors.link, 0.4),
 
     red: mixWithBg(baseColors.red, 0.3),
+    midRed: mixWithBg(baseColors.midRed, 0.3),
     lightRed: mixWithBg(baseColors.lightRed, 0.3),
 
     green: mixWithBg(baseColors.green, 0.3),

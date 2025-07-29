@@ -46,7 +46,7 @@ const Table = <T,>({
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
   const [filterText, setFilterText] = useState<string>('');
   const isSmallScreen = windowWidth < 600;
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
   const {colors} = useTheme();
@@ -73,6 +73,117 @@ const Table = <T,>({
       })
       .filter(({ matchingColumns }) => matchingColumns.length > 0);
   }, [filterText, data, columns]);
+
+  const PaginationControls = () => {
+    const getPageNumbers = () => {
+      const pageCount = totalPages;
+      const current = currentPage + 1;
+      const maxVisible = 5;
+
+      let startPage = Math.max(1, current - Math.floor(maxVisible / 2));
+      let endPage = startPage + maxVisible - 1;
+
+      if (endPage > pageCount) {
+        endPage = pageCount;
+        startPage = Math.max(1, endPage - maxVisible + 1);
+      }
+
+      const pages = [];
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+      return pages;
+    };
+
+    const pageNumbers = getPageNumbers();
+
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity
+          onPress={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+          disabled={currentPage === 0}
+          style={{ paddingHorizontal: 8, paddingVertical: 6 }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              color: currentPage === 0 ? colors.ccc : colors.text,
+            }}
+          >
+            ◀
+          </Text>
+        </TouchableOpacity>
+        {pageNumbers[0] > 1 && (
+          <>
+            <TouchableOpacity onPress={() => setCurrentPage(0)} style={{ paddingHorizontal: 6 }}>
+              <Text
+                style={{
+                  color: currentPage === 0 ? colors.whiteText : colors.text,
+                  backgroundColor: currentPage === 0 ? colors.darksteel : undefined,
+                  borderRadius: 4,
+                  paddingHorizontal: 6,
+                }}
+              >
+                1
+              </Text>
+            </TouchableOpacity>
+            <Text style={{ paddingHorizontal: 4 }}>...</Text>
+          </>
+        )}
+        {pageNumbers.map((page) => {
+          const pageIndex = page - 1;
+          const isCurrent = pageIndex === currentPage;
+          return (
+            <TouchableOpacity key={page} onPress={() => setCurrentPage(pageIndex)} style={{ marginHorizontal: 2 }}>
+              <Text
+                style={{
+                  padding: 6,
+                  backgroundColor: isCurrent ? colors.darksteel : colors.eee,
+                  color: isCurrent ? colors.whiteText : colors.text,
+                  borderRadius: 4,
+                  minWidth: 20,
+                  textAlign: 'center',
+                }}
+              >
+                {page}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+        {pageNumbers[pageNumbers.length - 1] < totalPages && (
+          <>
+            <Text style={{ paddingHorizontal: 4 }}>...</Text>
+            <TouchableOpacity onPress={() => setCurrentPage(totalPages - 1)} style={{ paddingHorizontal: 6 }}>
+              <Text
+                style={{
+                  color: currentPage === totalPages - 1 ? colors.whiteText : colors.text,
+                  backgroundColor: currentPage === totalPages - 1 ? colors.darksteel : undefined,
+                  borderRadius: 4,
+                  paddingHorizontal: 6,
+                }}
+              >
+                {totalPages}
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
+        <TouchableOpacity
+          onPress={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
+          disabled={currentPage === totalPages - 1}
+          style={{ paddingHorizontal: 8, paddingVertical: 6 }}
+        >
+          <Text
+            style={{
+              fontSize: 18,
+              color: currentPage === totalPages - 1 ? colors.ccc : colors.text,
+            }}
+          >
+            ▶
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const sortedData = useMemo(() => {
     if (!sortColumn || !sortDirection) return filteredData;
@@ -149,141 +260,147 @@ const Table = <T,>({
 
   if (isSmallScreen) {
     return (
-      <ScrollView style={[styles.cardsContainer, style]}>
-        {data.map((row, rowIndex) => (
-          <View key={rowIndex} style={[styles.card, rowIndex % 2 === 0 ? {backgroundColor: colors.evenRow} : 
-              {backgroundColor: colors.oddRow}]}>
-            {columns.map((col, colIndex) => {
-              const cellValue = col.accessor ? row[col.accessor] : null;
-              return (
-                <View key={colIndex} style={styles.cardRow}>
-                  <Text style={[styles.cardHeader, {color: colors.text}]}>{col.header}:</Text>
-                  <Text style={styles.cardValue}>
-                    {col.render
-                      ? col.render(cellValue ?? '', row, rowIndex, highlightText, filterText)
-                      : highlightText(String(cellValue ?? ''), filterText)}
-                  </Text>
-                </View>
-              );
-            })}
+      <View style={[style]}>
+        {paginationEnabled && (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              marginHorizontal: 15,
+              marginBottom: 8,
+            }}
+          >
+            {/* Grupo izquierdo */}
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+              <Select
+                style={{ width: 80 }}
+                selectedValue={rowsPerPage}
+                onValueChange={(value) => { setRowsPerPage(Number(value)); setCurrentPage(0); }}
+                placeholder={t('text.select.rows')}
+                options={(() => {
+                  const max = sortedData.length;
+                  const multiples = [];
+                  for (let i = 5; i <= max; i += 5) {
+                    multiples.push({ label: i.toString(), value: i });
+                  }
+                  if (max % 5 !== 0) {
+                    multiples.push({ label: max.toString(), value: max });
+                  }
+                  return multiples;
+                })() as SelectOption[]}
+              />
+
+              {windowWidth >= 420 && sortedData.length > 0 ? (
+                <PaginationControls />
+              ) : windowWidth >= 290 ? (
+                <View style={{ width: windowWidth * 0.2 }} />
+              ) : null}
+            </View>
+
+            {/* Grupo derecho */}
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8 }}>
+              <TextInput
+                placeholder={t('textinput.filter')}
+                value={filterText}
+                onChangeText={setFilterText}
+                inputStyle={{
+                  width: windowWidth * 0.2,
+                  height: minRowHeight,
+                  paddingVertical: 0,
+                  marginLeft: 8,
+                }}
+              />
+              <View style={{ justifyContent: 'center' }}>{renderHeaderButton}</View>
+            </View>
           </View>
-        ))}
-      </ScrollView>
+        )}
+
+        {/* Selector de columna y dirección de ordenación (sólo móviles) */}
+        {paginationEnabled && (
+          <View
+            style={{
+              marginHorizontal: 15,
+              marginBottom: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 10,
+            }}
+          >
+            {/* Selector de columna */}
+            <Select
+              style={{ flex: 1 }}
+              selectedValue={sortColumn !== null && typeof sortColumn !== 'symbol' ? String(sortColumn) : undefined}
+              onValueChange={(value) => setSortColumn(value as keyof T)}
+              placeholder={t('text.select.column')}
+              options={columns
+                .filter((col) => col.accessor && typeof col.accessor !== 'symbol')
+                .map((col) => ({
+                  label: col.header,
+                  value: String(col.accessor),
+                })) as SelectOption[]}
+            />
+
+            {/* Selector de dirección */}
+            <Select
+              style={{ width: 100 }}
+              selectedValue={sortDirection ?? undefined} // <-- convertimos null a undefined
+              onValueChange={(value) => {
+                if (value === 'asc' || value === 'desc') {
+                  setSortDirection(value);
+                }
+              }}
+              options={[
+                { label: t('sort.asc'), value: 'asc' },
+                { label: t('sort.desc'), value: 'desc' },
+              ]}
+            />
+          </View>
+        )}
+
+        {/* Cards */}
+        <ScrollView style={styles.cardsContainer}>
+          {paginatedData.map(({ item: row, matchingColumns }, rowIndex) => (
+            <View
+              key={rowIndex}
+              style={[
+                styles.card,
+                rowIndex % 2 === 0
+                  ? { backgroundColor: colors.evenRow }
+                  : { backgroundColor: colors.oddRow },
+              ]}
+            >
+              {columns.map((col, colIndex) => {
+                const cellValue = col.accessor ? row[col.accessor] : null;
+                return (
+                  <View key={colIndex} style={styles.cardRow}>
+                    <Text style={[styles.cardHeader, { color: colors.text }]}>{col.header}:</Text>
+                    <Text style={styles.cardValue}>
+                      {col.render
+                        ? col.render(cellValue ?? '', row, rowIndex, highlightText, filterText)
+                        : highlightText(String(cellValue ?? ''), filterText)}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          ))}
+        </ScrollView>
+
+        {/* PaginationControls debajo si pantalla < 420 */}
+        {paginationEnabled && windowWidth < 420 && sortedData.length > 0 && (
+          <View style={{ alignItems: 'center', marginVertical: 10 }}>
+            <PaginationControls />
+          </View>
+        )}
+      </View>
     );
   }
 
+
   const flexibleColumns = columns.filter((col) => !col.width);
   const flexibleColumnCount = flexibleColumns.length;
-  const PaginationControls = () => {
-    const getPageNumbers = () => {
-      const pageCount = totalPages;
-      const current = currentPage + 1;
-      const maxVisible = 5;
-
-      let startPage = Math.max(1, current - Math.floor(maxVisible / 2));
-      let endPage = startPage + maxVisible - 1;
-
-      if (endPage > pageCount) {
-        endPage = pageCount;
-        startPage = Math.max(1, endPage - maxVisible + 1);
-      }
-
-      const pages = [];
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-      return pages;
-    };
-
-    const pageNumbers = getPageNumbers();
-
-    return (
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20 }}>
-        <TouchableOpacity
-          onPress={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-          disabled={currentPage === 0}
-          style={{ paddingHorizontal: 8, paddingVertical: 6 }}
-        >
-          <Text
-            style={{
-              fontSize: 18,
-              color: currentPage === 0 ? colors.ccc : colors.text,
-            }}
-          >
-            ◀
-          </Text>
-        </TouchableOpacity>
-        {pageNumbers[0] > 1 && (
-          <>
-            <TouchableOpacity onPress={() => setCurrentPage(0)} style={{ paddingHorizontal: 6 }}>
-              <Text
-                style={{
-                  color: currentPage === 0 ? colors.whiteText : colors.text,
-                  backgroundColor: currentPage === 0 ? colors.darksteel : undefined,
-                  borderRadius: 4,
-                  paddingHorizontal: 6,
-                }}
-              >
-                1
-              </Text>
-            </TouchableOpacity>
-            <Text style={{ paddingHorizontal: 4 }}>...</Text>
-          </>
-        )}
-        {pageNumbers.map((page) => {
-          const pageIndex = page - 1;
-          const isCurrent = pageIndex === currentPage;
-          return (
-            <TouchableOpacity key={page} onPress={() => setCurrentPage(pageIndex)} style={{ marginHorizontal: 2 }}>
-              <Text
-                style={{
-                  padding: 6,
-                  backgroundColor: isCurrent ? colors.darksteel : colors.eee,
-                  color: isCurrent ? colors.whiteText : colors.text,
-                  borderRadius: 4,
-                  minWidth: 24,
-                  textAlign: 'center',
-                }}
-              >
-                {page}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-        {pageNumbers[pageNumbers.length - 1] < totalPages && (
-          <>
-            <Text style={{ paddingHorizontal: 4 }}>...</Text>
-            <TouchableOpacity onPress={() => setCurrentPage(totalPages - 1)} style={{ paddingHorizontal: 6 }}>
-              <Text
-                style={{
-                  color: currentPage === totalPages - 1 ? colors.whiteText : colors.text,
-                  backgroundColor: currentPage === totalPages - 1 ? colors.darksteel : undefined,
-                  borderRadius: 4,
-                  paddingHorizontal: 6,
-                }}
-              >
-                {totalPages}
-              </Text>
-            </TouchableOpacity>
-          </>
-        )}
-        <TouchableOpacity
-          onPress={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))}
-          disabled={currentPage === totalPages - 1}
-          style={{ paddingHorizontal: 8, paddingVertical: 6 }}
-        >
-          <Text
-            style={{
-              fontSize: 18,
-              color: currentPage === totalPages - 1 ? colors.ccc : colors.text,
-            }}
-          >
-            ▶
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  
 
   return (
     <View style={{ minHeight: minRowHeight * (sortedData.length + 2) }}>
@@ -429,8 +546,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   cardsContainer: {
-    marginTop: 15,
-    padding: 15,
+    paddingHorizontal: 15,
   },
   card: {
     padding: 12,
@@ -443,6 +559,7 @@ const styles = StyleSheet.create({
   cardRow: {
     flexDirection: 'row',
     marginBottom: 6,
+    alignItems: 'center'
   },
   cardHeader: {
     fontWeight: '700',

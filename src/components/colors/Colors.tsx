@@ -5,6 +5,7 @@ export interface AppColors {
   text: string;
   link: string;
   red: string;
+  midRed: string; 
   lightRed: string;
   green: string;
   lightGreen: string;
@@ -37,6 +38,7 @@ export const lightColors: AppColors = {
   whiteText: 'white',
   link: '#2980b9',
   red: '#c0392b',
+  midRed: '#e07a70', 
   lightRed: '#F5D5D2',
   green: '#27ae60',
   lightGreen: '#e6f4ea',
@@ -63,6 +65,7 @@ export const darkColors: AppColors = {
   text: '#f0f0f0', 
   link: '#3498db', 
   red: '#ee6151', 
+  midRed: '#7a2c26', 
   lightRed: '#552b28', 
   green: '#44d685', 
   lightGreen: '#1a6b3c',

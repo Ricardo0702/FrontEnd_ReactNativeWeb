@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Role } from '../../../../types/IRole';
-import { useWindowDimensions, View, Text } from 'react-native';
+import { useWindowDimensions, View, Text, TouchableOpacity } from 'react-native';
 import Table from '../../../../components/Table';
 import Button from '../../../../components/Button';
 import { useTheme } from '../../../../context/ThemeContext';
@@ -28,7 +28,7 @@ const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit, setShow
         height={50}
         color={colors.whiteText}
         style={{ backgroundColor: colors.darksteel, borderRadius: 6 }}
-        width={windowWidth * 0.1}
+        width={windowWidth * 0.15}
       />
     </View>
   );
@@ -71,46 +71,38 @@ const RolesTable: React.FC<RoleTableProps> = ({ roles, onDelete, onEdit, setShow
         const backgroundColor = colors.lightsteel;
         if (windowWidth < 600) {
           return (
-            <View style={{ flex: 1, flexDirection: 'row', gap: 10 }}>
-              <View style={{ backgroundColor }}>
-                <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                  <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
-                  <View style = {{marginLeft: 2, marginTop: 2}}>
-                    <Icon icon={faPenToSquare} size={14} color={colors.darksteel} />
-                  </View>
-                </View>
-              </View>
+            <View style={{ flexDirection: 'row', gap: 20, justifyContent: 'center' }}>
+              <TouchableOpacity
+                onPress={() => onEdit(row)}
+                style={{ justifyContent: 'center', alignItems: 'center', padding: 6, borderRadius: 4 }}
+              >
+                <Icon icon={faPenToSquare} size={20} color={colors.darksteel} title = 'Edit' />
+              </TouchableOpacity>
 
-              <View style={{ backgroundColor: colors.lightRed }}>
-                <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                  <Button title={t('button.delete')} type="associate" onPress={() => onDelete(row.id)} />
-                  <View style = {{marginLeft: 2, marginTop: 2}}>
-                    <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
-                  </View>
-                </View>
-              </View>
+              <TouchableOpacity
+                onPress={() => onDelete(row.id)}
+                style={{ justifyContent: 'center', alignItems: 'center', padding: 6, borderRadius: 4 }}
+              >
+                <Icon icon={faTrashCan} size={20} color={colors.midRed} title = 'Delete' />
+              </TouchableOpacity>
             </View>
           );
         }
         return (
-          <View style={{ flex: 1, flexDirection: 'column', gap: 10 }}>
-            <View style={{ backgroundColor }}>
-              <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Button title={t('button.edit')} type="associate" onPress={() => onEdit(row)} />
-                <View style = {{marginLeft: 6, marginTop: 2}}>
-                  <Icon icon={faPenToSquare} size={14} color={colors.darksteel} />
-                </View>
-              </View>
-            </View>
+          <View style={{ flexDirection: 'row', gap: 20, justifyContent: 'center' }}>
+            <TouchableOpacity
+              onPress={() => onEdit(row)}
+              style={{ justifyContent: 'center', alignItems: 'center', padding: 6, borderRadius: 4 }}
+            >
+              <Icon icon={faPenToSquare} size={20} color={colors.darksteel} title = 'Edit' />
+            </TouchableOpacity>
 
-            <View style={{ backgroundColor: colors.lightRed }}>
-              <View style = {{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Button title={t('button.delete')} type="associate" onPress={() => onDelete(row.id)} />
-                <View style = {{marginLeft: 2, marginTop: 2}}>
-                  <Icon icon={faTrashCan} size={14} color={colors.darksteel} />
-                </View>
-              </View>
-            </View>
+            <TouchableOpacity
+              onPress={() => onDelete(row.id)}
+              style={{ justifyContent: 'center', alignItems: 'center', padding: 6, borderRadius: 4 }}
+            >
+              <Icon icon={faTrashCan} size={20} color={colors.midRed} title = 'Delete' />
+            </TouchableOpacity>
           </View>
         );
       },

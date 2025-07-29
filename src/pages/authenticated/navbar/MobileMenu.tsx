@@ -10,6 +10,8 @@ import Modal from '../../../components/Modal';
 import Button from '../../../components/Button';
 import { useTheme } from '../../../context/ThemeContext';
 import ConfigDropdown from './dropdowns/ConfigDropdown';
+import Icon from '../../../components/Icon';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 interface MobileMenuProps {
   onLogout: () => void;
@@ -45,7 +47,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onLogout, onChangeLanguage, clo
       )}
       <ConfigDropdown onChangeLanguage={onChangeLanguage} closeMenu={closeMenu} 
         dropdownStyle={{ backgroundColor: colors.darksteel, padding: 5, zIndex: 100, alignItems: 'flex-start', }} />
-      <TouchableOpacity onPress={handleLogoutClick} >
+      <TouchableOpacity onPress={handleLogoutClick}style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style = {{marginRight: 6, marginTop: 3}}>
+          <Icon icon={faRightFromBracket} size={14} color={colors.darksteel} />
+        </View>
         <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.logout')}</Text>
       </TouchableOpacity>
       <Modal title={t('confirm.logout.title')} visible={logoutModal} onClose={cancelLogout} size="s" position="top">
