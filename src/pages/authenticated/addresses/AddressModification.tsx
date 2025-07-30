@@ -66,7 +66,6 @@ export default function AddressModification({ AddressId, AddressForm, onUpdateAd
 
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
-      <Title text={t('title.edit.address')} type="Subtitle" style={{ marginBottom: 20, color: colors.text }}/>
       <TextInput
         label={t('label.street')}
         value={localAddress.street}
@@ -152,7 +151,7 @@ export default function AddressModification({ AddressId, AddressForm, onUpdateAd
 
 const styles = StyleSheet.create({
 
-  container: { padding: 20, flex: 1 },
+  container: { flex: 1 },
 
   input: {
     borderWidth: 1,

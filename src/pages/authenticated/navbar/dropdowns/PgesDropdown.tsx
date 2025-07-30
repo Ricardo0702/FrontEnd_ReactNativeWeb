@@ -41,8 +41,10 @@ const PagesDropdown: React.FC<PagesDropdownProps> = ({ dropdownStyle, closeMenu 
         <View style = {{marginRight: 6, marginTop: 3}}>
           <Icon icon={faFile} size={14} color={isMobile? colors.darksteel : colors.midsteel} />
         </View>
-        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.pages')}</Text>
-        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        <Text style={[styles.navLink, {color: colors.whiteText, marginRight: 6}]}>{t('navbar.pages')}</Text>
+       <View style = {{marginTop: 3}}>
+         <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        </View>
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ?? [styles.pagesDropdown, {backgroundColor: colors.darksteel}]}>

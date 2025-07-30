@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import MobileMenu from './MobileMenu';
 import DesktopMenu from './DeskTopMenu';
 import { useTheme } from '../../../context/ThemeContext';
+import { useNavigate } from 'react-router-dom';
 
 interface NavbarProps {
   onLogout: () => void;
@@ -15,6 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   const { t, i18n } = useTranslation();
   const menuRef = useRef<HTMLDivElement>(null);
   const { themeName, toggleTheme, colors } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 730);
@@ -46,7 +48,7 @@ const Navbar: React.FC<NavbarProps> = ({ onLogout }) => {
   return (
     <>
       <View style={[styles.navbar, { backgroundColor: colors.darksteel }]}>
-        <TouchableOpacity onPress={() => (window.location.pathname = '/')}>
+        <TouchableOpacity onPress={() => navigate('/auth/dashboard')}>
           <Text style={[styles.logo, { color: colors.whiteText }]}>{t('title.My Dashboard')}</Text>
         </TouchableOpacity>
 

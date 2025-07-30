@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import Select, { SelectOption } from './Select';
 import { highlightText } from './HighlightText';
 import { useTheme } from '../context/ThemeContext';
+import Icon from './Icon';
+import { faCaretDown, faCaretUp, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 export interface TableProps<T> {
   columns: Array<{
@@ -50,6 +52,7 @@ const Table = <T,>({
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useTranslation();
   const {colors} = useTheme();
+  const [showSortOptions, setShowSortOptions] = useState(false);
 
   if (!data.length || !columns.length) return null;
 
@@ -308,26 +311,51 @@ const Table = <T,>({
                   width: windowWidth * 0.2,
                   height: minRowHeight,
                   paddingVertical: 0,
-                  marginLeft: 8,
                 }}
+                leftIcon = {<Icon icon = {faMagnifyingGlass} size={14} style={{marginLeft: 6, marginTop: 6}} color = {colors.midsteel}/>}
               />
               <View style={{ justifyContent: 'center' }}>{renderHeaderButton}</View>
             </View>
           </View>
         )}
 
-        {/* Selector de columna y dirección de ordenación (sólo móviles) */}
         {paginationEnabled && (
+          <TouchableOpacity
+            onPress={() => setShowSortOptions(!showSortOptions)}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+              paddingVertical: 8,
+              backgroundColor: colors.darksteel,
+              marginHorizontal: 15,
+              borderRadius: 6,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: '500', color: colors.whiteText }}>
+              {showSortOptions ? t('text.hideSortOptions') : t('text.showSortOptions')}
+            </Text>
+            <Icon
+              icon={showSortOptions ? faCaretUp : faCaretDown}
+              size={18}
+              color={colors.whiteText}
+              style={{marginTop: 4}}
+            />
+          </TouchableOpacity>
+        )}
+
+        {/* Opciones de orden solo si están visibles */}
+        {paginationEnabled && showSortOptions && (
           <View
             style={{
               marginHorizontal: 15,
-              marginBottom: 10,
+              marginTop: 8,
               flexDirection: 'row',
               alignItems: 'center',
-              gap: 10,
+              gap: 5
             }}
           >
-            {/* Selector de columna */}
             <Select
               style={{ flex: 1 }}
               selectedValue={sortColumn !== null && typeof sortColumn !== 'symbol' ? String(sortColumn) : undefined}
@@ -341,20 +369,51 @@ const Table = <T,>({
                 })) as SelectOption[]}
             />
 
-            {/* Selector de dirección */}
-            <Select
-              style={{ width: 100 }}
-              selectedValue={sortDirection ?? undefined} // <-- convertimos null a undefined
-              onValueChange={(value) => {
-                if (value === 'asc' || value === 'desc') {
-                  setSortDirection(value);
+            <View style={{ alignItems: 'center' }}>
+              {/* Triángulo hacia arriba (ascendente) */}
+              <TouchableOpacity
+                onPress={() =>
+                  setSortDirection(sortDirection === 'asc' ? null : 'asc')
                 }
-              }}
-              options={[
-                { label: t('sort.asc'), value: 'asc' },
-                { label: t('sort.desc'), value: 'desc' },
-              ]}
-            />
+                style={{ padding: 1 }}
+              >
+                <View
+                  style={{
+                    width: 0,
+                    height: 0,
+                    borderLeftWidth: 8,
+                    borderRightWidth: 8,
+                    borderBottomWidth: 12,
+                    borderLeftColor: 'transparent',
+                    borderRightColor: 'transparent',
+                    borderBottomColor:
+                      sortDirection === 'asc' ? colors.whiteText : colors.darksteel,
+                  }}
+                />
+              </TouchableOpacity>
+
+              {/* Triángulo hacia abajo (descendente) */}
+              <TouchableOpacity
+                onPress={() =>
+                  setSortDirection(sortDirection === 'desc' ? null : 'desc')
+                }
+                style={{ padding: 1 }}
+              >
+                <View
+                  style={{
+                    width: 0,
+                    height: 0,
+                    borderLeftWidth: 8,
+                    borderRightWidth: 8,
+                    borderTopWidth: 12,
+                    borderLeftColor: 'transparent',
+                    borderRightColor: 'transparent',
+                    borderTopColor:
+                      sortDirection === 'desc' ? colors.whiteText : colors.darksteel,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
 
@@ -396,6 +455,7 @@ const Table = <T,>({
       </View>
     );
   }
+
 
 
   const flexibleColumns = columns.filter((col) => !col.width);
@@ -447,6 +507,7 @@ const Table = <T,>({
               value={filterText}
               onChangeText={setFilterText}
               inputStyle={{ height: minRowHeight, paddingVertical: 0 }}
+              leftIcon = {<Icon icon = {faMagnifyingGlass} size={14} style={{marginLeft: 6, marginTop: 6}} color = {colors.midsteel}/>}
             />
           </View>
           <View style={{ justifyContent: 'center' }}>{renderHeaderButton}</View>

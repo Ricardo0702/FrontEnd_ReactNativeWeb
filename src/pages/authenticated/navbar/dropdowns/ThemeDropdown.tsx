@@ -132,18 +132,26 @@ const ThemesDropdown: React.FC<ThemesDropdownProps> = ({ dropdownStyle, closeMen
         <View style={{ marginRight: 6, marginTop: 3 }}>
           <Icon icon={faPalette} size={14} color={colors.midsteel} />
         </View>
-        <Text style={[styles.navLink, { color: colors.whiteText }]}>{t('navbar.theme')}</Text>
-        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        <Text style={[styles.navLink, { color: colors.whiteText, marginRight: 6 }]}>{t('navbar.theme')}</Text>
+        <View style = {{marginTop: 3}}>
+         <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        </View>
       </TouchableOpacity>
       
       {langOpen && (
         <View style={dropdownStyle ?? [styles.themesDropdown, { backgroundColor: colors.darksteel }]}>
-          <TouchableOpacity onPress={() => handleSelectTheme('light')}>
+          <TouchableOpacity onPress={() => handleSelectTheme('light')} style = {{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={[styles.navLink, { color: colors.whiteText }, colorStyle]}>{t('theme.light')}</Text>
+            <View style={{ marginLeft: 68, marginTop: 3 }}>
+              <Icon icon={faSun} size={14} color={colors.darksteel} />
+            </View>
           </TouchableOpacity>
-          <View style={{ marginTop: 5 }}>
-            <TouchableOpacity onPress={() => handleSelectTheme('dark')}>
+          <View style={{ marginTop: 5}}>
+            <TouchableOpacity onPress={() => handleSelectTheme('dark')} style = {{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={[styles.navLink, { color: colors.whiteText }, colorStyle]}>{t('theme.dark')}</Text>
+              <View style={{ marginLeft: 66, marginTop: 3 }}>
+                <Icon icon={faMoon} size={14} color={colors.darksteel} />
+              </View>
             </TouchableOpacity>
           </View>
           <View style={{ marginTop: 5 }}>

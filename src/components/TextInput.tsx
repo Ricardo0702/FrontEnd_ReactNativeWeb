@@ -16,6 +16,7 @@ export interface TextInputProps extends Omit<RNTextInputProps, 'value'> {
   returnKeyType?: RNTextInputProps['returnKeyType'];
   placeholder?: string;
   rightIcon?: React.ReactNode;
+  leftIcon?: React.ReactNode;  // <-- Nuevo prop
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -32,16 +33,25 @@ const TextInput: React.FC<TextInputProps> = ({
   returnKeyType,
   placeholder,
   rightIcon,
+  leftIcon,  // <-- Nuevo prop
 }) => {
   const stringValue = value !== undefined && value !== null ? String(value) : '';
   const { colors } = useTheme();
+  const paddingLeft = leftIcon ? 40 : 12;
+  const paddingRight = rightIcon ? 40 : 12;
 
   return (
     <View style={[containerStyle]}>
-      {label ? <Text style={[styles.label, {color: colors.text},labelStyle]}>{label}</Text> : null}
+      {label ? <Text style={[styles.label, {color: colors.text}, labelStyle]}>{label}</Text> : null}
       <View style={styles.inputWrapper}>
+        {leftIcon && <View style={styles.leftIcon}>{leftIcon}</View>} {/* icono izquierda */}
         <RNTextInput
-          style={[styles.input, {borderColor: colors.darksteel, color: colors.text}, inputStyle, rightIcon ? { paddingRight: 40 } : {}]}
+          style={[
+            styles.input,
+            { borderColor: colors.darksteel, color: colors.text },
+            inputStyle,
+            { paddingLeft, paddingRight },
+          ]}
           value={stringValue}
           onChangeText={(text) => onChangeText?.(text)}
           secureTextEntry={secure}
@@ -50,7 +60,7 @@ const TextInput: React.FC<TextInputProps> = ({
           placeholder={placeholder}
           placeholderTextColor={colors.midsteel}
         />
-        {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+        {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>} {/* icono derecha */}
       </View>
       {errorMessage ? <Text style={[styles.error, {color: colors.red}, errorStyle]}>{errorMessage}</Text> : null}
     </View>
@@ -69,12 +79,16 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderRadius: 6,
-    paddingHorizontal: 12,
     fontSize: 16,
     height: 45,
   },
+  leftIcon: {
+    position: 'absolute',
+    left: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+  },
   rightIcon: {
-    marginTop: -4,
     position: 'absolute',
     right: 10,
     top: '50%',

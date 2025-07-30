@@ -32,8 +32,10 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, d
         <View style = {{marginRight: 6, marginTop: 4}}>
           <Icon icon={faLanguage} size={15} color={colors.midsteel} />
         </View>
-        <Text style={[styles.navLink, {color: colors.whiteText}]}>{t('navbar.language')}</Text>
-        <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        <Text style={[styles.navLink, {color: colors.whiteText, marginRight: 6}]}>{t('navbar.language')}</Text>
+        <View style = {{marginTop: 3}}>
+         <Icon icon={langOpen ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        </View>
       </TouchableOpacity>
       {langOpen && (
         <View style={dropdownStyle ? [dropdownStyle] : [styles.languageDropdown, { backgroundColor: colors.darksteel }]}>
@@ -79,7 +81,7 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({ onChangeLanguage, d
 
 const styles = StyleSheet.create({
 
-  container: { position: 'relative' },
+  container: { position: 'relative', width: 120 },
 
   navLink: { fontSize: 17, marginVertical: 5 },
 

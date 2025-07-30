@@ -127,7 +127,7 @@ const AddressesTable: React.FC<AddressesTableProps> = ({ Addresses, onDelete, on
       : []),
   ];
 
-  return <Table columns={columns} data={Addresses} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled />;
+  return <Table columns={columns} data={Addresses} minRowHeight={50} renderHeaderButton={renderHeaderButton} paginationEnabled widthFactor={0.7} />;
 };
 
 export default AddressesTable;

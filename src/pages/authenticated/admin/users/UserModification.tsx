@@ -80,7 +80,6 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
 
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
-      <Title text={t('title.edit.user')} type="Subtitle" style={{ marginBottom: 20, color: colors.text}} />
       <TextInput
         label={t('label.Username')}
         value={localUser.username}
@@ -149,7 +148,7 @@ export default function UserModification({ userId, userForm, onUpdateUser }: Pro
 
 const styles = StyleSheet.create({
 
-  container: { padding: 20, flex: 1, backgroundColor: '#fff' },
+  container: { flex: 1, backgroundColor: '#fff' },
 
   input: {
     borderWidth: 1,

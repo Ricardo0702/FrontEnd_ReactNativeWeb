@@ -150,7 +150,6 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
 
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
-      <Title text={t('title.edit.person')} type="Subtitle" style={{marginBottom: 20, color: colors.text }} />
       <TextInput
         label={t('label.Name')}
         value={localPerson.name}
@@ -292,7 +291,7 @@ export default function PersonModification({ personId, personForm, onUpdatePerso
 
 const styles = StyleSheet.create({
 
-  container: { padding: 20, flex: 1 },
+  container: { flex: 1 },
 
   input: {  
     borderWidth: 1, 

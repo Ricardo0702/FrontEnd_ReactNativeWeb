@@ -101,7 +101,7 @@ const App: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, minHeight: '100%' }, //, backgroundColor: '#f9f9f9'
+  container: { flex: 1, minHeight: '100%' },
 });
 
 export default App;

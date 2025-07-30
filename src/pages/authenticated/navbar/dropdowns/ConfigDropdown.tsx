@@ -54,8 +54,10 @@ const ConfigDropdown: React.FC<ConfigDropdownProps> = ({ onChangeLanguage, dropd
         <View style = {{marginRight: 6, marginTop: 3}}>
           <Icon icon={faGear} size={14} color={isMobile? colors.darksteel : colors.midsteel} />
         </View>
-        <Text style={[styles.navLink, { color: colors.whiteText }]}>{t('navbar.config')}</Text>
-        <Icon icon={open ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        <Text style={[styles.navLink, { color: colors.whiteText, marginRight: 6 }]}>{t('navbar.config')}</Text>
+        <View style = {{marginTop: 3}}>
+         <Icon icon={open ? faCaretUp : faCaretDown} size={15} color={colors.whiteText} />
+        </View>
       </TouchableOpacity>
 
       {open && (
